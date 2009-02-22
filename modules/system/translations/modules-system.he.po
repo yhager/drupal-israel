@@ -1,0 +1,2402 @@
+# translation of modules-system.po to Hebrew
+# Amnon Levav <amnon@levavie.com>, 2006.
+# Haggai Eran <haggai.eran@gmail.com>, 2006.
+# Yuval Hager <yuval@avramzon.net>, 2007, 2008.
+# Hebrew translation of דרופל ישראל
+# Copyright (c) 2006 ליאור <lior@linnovate.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: modules-system\n"
+"POT-Creation-Date: 2008-02-15 13:50+0100\n"
+"PO-Revision-Date: 2008-02-26 09:09+0200\n"
+"Last-Translator: Yuval Hager <yuval@avramzon.net>\n"
+"Language-Team: Hebrew <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: modules/system/system.admin.inc:22
+msgid ""
+"One or more problems were detected with your Drupal installation. Check the "
+"<a href=\"@status\">status report</a> for more information."
+msgstr ""
+"נתגלתה לפחות בעיה אחת עם התקנת דרופל. בדוק את <a href=\"@status\">דו\"ח "
+"המצב</a> לקבלת מידע נוסף."
+
+#: modules/system/system.admin.inc:58;79
+msgid "You do not have any administrative items."
+msgstr ""
+
+#: modules/system/system.admin.inc:118
+msgid "Get help"
+msgstr "קבל עזרה"
+
+#: modules/system/system.admin.inc:158
+msgid "System default"
+msgstr "ברירת המחדל"
+
+#: modules/system/system.admin.inc:166 modules/system/system.module:258
+msgid "Administration theme"
+msgstr "עיצוב עמודי הניהול"
+
+#: modules/system/system.admin.inc:167
+msgid ""
+"Choose which theme the administration pages should display in. If you choose "
+"\"System default\" the administration pages will use the same theme as the "
+"rest of the site."
+msgstr ""
+"בחר את עיצוב דפי הניהול. אם תבחר \"ברירת מחדל\", ישמש לכך אותו עיצוב כמו "
+"בשאר האתר."
+
+#: modules/system/system.admin.inc:173
+msgid "Use administration theme for content editing"
+msgstr ""
+
+#: modules/system/system.admin.inc:174
+msgid ""
+"Use the administration theme when editing existing posts or creating new "
+"ones."
+msgstr ""
+
+#: modules/system/system.admin.inc:209 modules/system/system.module:704
+msgid "Screenshot for %theme theme"
+msgstr "צילום מסך עבור העיצוב %theme"
+
+#: modules/system/system.admin.inc:209 modules/system/system.module:704
+msgid "no screenshot"
+msgstr "ללא צילום מסך"
+
+#: modules/system/system.admin.inc:288
+msgid ""
+"Please note that the <a href=\"!admin_theme_page\">administration theme</a> "
+"is still set to the %admin_theme theme; consequently, the theme on this page "
+"remains unchanged. All non-administrative sections of the site, however, "
+"will show the selected %selected_theme theme by default."
+msgstr ""
+
+#: modules/system/system.admin.inc:306;555;933
+#: modules/system/system.module:1054
+msgid "The configuration options have been saved."
+msgstr "ההגדרות נשמרו."
+
+#: modules/system/system.admin.inc:377
+msgid "Logo"
+msgstr "לוגו"
+
+#: modules/system/system.admin.inc:378
+msgid "Site name"
+msgstr "שם האתר"
+
+#: modules/system/system.admin.inc:379
+msgid "Site slogan"
+msgstr "סיסמת האתר"
+
+#: modules/system/system.admin.inc:380
+msgid "Mission statement"
+msgstr "הצהרת משימה"
+
+#: modules/system/system.admin.inc:381
+msgid "User pictures in posts"
+msgstr "תמונות חברים בפרסומים"
+
+#: modules/system/system.admin.inc:382
+msgid "User pictures in comments"
+msgstr "תמונות חברים בתגובות"
+
+#: modules/system/system.admin.inc:383
+msgid "Search box"
+msgstr "תיבת חיפוש"
+
+#: modules/system/system.admin.inc:384
+msgid "Shortcut icon"
+msgstr "סמל קיצור דרך"
+
+#: modules/system/system.admin.inc:401
+msgid "Toggle display"
+msgstr "שינוי מאפייני תצוגה"
+
+#: modules/system/system.admin.inc:402
+msgid "Enable or disable the display of certain page elements."
+msgstr "איפשור או ביטול התצוגה של רכיבים מסויימים בעמוד."
+
+#: modules/system/system.admin.inc:427
+msgid "Display post information on"
+msgstr "הצג מידע על מחבר הפרסום בכל"
+
+#: modules/system/system.admin.inc:428
+msgid ""
+"Enable or disable the <em>submitted by Username on date</em> text when "
+"displaying posts of the following type."
+msgstr ""
+"אפשר או בטל את הצגת <em>הכינוי ותאריך ההגשה</em> בזמן הצגת פרסומים מהסוג הבא."
+
+#: modules/system/system.admin.inc:447
+msgid "Logo image settings"
+msgstr "הגדרות תמונת לוגו"
+
+#: modules/system/system.admin.inc:448
+msgid "If toggled on, the following logo will be displayed."
+msgstr "אם מסומן, הלוגו הבא יוצג."
+
+#: modules/system/system.admin.inc:453
+msgid "Use the default logo"
+msgstr "השתמש בלוגו ברירת המחדל"
+
+#: modules/system/system.admin.inc:456
+msgid "Check here if you want the theme to use the logo supplied with it."
+msgstr "סמן כאן אם ברצונך להשתמש בלוגו שמסופק עם העיצוב."
+
+#: modules/system/system.admin.inc:460
+msgid "Path to custom logo"
+msgstr "נתיב לקובץ לוגו מותאם"
+
+#: modules/system/system.admin.inc:462
+msgid ""
+"The path to the file you would like to use as your logo file instead of the "
+"default logo."
+msgstr "מיקום הקובץ שבו תרצה להשתמש כלוגו במקום לוגו ברירת המחדל."
+
+#: modules/system/system.admin.inc:466
+msgid "Upload logo image"
+msgstr "טעינת תמונת לוגו"
+
+#: modules/system/system.admin.inc:468
+msgid ""
+"If you don't have direct file access to the server, use this field to upload "
+"your logo."
+msgstr ""
+"אם אין לכם גישה ישירה לקבצים על השרת, השתמשו בשדה זה כדי לטעון את קובץ הלוגו."
+
+#: modules/system/system.admin.inc:475
+msgid "Shortcut icon settings"
+msgstr "הגדרות סמל סימניה"
+
+#: modules/system/system.admin.inc:476
+msgid ""
+"Your shortcut icon, or 'favicon', is displayed in the address bar and "
+"bookmarks of most browsers."
+msgstr ""
+"סמל הכתובת (favicon) מוצג בשורת הכתובת ובסימניות/מועדפים ברוב הדפדפנים."
+
+#: modules/system/system.admin.inc:480
+msgid "Use the default shortcut icon."
+msgstr "השתמש בסמל סימניה ברירת המחדל."
+
+#: modules/system/system.admin.inc:482
+msgid "Check here if you want the theme to use the default shortcut icon."
+msgstr "סמן כאן אם ברצונך להשתמש בסמל הסימניה שמסופק עם העיצוב."
+
+#: modules/system/system.admin.inc:486
+msgid "Path to custom icon"
+msgstr "נתיב לסמל מותאם"
+
+#: modules/system/system.admin.inc:488
+msgid ""
+"The path to the image file you would like to use as your custom shortcut "
+"icon."
+msgstr "מיקום הקובץ שמכיל את סמל הסימניה בו תרצה להשתמש."
+
+#: modules/system/system.admin.inc:493
+msgid "Upload icon image"
+msgstr "טעינת סמל סימניה"
+
+#: modules/system/system.admin.inc:494
+msgid ""
+"If you don't have direct file access to the server, use this field to upload "
+"your shortcut icon."
+msgstr ""
+"אם אין לכם גישה ישירה לקבצים על השרת, השתמשו בשדה זה כדי לטעון את קובץ סמל "
+"הסימניה."
+
+#: modules/system/system.admin.inc:515
+msgid "Theme-engine-specific settings"
+msgstr "הגדרות פרטיות עבור כל ערכת עיצוב"
+
+#: modules/system/system.admin.inc:515
+msgid ""
+"These settings only exist for all the templates and styles based on the %"
+"engine theme engine."
+msgstr ""
+"הגדרות אלו קיימות רק עבור העיצובים והסגנונות המבוססים על מנוע העיצוב %engine."
+
+#: modules/system/system.admin.inc:527
+msgid "Theme-specific settings"
+msgstr "הגדרות פרטיות עבור כל ערכת עיצוב"
+
+#: modules/system/system.admin.inc:527
+msgid ""
+"These settings only exist for the %theme theme and all the styles based on "
+"it."
+msgstr "הגדרות אילו קיימות עבור ערכת עיצוב %theme וכל העיצובים הקשורים בה."
+
+#: modules/system/system.admin.inc:549 modules/system/system.module:1051
+msgid "The configuration options have been reset to their default values."
+msgstr "אפשרויות התצורה הוחזרו למצבן ההתחלתי."
+
+#: modules/system/system.admin.inc:683;715
+msgid " (<span class=\"admin-disabled\">disabled</span>)"
+msgstr " (<span class=\"admin-disabled\">מנותק</span>)"
+
+#: modules/system/system.admin.inc:686
+msgid " (<span class=\"admin-missing\">missing</span>)"
+msgstr " (<span class=\"admin-missing\">חסר</span>)"
+
+#: modules/system/system.admin.inc:692;710
+msgid " (<span class=\"admin-enabled\">enabled</span>)"
+msgstr " (<span class=\"admin-enabled\">מופעל</span>)"
+
+#: modules/system/system.admin.inc:699
+msgid "Depends on: !dependencies"
+msgstr "תלוי ב:!dependencies"
+
+#: modules/system/system.admin.inc:722
+msgid "Required by: !required"
+msgstr "נדרש ע\"י: !required"
+
+#: modules/system/system.admin.inc:841
+msgid "Some required modules must be enabled"
+msgstr "יש לאפשר מספר רכיבים אשר נדרשים"
+
+#: modules/system/system.admin.inc:843
+msgid "Would you like to continue with enabling the above?"
+msgstr "האם להמשיך להפעיל את הכתוב לעיל?"
+
+#: modules/system/system.admin.inc:844
+msgid "Continue"
+msgstr "המשך"
+
+#: modules/system/system.admin.inc:1036;1081;2106
+#: modules/system/system.module:322;327
+msgid "Uninstall"
+msgstr "הסרה"
+
+#: modules/system/system.admin.inc:1075
+msgid ""
+"The following modules will be completely uninstalled from your site, and "
+"<em>all data from these modules will be lost</em>!"
+msgstr ""
+"הרכיבים הבאים יוסרו לחלוטין מהאתר וכן <em>כל הנתונים מרכיבים אלה יימחקו</em>!"
+
+#: modules/system/system.admin.inc:1078
+msgid "Confirm uninstall"
+msgstr "אשר הסרה"
+
+#: modules/system/system.admin.inc:1080
+msgid "Would you like to continue with uninstalling the above?"
+msgstr "להמשיך הסרה של הכתוב לעיל?"
+
+#: modules/system/system.admin.inc:1093
+msgid "No modules selected."
+msgstr "לא נבחרו רכיבים."
+
+#: modules/system/system.admin.inc:1110
+msgid "The selected modules have been uninstalled."
+msgstr "הרכיבים שנבחרו הוסרו."
+
+#: modules/system/system.admin.inc:1131
+msgid "The name of this website."
+msgstr "שם אתר זה."
+
+#: modules/system/system.admin.inc:1138
+msgid ""
+"The <em>From</em> address in automated e-mails sent during registration and "
+"new password requests, and other notifications. (Use an address ending in "
+"your site's domain to help prevent this e-mail being flagged as spam.)"
+msgstr ""
+
+#: modules/system/system.admin.inc:1143
+msgid "Slogan"
+msgstr "סיסמה"
+
+#: modules/system/system.admin.inc:1145
+msgid ""
+"Your site's motto, tag line, or catchphrase (often displayed alongside the "
+"title of the site)."
+msgstr ""
+
+#: modules/system/system.admin.inc:1149
+msgid "Mission"
+msgstr "משימה"
+
+#: modules/system/system.admin.inc:1151
+msgid ""
+"Your site's mission or focus statement (often prominently displayed on the "
+"front page)."
+msgstr ""
+
+#: modules/system/system.admin.inc:1155
+msgid "Footer message"
+msgstr "הודעה בתחתית האתר"
+
+#: modules/system/system.admin.inc:1157
+msgid ""
+"This text will be displayed at the bottom of each page. Useful for adding a "
+"copyright notice to your pages."
+msgstr "טקסט זה יוצג בתחתית כל עמוד. שימושי להוספת הודעה על זכויות יוצרים."
+
+#: modules/system/system.admin.inc:1161
+msgid "Anonymous user"
+msgstr "משתמש אנונימי"
+
+#: modules/system/system.admin.inc:1163
+msgid "The name used to indicate anonymous users."
+msgstr "שם זה מציין שפעולה בוצעה על ידי גולש אנונימי, שעדיין לא הצטרף כחבר."
+
+#: modules/system/system.admin.inc:1168
+msgid "Default front page"
+msgstr "ברירת המחדל לעמוד ראשי"
+
+#: modules/system/system.admin.inc:1171
+msgid ""
+"The home page displays content from this relative URL. If unsure, specify "
+"\"node\"."
+msgstr ""
+"עמוד הבית מציג תוכן מכתובת URL יחסית זו. אם אינכם בטוחים, רשמו \"node\"."
+
+#: modules/system/system.admin.inc:1196
+msgid "The path '@path' is either invalid or you do not have access to it."
+msgstr ""
+
+#: modules/system/system.admin.inc:1210
+msgid "Default 403 (access denied) page"
+msgstr "ברירת המחדל לעמוד 403 (אין הרשאה)"
+
+#: modules/system/system.admin.inc:1213
+msgid ""
+"This page is displayed when the requested document is denied to the current "
+"user. If unsure, specify nothing."
+msgstr "עמוד זה מוצג כשאין הרשאה לגשת למסמך המבוקש. אם אינך בטוח, השאר ריק."
+
+#: modules/system/system.admin.inc:1219
+msgid "Default 404 (not found) page"
+msgstr "ברירת המחדל לעמוד 404 (לא נמצא)"
+
+#: modules/system/system.admin.inc:1222
+msgid ""
+"This page is displayed when no other content matches the requested document. "
+"If unsure, specify nothing."
+msgstr ""
+"עמוד זה מוצג כשאין תוכן אחר המתאים למסמך המבוקש. אם אינך בטוח, השאר ריק."
+
+#: modules/system/system.admin.inc:1227 modules/system/system.module:374
+msgid "Error reporting"
+msgstr "דיווח שגיאות"
+
+#: modules/system/system.admin.inc:1228
+msgid "Write errors to the log"
+msgstr "כתוב שגיאות ליומן הפעילות"
+
+#: modules/system/system.admin.inc:1228
+msgid "Write errors to the log and to the screen"
+msgstr "כתוב שגיאות ליומן הפעילות ולמסך"
+
+#: modules/system/system.admin.inc:1229
+msgid ""
+"Specify where Drupal, PHP and SQL errors are logged. While it is recommended "
+"that a site running in a production environment write errors to the log "
+"only, in a development or testing environment it may be helpful to write "
+"errors both to the log and to the screen."
+msgstr ""
+"היכן נשמר יומן השגיאות (הכולל שגיאות של דרופל, שגיאות PHP, ושגיאות בבסיס "
+"הנתונים). בשרת ייצור, מומלץ שהשגיאות נכתבות רק ליומן השגיאות. בשרת הבדיקות, "
+"כתיבת השגיאות למסך יכולה לעזור."
+
+#: modules/system/system.admin.inc:1255
+msgid ""
+"The normal cache mode is suitable for most sites and does not cause any side "
+"effects. The aggressive cache mode causes Drupal to skip the loading (boot) "
+"and unloading (exit) of enabled modules when serving a cached page. This "
+"results in an additional performance boost but can cause unwanted side "
+"effects."
+msgstr ""
+
+#: modules/system/system.admin.inc:1261
+msgid ""
+"<strong class=\"error\">The following enabled modules are incompatible with "
+"aggressive mode caching and will not function properly: %modules</strong>"
+msgstr ""
+
+#: modules/system/system.admin.inc:1264
+msgid ""
+"<strong class=\"ok\">Currently, all enabled modules are compatible with the "
+"aggressive caching policy.</strong> Please note, if you use aggressive "
+"caching and enable new modules, you will need to check this page again to "
+"ensure compatibility."
+msgstr ""
+
+#: modules/system/system.admin.inc:1268
+msgid "Page cache"
+msgstr "מטמון דפים"
+
+#: modules/system/system.admin.inc:1269
+msgid ""
+"Enabling the page cache will offer a significant performance boost. Drupal "
+"can store and send compressed cached pages requested by <em>anonymous</em> "
+"users. By caching a web page, Drupal does not have to construct the page "
+"each time it is viewed."
+msgstr ""
+
+#: modules/system/system.admin.inc:1274
+msgid "Caching mode"
+msgstr "אפשרויות מטמון"
+
+#: modules/system/system.admin.inc:1276
+msgid "Normal (recommended for production sites, no side effects)"
+msgstr "רגיל (מומלץ, ללא תופעות לוואי)"
+
+#: modules/system/system.admin.inc:1276
+msgid "Aggressive (experts only, possible side effects)"
+msgstr "אגרסיבי (מומחים בלבד, תופעות לוואי אפשריות)"
+
+#: modules/system/system.admin.inc:1284
+msgid "Minimum cache lifetime"
+msgstr "זמן חיים מינימלי למטמון"
+
+#: modules/system/system.admin.inc:1287
+msgid ""
+"On high-traffic sites, it may be necessary to enforce a minimum cache "
+"lifetime. The minimum cache lifetime is the minimum amount of time that will "
+"elapse before the cache is emptied and recreated, and is applied to both "
+"page and block caches. A larger minimum cache lifetime offers better "
+"performance, but users will not see new content for a longer period of time."
+msgstr ""
+
+#: modules/system/system.admin.inc:1291
+msgid "Page compression"
+msgstr ""
+
+#: modules/system/system.admin.inc:1294
+msgid ""
+"By default, Drupal compresses the pages it caches in order to save bandwidth "
+"and improve download times. This option should be disabled when using a "
+"webserver that performs compression."
+msgstr ""
+
+#: modules/system/system.admin.inc:1299;1305
+msgid "Block cache"
+msgstr "זכרון מטמון לתיבות"
+
+#: modules/system/system.admin.inc:1300
+msgid ""
+"Enabling the block cache can offer a performance increase for all users by "
+"preventing blocks from being reconstructed on each page load. If the page "
+"cache is also enabled, performance increases from enabling the block cache "
+"will mainly benefit authenticated users."
+msgstr ""
+
+#: modules/system/system.admin.inc:1307
+msgid "Enabled (recommended)"
+msgstr ""
+
+#: modules/system/system.admin.inc:1309
+msgid ""
+"Note that block caching is inactive when modules defining content access "
+"restrictions are enabled."
+msgstr ""
+
+#: modules/system/system.admin.inc:1314
+msgid "Bandwidth optimizations"
+msgstr "מיטוב תעבורה"
+
+#: modules/system/system.admin.inc:1315
+msgid ""
+"<p>Drupal can automatically optimize external resources like CSS and "
+"JavaScript, which can reduce both the size and number of requests made to "
+"your website. CSS files can be aggregated and compressed into a single file, "
+"while JavaScript files are aggregated (but not compressed). These optional "
+"optimizations may reduce server load, bandwidth requirements, and page "
+"loading times.</p><p>These options are disabled if you have not set up your "
+"files directory, or if your download method is set to private.</p>"
+msgstr ""
+
+#: modules/system/system.admin.inc:1322
+msgid "Optimize CSS files"
+msgstr ""
+
+#: modules/system/system.admin.inc:1326
+msgid ""
+"This option can interfere with theme development and should only be enabled "
+"in a production environment."
+msgstr ""
+
+#: modules/system/system.admin.inc:1330
+msgid "Optimize JavaScript files"
+msgstr ""
+
+#: modules/system/system.admin.inc:1334
+msgid ""
+"This option can interfere with module development and should only be enabled "
+"in a production environment."
+msgstr ""
+
+#: modules/system/system.admin.inc:1339;1345
+msgid "Clear cached data"
+msgstr ""
+
+#: modules/system/system.admin.inc:1340
+msgid ""
+"Caching data improves performance, but may cause problems while "
+"troubleshooting new modules, themes, or translations, if outdated "
+"information has been cached. To refresh all cached data on your site, click "
+"the button below. <em>Warning: high-traffic sites will experience "
+"performance slowdowns while cached data is rebuilt.</em>"
+msgstr ""
+
+#: modules/system/system.admin.inc:1375
+msgid "File system path"
+msgstr "מיקום קבצי מערכת"
+
+#: modules/system/system.admin.inc:1378
+msgid ""
+"A file system path where the files will be stored. This directory must exist "
+"and be writable by Drupal. If the download method is set to public, this "
+"directory must be relative to the Drupal installation directory and be "
+"accessible over the web. If the download method is set to private, this "
+"directory should not be accessible over the web. Changing this location will "
+"modify all download paths and may cause unexpected problems on an existing "
+"site."
+msgstr ""
+"ספרייה שבה יש לאחסן את קבצי המערכת. הספרייה חייבת להיות קיימת, וניתנת לכתיבה "
+"על ידי דרופל. אם שיטת ההורדה של קבצים הוגדרה כציבורית, ספרייה זו חייבת להיות "
+"ניתנת לגישה מספריית ההתקנה של דרופל בעזרת נתיב יחסי, וכן ניתנת לגישה דרך "
+"הרשת. כששיטת ההורדה מוגדרת כפרטית, חובה לאסור את הגישה לספרייה זו דרך הרשת. "
+"שינוי המקום לאחר שהאתר היה בשימוש ייצור בעיות, כך שיש לשנות הגדרה זו באתר "
+"קיים רק אם אתם יודעים מה שאתם עושים."
+
+#: modules/system/system.admin.inc:1384
+msgid "Temporary directory"
+msgstr "תיקיה זמנית"
+
+#: modules/system/system.admin.inc:1387
+msgid "A file system path where uploaded files will be stored during previews."
+msgstr ""
+
+#: modules/system/system.admin.inc:1393
+msgid "Download method"
+msgstr "שיטת הורדת קבצים"
+
+#: modules/system/system.admin.inc:1395
+msgid "Public - files are available using HTTP directly."
+msgstr "ציבורית - הקבצים זמינים ישירות בעזרת פרוטוקול http."
+
+#: modules/system/system.admin.inc:1395
+msgid "Private - files are transferred by Drupal."
+msgstr "פרטית - הקבצים מועברים על ידי דרופל."
+
+#: modules/system/system.admin.inc:1396
+msgid ""
+"Choose the <em>Public download</em> method unless you wish to enforce fine-"
+"grained access controls over file downloads. Changing the download method "
+"will modify all download paths and may cause unexpected problems on an "
+"existing site."
+msgstr ""
+
+#: modules/system/system.admin.inc:1413
+msgid "Select an image processing toolkit"
+msgstr "בחירת חבילת תוכנה לעיבוד תמונה"
+
+#: modules/system/system.admin.inc:1437
+msgid "Number of items in each feed"
+msgstr "מספר פריטי חדשות לערוץ"
+
+#: modules/system/system.admin.inc:1440
+msgid "Default number of items to include in each feed."
+msgstr "מספר הפריטים שיכללו בערוץ כברירת מחדל."
+
+#: modules/system/system.admin.inc:1444
+msgid "Feed content"
+msgstr "תוכן הערוץ"
+
+#: modules/system/system.admin.inc:1446
+msgid "Titles only"
+msgstr "כותרת בלבד"
+
+#: modules/system/system.admin.inc:1446
+msgid "Titles plus teaser"
+msgstr "כותרת ותקציר"
+
+#: modules/system/system.admin.inc:1446
+msgid "Full text"
+msgstr "כל הטקסט"
+
+#: modules/system/system.admin.inc:1447
+msgid "Global setting for the default display of content items in each feed."
+msgstr ""
+
+#: modules/system/system.admin.inc:1490
+msgid "Custom format"
+msgstr "תבנית מותאמת"
+
+#: modules/system/system.admin.inc:1494 modules/system/system.module:550
+msgid "Locale settings"
+msgstr "הגדרות מיקום"
+
+#: modules/system/system.admin.inc:1499
+msgid "Default time zone"
+msgstr "ברירת מחדל לאזור זמן"
+
+#: modules/system/system.admin.inc:1502
+msgid "Select the default site time zone."
+msgstr "בחר את אזור הזמן שישמש כברירת מחדל עבור האתר."
+
+#: modules/system/system.admin.inc:1507
+msgid "User-configurable time zones"
+msgstr "אזורי זמן מותאמים אישית"
+
+#: modules/system/system.admin.inc:1510
+msgid ""
+"When enabled, users can set their own time zone and dates will be displayed "
+"accordingly."
+msgstr ""
+"אם התכונה מאופשרת, המשתמשים יכולים להגדיר את אזור הזמן שלהם, והתאריכים יוצגו "
+"בהתאם."
+
+#: modules/system/system.admin.inc:1515
+msgid "First day of week"
+msgstr "יום ראשון בשבוע"
+
+#: modules/system/system.admin.inc:1518
+msgid "The first day of the week for calendar views."
+msgstr "היום הראשון בשבוע עבור תצוגת תאריכים."
+
+#: modules/system/system.admin.inc:1523
+msgid "Formatting"
+msgstr "תבניות"
+
+#: modules/system/system.admin.inc:1531
+msgid "Short date format"
+msgstr "מבנה תאריך קצר"
+
+#: modules/system/system.admin.inc:1535
+msgid "The short format of date display."
+msgstr "המבנה הקצר של תצוגת תאריכים."
+
+#: modules/system/system.admin.inc:1543
+msgid "Custom short date format"
+msgstr "מבנה תאריך קצר"
+
+#: modules/system/system.admin.inc:1546
+msgid ""
+"A user-defined short date format. See the <a href=\"@url\">PHP manual</a> "
+"for available options. This format is currently set to display as <span>%"
+"date</span>."
+msgstr ""
+
+#: modules/system/system.admin.inc:1554
+msgid "Medium date format"
+msgstr "מבנה תאריך בגודל ביניים"
+
+#: modules/system/system.admin.inc:1558
+msgid "The medium sized date display."
+msgstr "מבנה המשמש לתצוגת תאריך בגודל ביניים, בין הקצר לארוך."
+
+#: modules/system/system.admin.inc:1566
+msgid "Custom medium date format"
+msgstr "מבנה תאריך בגודל בינוני"
+
+#: modules/system/system.admin.inc:1569
+msgid ""
+"A user-defined medium date format. See the <a href=\"@url\">PHP manual</a> "
+"for available options. This format is currently set to display as <span>%"
+"date</span>."
+msgstr ""
+
+#: modules/system/system.admin.inc:1577
+msgid "Long date format"
+msgstr "מבנה תאריך ארוך"
+
+#: modules/system/system.admin.inc:1581
+msgid "Longer date format used for detailed display."
+msgstr "מבנה תאריך ארוך יותר המשמש לתצוגה מפורטת."
+
+#: modules/system/system.admin.inc:1589
+msgid "Custom long date format"
+msgstr "מבנה תאריך ארוך"
+
+#: modules/system/system.admin.inc:1592
+msgid ""
+"A user-defined long date format. See the <a href=\"@url\">PHP manual</a> for "
+"available options. This format is currently set to display as <span>%date</"
+"span>."
+msgstr ""
+
+#: modules/system/system.admin.inc:1636
+msgid "Site status"
+msgstr "מצב האתר"
+
+#: modules/system/system.admin.inc:1638
+msgid "Online"
+msgstr "מקוון"
+
+#: modules/system/system.admin.inc:1638
+msgid "Off-line"
+msgstr "לא מקוון"
+
+#: modules/system/system.admin.inc:1639
+msgid ""
+"When set to \"Online\", all visitors will be able to browse your site "
+"normally. When set to \"Off-line\", only users with the \"administer site "
+"configuration\" permission will be able to access your site to perform "
+"maintenance; all other visitors will see the site off-line message "
+"configured below. Authorized users can log in during \"Off-line\" mode "
+"directly via the <a href=\"@user-login\">user login</a> page."
+msgstr ""
+
+#: modules/system/system.admin.inc:1644
+msgid "Site off-line message"
+msgstr "הודעה כאשר האתר לא מקוון"
+
+#: modules/system/system.admin.inc:1646
+msgid "Message to show visitors when the site is in off-line mode."
+msgstr "הודעה להראות למבקרים כאשר האתר נמצא במצב לא מקוון."
+
+#: modules/system/system.admin.inc:1661 modules/system/system.module:443
+msgid "Clean URLs"
+msgstr "כתובות URL נקיות"
+
+#: modules/system/system.admin.inc:1664
+msgid ""
+"This option makes Drupal emit \"clean\" URLs (i.e. without <code>?q=</code> "
+"in the URL)."
+msgstr ""
+"אפשרות זאת גורמת לדרופל לייצר כתובות \"נקיות\" (קרי, ללא ה-<code>?q=</code> "
+"בכתובת)."
+
+#: modules/system/system.admin.inc:1671
+msgid ""
+"Before enabling clean URLs, you must perform a test to determine if your "
+"server is properly configured. If you are able to see this page again after "
+"clicking the \"Run the clean URL test\" link, the test has succeeded and the "
+"radio buttons above will be available. If instead you are directed to a "
+"\"Page not found\" error, you will need to change the configuration of your "
+"server. The <a href=\"@handbook\">handbook page on Clean URLs</a> has "
+"additional troubleshooting information."
+msgstr ""
+
+#: modules/system/system.admin.inc:1675
+msgid "<a href=\"@clean_url\">Run the clean url test</a>."
+msgstr ""
+
+#: modules/system/system.admin.inc:1678 modules/system/system.js:0
+msgid "Your server has been successfully tested to support this feature."
+msgstr ""
+
+#: modules/system/system.admin.inc:1716
+msgid "Cron ran successfully."
+msgstr "ריצת cron הושלמה."
+
+#: modules/system/system.admin.inc:1719
+msgid "Cron run failed."
+msgstr "ריצת cron נכשלה."
+
+#: modules/system/system.admin.inc:1751
+msgid "Variable"
+msgstr "משתנה"
+
+#: modules/system/system.admin.inc:1751
+msgid "Value"
+msgstr "ערך"
+
+#: modules/system/system.admin.inc:1766
+msgid "Command counters"
+msgstr "מוני פקודות"
+
+#: modules/system/system.admin.inc:1768
+msgid "The number of <code>SELECT</code>-statements."
+msgstr "מספר קריאות <code>SELECT</code>."
+
+#: modules/system/system.admin.inc:1769
+msgid "The number of <code>INSERT</code>-statements."
+msgstr "מספר קריאות <code>INSERT</code>."
+
+#: modules/system/system.admin.inc:1770
+msgid "The number of <code>UPDATE</code>-statements."
+msgstr "מספר קריאות <code>UPDATE</code>."
+
+#: modules/system/system.admin.inc:1771
+msgid "The number of <code>DELETE</code>-statements."
+msgstr "מספר קריאות <code>DELETE</code>."
+
+#: modules/system/system.admin.inc:1772
+msgid "The number of table locks."
+msgstr "מספר נעילות טבלה."
+
+#: modules/system/system.admin.inc:1773
+msgid "The number of table unlocks."
+msgstr "מספר שחרורי נעילות טבלה."
+
+#: modules/system/system.admin.inc:1776
+msgid "Query performance"
+msgstr "ביצועי שאילתות"
+
+#: modules/system/system.admin.inc:1778
+msgid "The number of joins without an index; should be zero."
+msgstr "מספר חיבורי JOIN ללא מפתח. צריך להיות אפס."
+
+#: modules/system/system.admin.inc:1779
+msgid ""
+"The number of joins without keys that check for key usage after each row; "
+"should be zero."
+msgstr "מספר חיבורי JOIN ללא מפתח שבודקים שימוש במפתח כל שורה. צריך להיות אפס."
+
+#: modules/system/system.admin.inc:1780
+msgid "The number of sorts done without using an index; should be zero."
+msgstr "מספר המיונים שבוצעו ללא מפתח. צריך להיות אפס."
+
+#: modules/system/system.admin.inc:1781
+msgid "The number of times a lock could be acquired immediately."
+msgstr "מספר הפעמים שנעילה התרחשה מיידית."
+
+#: modules/system/system.admin.inc:1782
+msgid "The number of times the server had to wait for a lock."
+msgstr "מספר הפעמים בהם השרת נאלץ לחכות לנעילה."
+
+#: modules/system/system.admin.inc:1785
+msgid "Query cache information"
+msgstr "מידע על מטמון השאילתות"
+
+#: modules/system/system.admin.inc:1786
+msgid ""
+"The MySQL query cache can improve performance of your site by storing the "
+"result of queries. Then, if an identical query is received later, the MySQL "
+"server retrieves the result from the query cache rather than parsing and "
+"executing the statement again."
+msgstr ""
+
+#: modules/system/system.admin.inc:1788
+msgid "The number of queries in the query cache."
+msgstr "מספר השאילתות במטמון."
+
+#: modules/system/system.admin.inc:1789
+msgid "The number of times MySQL found previous results in the cache."
+msgstr "מספר הפעמים בהם נמצאו תוצאות משאילתות קודמות במטמון."
+
+#: modules/system/system.admin.inc:1790
+msgid "The number of times MySQL added a query to the cache (misses)."
+msgstr "מספר הפעמים בהם התוספה שאילתא למטמון (פספוסים)."
+
+#: modules/system/system.admin.inc:1791
+msgid ""
+"The number of times MySQL had to remove queries from the cache because it "
+"ran out of memory. Ideally should be zero."
+msgstr "מספר הפעמים בהם נמחקו שאילתות מהמטמון עקב מחסור במקום. רצוי שיהיה אפס."
+
+#: modules/system/system.admin.inc:1904
+msgid "Show descriptions"
+msgstr "הראה תיאורים"
+
+#: modules/system/system.admin.inc:1904
+msgid "Expand layout to include descriptions."
+msgstr "מציג תצוגה נרחבת יותר הכוללת תיאורים."
+
+#: modules/system/system.admin.inc:1907
+msgid "Hide descriptions"
+msgstr "אל תראה תיאורים"
+
+#: modules/system/system.admin.inc:1907
+msgid "Compress layout by hiding descriptions."
+msgstr "מציג תצוגה מצומצמת ללא תיאורים."
+
+#: modules/system/system.admin.inc:2023;2207
+msgid "Version"
+msgstr "גרסה"
+
+#: modules/system/system.admin.inc:2030
+msgid "Other"
+msgstr "אחר"
+
+#: modules/system/system.admin.inc:2045;2050;2175;2180
+msgid "incompatible"
+msgstr "לא תואם"
+
+#: modules/system/system.admin.inc:2045;2175
+msgid "Incompatible with this version of Drupal core"
+msgstr "לא תואם לגרסה זו של דרופל"
+
+#: modules/system/system.admin.inc:2046;2176
+msgid ""
+"This version is incompatible with the !core_version version of Drupal core."
+msgstr "גרסה זו אינה תואמת לגרסת !core_version של דרופל."
+
+#: modules/system/system.admin.inc:2050;2180
+msgid "Incompatible with this version of PHP"
+msgstr ""
+
+#: modules/system/system.admin.inc:2055
+msgid ""
+"This module requires PHP version @php_required and is incompatible with PHP "
+"version !php_version."
+msgstr ""
+
+#: modules/system/system.admin.inc:2123
+msgid "No modules are available to uninstall."
+msgstr "אין רכיבים זמינים להסרה."
+
+#: modules/system/system.admin.inc:2149;2207
+msgid "Screenshot"
+msgstr "צילום מסך"
+
+#: modules/system/system.admin.inc:2185
+msgid ""
+"This theme requires PHP version @php_required and is incompatible with PHP "
+"version !php_version."
+msgstr ""
+
+#: modules/system/system.admin.inc:833
+msgid "You must enable the @dependencies module to install @module."
+msgid_plural "You must enable the @dependencies modules to install @module."
+msgstr[0] "יש להפעיל את הרכיב @dependencies כדי להתקין את @module."
+msgstr[1] "יש להפעיל את הרכיבים @dependencies כדי להתקין את @module."
+
+#: modules/system/system.module:52
+msgid ""
+"The system module is at the foundation of your Drupal website, and provides "
+"basic but extensible functionality for use by other modules and themes. Some "
+"integral elements of Drupal are contained in and managed by the system "
+"module, including caching, enabling or disabling of modules and themes, "
+"preparing and displaying the administrative page, and configuring "
+"fundamental site settings. A number of key system maintenance operations are "
+"also part of the system module."
+msgstr ""
+
+#: modules/system/system.module:53
+msgid "The system module provides:"
+msgstr ""
+
+#: modules/system/system.module:54
+msgid ""
+"support for enabling and disabling <a href=\"@modules\">modules</a>. Drupal "
+"comes packaged with a number of core modules; each module provides a "
+"discrete set of features and may be enabled depending on the needs of your "
+"site. A wide array of additional modules contributed by members of the "
+"Drupal community are available for download at the <a href=\"@drupal-modules"
+"\">Drupal.org module page</a>."
+msgstr ""
+
+#: modules/system/system.module:55
+msgid ""
+"support for enabling and disabling <a href=\"@themes\">themes</a>, which "
+"determine the design and presentation of your site. Drupal comes packaged "
+"with several core themes and additional contributed themes are available at "
+"the <a href=\"@drupal-themes\">Drupal.org theme page</a>."
+msgstr ""
+
+#: modules/system/system.module:56
+msgid ""
+"a robust <a href=\"@cache-settings\">caching system</a> that allows the "
+"efficient re-use of previously-constructed web pages and web page "
+"components. Drupal stores the pages requested by anonymous users in a "
+"compressed format; depending on your site configuration and the amount of "
+"your web traffic tied to anonymous visitors, Drupal's caching system may "
+"significantly increase the speed of your site."
+msgstr ""
+
+#: modules/system/system.module:57
+msgid ""
+"a set of routine administrative operations that rely on a correctly-"
+"configured <a href=\"@cron\">cron maintenance task</a> to run automatically. "
+"A number of other modules, including the feed aggregator, ping module and "
+"search also rely on <a href=\"@cron\">cron maintenance tasks</a>. For more "
+"information, see the online handbook entry for <a href=\"@handbook"
+"\">configuring cron jobs</a>."
+msgstr ""
+
+#: modules/system/system.module:58
+msgid ""
+"basic configuration options for your site, including <a href=\"@date-settings"
+"\">date and time settings</a>, <a href=\"@file-system\">file system "
+"settings</a>, <a href=\"@clean-url\">clean URL support</a>, <a href=\"@site-"
+"info\">site name and other information</a>, and a <a href=\"@site-maintenance"
+"\">site maintenance</a> function for taking your site temporarily off-line."
+msgstr ""
+
+#: modules/system/system.module:59
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@system"
+"\">System module</a>."
+msgstr "למידע נוסף על קרא בספר ההדרכה של <a href=\"@system\">רכיב המערכת</a>."
+
+#: modules/system/system.module:62
+msgid ""
+"Welcome to the administration section. Here you may control how your site "
+"functions."
+msgstr "ברוכים הבאים לממשק המנהל. כאן תוכל לשלוט על התנהגות ומראה האתר."
+
+#: modules/system/system.module:64
+msgid "This page shows you all available administration tasks for each module."
+msgstr "עמוד זה מציג את כל משימות הניהול לכל רכיב."
+
+#: modules/system/system.module:66
+msgid ""
+"Select which themes are available to your users and specify the default "
+"theme. To configure site-wide display settings, click the \"configure\" task "
+"above. Alternatively, to override these settings in a specific theme, click "
+"the \"configure\" link for that theme. Note that different themes may have "
+"different regions available for displaying content; for consistency in "
+"presentation, you may wish to enable only one theme."
+msgstr ""
+"יש לסמן אילו עיצובים זמינים לחברי האתר, וכן מהי ברירת המחדל. כדי להגדיר "
+"הגדרות כלל מערכתיות, אפשר ללחוץ על הלשונית 'הגדר' למעלה. לחלופין, כדי לעקוף "
+"הגדרות כלליות כלו עבור עיצוב מסוים, אפשר ללחוץ על הקישור 'הגדר' המופיע ליד "
+"העיצוב. יש לשים לב שהעיצובים לעתים אינם אחידים בתיבות ובאיזורים שאפשר להציג "
+"בהם תוכן. כדי להשיג תאימות מירבית במראה האתר, מומלץ לאפשר רק ערכת עיצוב אחת."
+
+#: modules/system/system.module:67
+msgid ""
+"To change the appearance of your site, a number of <a href=\"@themes"
+"\">contributed themes</a> are available."
+msgstr ""
+
+#: modules/system/system.module:72
+msgid ""
+"These options control the display settings for the <code>%template</code> "
+"theme. When your site is displayed using this theme, these settings will be "
+"used. By clicking \"Reset to defaults,\" you can choose to use the <a href="
+"\"@global\">global settings</a> for this theme."
+msgstr ""
+"אפשרויות אלו קובעות את הגדרות התצוגה עבור העיצוב <code>%template</code>. "
+"הגדרות אלו משמשות כשהאתר מוצג תוך שימוש בעיצוב זה. בלחיצה על 'חזור להגדרות "
+"ברירת המחדל', ניתן לחזור להשתמש  <a href=\"@global\">בהגדרות הכלליות</a> "
+"עבור עיצוב זה."
+
+#: modules/system/system.module:74
+msgid ""
+"These options control the default display settings for your entire site, "
+"across all themes. Unless they have been overridden by a specific theme, "
+"these settings will be used."
+msgstr ""
+"אפשרויות אלו קובעות את הגדרות ברירת המחדל לתצוגה עבור כל האתר, לכל העיצובים. "
+"אם לא שינית את ברירת המחדל עבור עיצוב מסוים, יתבצע שימוש בהגדרות אלו."
+
+#: modules/system/system.module:76
+msgid ""
+"Modules are plugins that extend Drupal's core functionality. Enable modules "
+"by selecting the <em>Enabled</em> checkboxes below and clicking the <em>Save "
+"configuration</em> button. Once a module is enabled, new <a href="
+"\"@permissions\">permissions</a> may be available. To reduce server load, "
+"modules with their <em>Throttle</em> checkbox selected are temporarily "
+"disabled when your site becomes extremely busy. (Note that the <em>Throttle</"
+"em> checkbox is only available if the Throttle module is enabled.)"
+msgstr ""
+
+#: modules/system/system.module:78
+msgid ""
+"The auto-throttle functionality must be enabled on the <a href=\"@throttle"
+"\">throttle configuration page</a> after having enabled the throttle module."
+msgstr ""
+
+#: modules/system/system.module:81
+msgid ""
+"It is important that <a href=\"@update-php\">update.php</a> is run every "
+"time a module is updated to a newer version."
+msgstr ""
+
+#: modules/system/system.module:82
+msgid ""
+"You can find all administration tasks belonging to a particular module on "
+"the <a href=\"@by-module\">administration by module page</a>."
+msgstr ""
+
+#: modules/system/system.module:83
+msgid ""
+"To extend the functionality of your site, a number of <a href=\"@modules"
+"\">contributed modules</a> are available."
+msgstr ""
+
+#: modules/system/system.module:86
+msgid ""
+"The uninstall process removes all data related to a module. To uninstall a "
+"module, you must first disable it. Not all modules support this feature."
+msgstr ""
+
+#: modules/system/system.module:89
+msgid ""
+"The <em>Powered by Drupal</em> block is an optional link to the home page of "
+"the Drupal project. While there is absolutely no requirement that sites "
+"feature this link, it may be used to show support for Drupal."
+msgstr ""
+
+#: modules/system/system.module:94
+msgid ""
+"Actions are individual tasks that the system can do, such as unpublishing a "
+"piece of content or banning a user. Modules, such as the trigger module, can "
+"fire these actions when certain system events happen; for example, when a "
+"new post is added or when a user logs in. Modules may also provide "
+"additional actions."
+msgstr ""
+
+#: modules/system/system.module:95
+msgid ""
+"There are two types of actions: simple and advanced. Simple actions do not "
+"require any additional configuration, and are listed here automatically. "
+"Advanced actions can do more than simple actions; for example, send an e-"
+"mail to a specified address, or check for certain words within a piece of "
+"content. These actions need to be created and configured first before they "
+"may be used. To create an advanced action, select the action from the drop-"
+"down below and click the <em>Create</em> button."
+msgstr ""
+
+#: modules/system/system.module:97
+msgid ""
+"You may proceed to the <a href=\"@url\">Triggers</a> page to assign these "
+"actions to system events."
+msgstr ""
+
+#: modules/system/system.module:101
+msgid ""
+"An advanced action offers additional configuration options which may be "
+"filled out below. Changing the <em>Description</em> field is recommended, in "
+"order to better identify the precise action taking place. This description "
+"will be displayed in modules such as the trigger module when assigning "
+"actions to system events, so it is best if it is as descriptive as possible "
+"(for example, \"Send e-mail to Moderation Team\" rather than simply \"Send e-"
+"mail\")."
+msgstr ""
+
+#: modules/system/system.module:103
+msgid ""
+"Here you can find a short overview of your site's parameters as well as any "
+"problems detected with your installation. It may be useful to copy and paste "
+"this information into support requests filed on drupal.org's support forums "
+"and project issue queues."
+msgstr ""
+
+#: modules/system/system.module:544
+msgid "Selecting a different theme will change the look and feel of the site."
+msgstr "שינוי העיצוב משנה את מראה האתר."
+
+#: modules/system/system.module:556
+msgid "Time zone"
+msgstr "אזור זמן"
+
+#: modules/system/system.module:559
+msgid ""
+"Select your current local time. Dates and times throughout this site will be "
+"displayed using this time zone."
+msgstr "המערכת תציג את הזמנים והתאריכים באתר בהתאם לאזור הזמן."
+
+#: modules/system/system.module:576
+msgid "Powered by Drupal"
+msgstr "מריץ דרופל"
+
+#: modules/system/system.module:586
+msgid "Badge color"
+msgstr "צבע התג"
+
+#: modules/system/system.module:588
+msgid "Black"
+msgstr "שחור"
+
+#: modules/system/system.module:588
+msgid "Blue"
+msgstr "כחול"
+
+#: modules/system/system.module:588
+msgid "Gray"
+msgstr "אפור"
+
+#: modules/system/system.module:592
+msgid "Badge size"
+msgstr "גודל התג"
+
+#: modules/system/system.module:594
+msgid "Small"
+msgstr "קטן"
+
+#: modules/system/system.module:594
+msgid "Large"
+msgstr "גדול"
+
+#: modules/system/system.module:684
+msgid "Theme configuration"
+msgstr "הגדרת עיצוב"
+
+#: modules/system/system.module:707
+msgid "(site default theme)"
+msgstr "(עיצוב ברירת מחדל)"
+
+#: modules/system/system.module:1020
+msgid "The settings have not been saved because of the errors."
+msgstr "ההגדרות לא נשמרו בגלל שגיאות."
+
+#: modules/system/system.module:1191
+msgid "Configure permissions"
+msgstr "הגדר הרשאות"
+
+#: modules/system/system.module:1240
+msgid "When cron runs"
+msgstr "בזמן ריצת cron"
+
+#: modules/system/system.module:1254
+msgid "Display a message to the user"
+msgstr "הצג הודעה למשתמש"
+
+#: modules/system/system.module:1275
+msgid "Redirect to URL"
+msgstr "הפנה ל URL"
+
+#: modules/system/system.module:1295
+msgid "Choose an advanced action"
+msgstr "בחר אפשרות מתקדמת"
+
+#: modules/system/system.module:1310
+msgid "Action type"
+msgstr "סוג הפעולה"
+
+#: modules/system/system.module:1330
+msgid "Actions available to Drupal:"
+msgstr ""
+
+#: modules/system/system.module:1356
+msgid "Make a new advanced action available"
+msgstr ""
+
+#: modules/system/system.module:1368
+msgid "Create"
+msgstr "נוצר"
+
+#: modules/system/system.module:1435
+msgid ""
+"A unique description for this advanced action. This description will be "
+"displayed in the interface of modules that integrate with actions, such as "
+"Trigger module."
+msgstr ""
+
+#: modules/system/system.module:1491
+msgid "The action has been successfully saved."
+msgstr "הפעולה נשמרה."
+
+#: modules/system/system.module:1509
+msgid "Are you sure you want to delete the action %action?"
+msgstr "האמנם ברצונך למחוק את הפעולה %action?"
+
+#: modules/system/system.module:1511
+msgid "This cannot be undone."
+msgstr "לא ניתן לבטל פעולה זו."
+
+#: modules/system/system.module:1527
+msgid "Action %action was deleted"
+msgstr ""
+
+#: modules/system/system.module:1539
+msgid "Deleted orphaned action (%action)."
+msgstr ""
+
+#: modules/system/system.module:1575
+msgid "Recipient"
+msgstr "נמען"
+
+#: modules/system/system.module:1578
+msgid ""
+"The email address to which the message should be sent OR enter %author if "
+"you would like to send an e-mail to the author of the original post."
+msgstr ""
+
+#: modules/system/system.module:1585
+msgid "The subject of the message."
+msgstr "נושא ההודעה."
+
+#: modules/system/system.module:1593
+msgid ""
+"The message that should be sent. You may include the following variables: %"
+"site_name, %username, %node_url, %node_type, %title, %teaser, %body. Not all "
+"variables will be available in all contexts."
+msgstr ""
+
+#: modules/system/system.module:1606
+msgid "Please enter a valid email address or %author."
+msgstr "נא להכניס כתובת דואר אלקטרוני תקפה של %author."
+
+#: modules/system/system.module:1739
+msgid ""
+"The message to be displayed to the current user. You may include the "
+"following variables: %site_name, %username, %node_url, %node_type, %title, %"
+"teaser, %body. Not all variables will be available in all contexts."
+msgstr ""
+
+#: modules/system/system.module:1812
+msgid ""
+"The URL to which the user should be redirected. This can be an internal URL "
+"like node/1234 or an external URL like http://drupal.org."
+msgstr ""
+
+#: modules/system/system.module:1875;1875
+msgid "Powered by Drupal, an open source content management system"
+msgstr ""
+
+#: modules/system/system.module:1224
+msgid "Could not delete temporary file \"%path\" during garbage collection"
+msgstr ""
+
+#: modules/system/system.module:1526
+msgid "Deleted action %aid (%action)"
+msgstr ""
+
+#: modules/system/system.module:1653
+msgid "Cannot use %author token in this context."
+msgstr ""
+
+#: modules/system/system.module:1684
+msgid "Sent email to %recipient"
+msgstr ""
+
+#: modules/system/system.module:1687
+msgid "Unable to send email to %recipient"
+msgstr "אין אפשרות לשלוח דואר אלקטרוני ל%recipient"
+
+#: modules/system/system.module:158
+msgid "administer site configuration"
+msgstr "ניהול תצורת האתר"
+
+#: modules/system/system.module:158
+msgid "access administration pages"
+msgstr "גישה לעמודי ניהול"
+
+#: modules/system/system.module:158
+msgid "administer actions"
+msgstr "ניהול פעולות"
+
+#: modules/system/system.module:158
+msgid "access site reports"
+msgstr ""
+
+#: modules/system/system.module:158
+msgid "select different theme"
+msgstr "בחר עיצוב שונה"
+
+#: modules/system/system.module:158
+msgid "administer files"
+msgstr "ניהול קבצים"
+
+#: modules/system/system.module:200
+msgid "File download"
+msgstr "הורדת קבצים"
+
+#: modules/system/system.module:206
+msgid "Administer"
+msgstr "ניהול"
+
+#: modules/system/system.module:213
+msgid "Compact mode"
+msgstr "מצב קומפקטי"
+
+#: modules/system/system.module:219
+msgid "By task"
+msgstr "לפי משימה"
+
+#: modules/system/system.module:225
+msgid "By module"
+msgstr "לפי רכיב"
+
+#: modules/system/system.module:232
+msgid "Content management"
+msgstr "ניהול תוכן"
+
+#: modules/system/system.module:233
+msgid "Manage your site's content."
+msgstr "ניהול התוכן באתר."
+
+#: modules/system/system.module:242
+msgid "Site configuration"
+msgstr "הגדרות אתר"
+
+#: modules/system/system.module:243
+msgid "Adjust basic site configuration options."
+msgstr "ניהול תצורת אתר בסיסית."
+
+#: modules/system/system.module:250
+msgid "Site building"
+msgstr "בניית אתר"
+
+#: modules/system/system.module:251
+msgid "Control how your site looks and feels."
+msgstr "שליטה על מראה האתר."
+
+#: modules/system/system.module:259
+msgid "Settings for how your administrative pages should look."
+msgstr "הגדרות עבור מראה עמודי הניהול."
+
+#: modules/system/system.module:270
+msgid "Change which theme your site uses or allows users to set."
+msgstr "שנה את העיצוב הנבחר או אפשר לחברים לבחור לבד."
+
+#: modules/system/system.module:278
+msgid "Select the default theme."
+msgstr "בחר את העיצוב שישמש כברירת המחדל."
+
+#: modules/system/system.module:289
+msgid "Global settings"
+msgstr "הגדרות כלליות"
+
+#: modules/system/system.module:307
+msgid "Enable or disable add-on modules for your site."
+msgstr "הפעל או בטל רכיבים נוספים באתר."
+
+#: modules/system/system.module:333
+msgid "Actions"
+msgstr "פעולות"
+
+#: modules/system/system.module:334;340
+msgid "Manage the actions defined for your site."
+msgstr "ניהול הפעולות באתר שלך."
+
+#: modules/system/system.module:339
+msgid "Manage actions"
+msgstr "ניהול פעולות"
+
+#: modules/system/system.module:346
+msgid "Configure an advanced action"
+msgstr "הגדר פעולה מתקדמת"
+
+#: modules/system/system.module:352
+msgid "Delete action"
+msgstr "מחק פעולה"
+
+#: modules/system/system.module:353
+msgid "Delete an action."
+msgstr "מחק פעולה."
+
+#: modules/system/system.module:359
+msgid "Remove orphans"
+msgstr ""
+
+#: modules/system/system.module:366
+msgid "Site information"
+msgstr "מידע על האתר"
+
+#: modules/system/system.module:367
+msgid ""
+"Change basic site information, such as the site name, slogan, e-mail "
+"address, mission, front page and more."
+msgstr ""
+"שנה מידע בסיסי על האתר כמו שם, הצהרת כוונות פרסומית, כתובת דואל, משימה, עמוד "
+"ראשי ועוד."
+
+#: modules/system/system.module:375
+msgid ""
+"Control how Drupal deals with errors including 403/404 errors as well as PHP "
+"error reporting."
+msgstr ""
+"שליטה על התנהגות דרופל בעת שגיאות כולל שגיאות מסוג 403/404 וגם דיווחי שגיאות "
+"של PHP."
+
+#: modules/system/system.module:382
+msgid "Logging and alerts"
+msgstr ""
+
+#: modules/system/system.module:383
+msgid ""
+"Settings for logging and alerts modules. Various modules can route Drupal's "
+"system events to different destination, such as syslog, database, email, ..."
+"etc."
+msgstr ""
+
+#: modules/system/system.module:389
+msgid "Performance"
+msgstr "ביצועים"
+
+#: modules/system/system.module:390
+msgid ""
+"Enable or disable page caching for anonymous users and set CSS and JS "
+"bandwidth optimization options."
+msgstr "הפעל או בטל מטמון דפים למבקרים, וקבע מיטוב תעבורה של CSS ו JS."
+
+#: (duplicate) modules/system/system.module:397
+#: modules/system/system.install:184
+msgid "File system"
+msgstr "מערכת קבצים"
+
+#: modules/system/system.module:398
+msgid "Tell Drupal where to store uploaded files and how they are accessed."
+msgstr "היכן דרופל אמור לשמור קבצים שהועלו, וכיצד לגשת אליהם."
+
+#: modules/system/system.module:405
+msgid "Image toolkit"
+msgstr "ערכת כלים גרפים"
+
+#: modules/system/system.module:406
+msgid ""
+"Choose which image toolkit to use if you have installed optional toolkits."
+msgstr "בחר באיזו ערכה גרפית להשתמש אם התקנת כזו."
+
+#: modules/system/system.module:413
+msgid "RSS publishing"
+msgstr "פרסום רסס"
+
+#: modules/system/system.module:414
+msgid ""
+"Configure the number of items per feed and whether feeds should be titles/"
+"teasers/full-text."
+msgstr "הגדר את מספר הפריטים לערוץ, ואם ערוצים יכילו כותרת/תקציר/טקסט מלא."
+
+#: modules/system/system.module:421
+msgid "Date and time"
+msgstr "תאריך ושעה"
+
+#: modules/system/system.module:422
+msgid ""
+"Settings for how Drupal displays date and time, as well as the system's "
+"default timezone."
+msgstr "הגדרות לקביעת תצוגת תאריך ושעה, וכן איזור הזמן של המערכת."
+
+#: modules/system/system.module:429
+msgid "Date and time lookup"
+msgstr "חיפוש תאריך ושעה"
+
+#: modules/system/system.module:435
+msgid "Site maintenance"
+msgstr "תחזוקת אתר"
+
+#: modules/system/system.module:436
+msgid "Take the site off-line for maintenance or bring it back online."
+msgstr "הורד את האתר לצרכי תחזוקה, או העלה אותו מחדש."
+
+#: modules/system/system.module:444
+msgid "Enable or disable clean URLs for your site."
+msgstr "הפעל או בטל כתובות נקיות באתר."
+
+#: modules/system/system.module:451
+msgid "Clean URL check"
+msgstr "בדיקת כתובות URL נקיות"
+
+#: modules/system/system.module:460
+msgid "Request test"
+msgstr "בדיקת קריאת HTTP"
+
+#: modules/system/system.module:469
+msgid "Reports"
+msgstr "דו\"חות"
+
+#: modules/system/system.module:470
+msgid "View reports from system logs and other status information."
+msgstr "צפה בדווחים מיומני המערכת ומידע נוסף."
+
+#: modules/system/system.module:478
+msgid "Status report"
+msgstr "דו\"ח מצב"
+
+#: modules/system/system.module:479
+msgid ""
+"Get a status report about your site's operation and any detected problems."
+msgstr "קבל דו\"ח על פעילות האתר ובעיות שזוהו."
+
+#: modules/system/system.module:486
+msgid "Run cron"
+msgstr "הרץ cron"
+
+#: (duplicate) modules/system/system.module:492
+#: modules/system/system.install:36
+msgid "PHP"
+msgstr "PHP"
+
+#: modules/system/system.module:498
+msgid "SQL"
+msgstr "SQL"
+
+#: modules/system/system.module:0
+msgid "system"
+msgstr "מערכת"
+
+#: modules/system/system.module:0
+msgid "Footer"
+msgstr "הודעה בתחתית האתר"
+
+#: modules/system/system.install:417
+msgid ""
+"Named variable/value pairs created by Drupal core or any other module or "
+"theme. All variables are cached in memory at the start of every Drupal "
+"request so developers should not be careless about what is stored here."
+msgstr ""
+
+#: modules/system/system.install:420
+msgid "The name of the variable."
+msgstr "שם המשתנה."
+
+#: modules/system/system.install:426
+msgid "The value of the variable."
+msgstr "ערך המשתנה."
+
+#: modules/system/system.install:435
+msgid "Stores action information."
+msgstr "שומר מידע על הפעולה."
+
+#: modules/system/system.install:438;474
+msgid "Primary Key: Unique actions ID."
+msgstr ""
+
+#: modules/system/system.install:444
+msgid ""
+"The object that that action acts on (node, user, comment, system or custom "
+"types.)"
+msgstr ""
+
+#: modules/system/system.install:450
+msgid "The callback function that executes when the action runs."
+msgstr ""
+
+#: modules/system/system.install:456
+msgid "Parameters to be passed to the callback function."
+msgstr ""
+
+#: modules/system/system.install:461
+msgid "Description of the action."
+msgstr "תיאור הפעולה."
+
+#: modules/system/system.install:471
+msgid "Stores action IDs for non-default actions."
+msgstr ""
+
+#: modules/system/system.install:483
+msgid ""
+"Stores details about batches (processes that run in multiple HTTP requests)."
+msgstr ""
+
+#: modules/system/system.install:486
+msgid "Primary Key: Unique batch ID."
+msgstr ""
+
+#: modules/system/system.install:491
+msgid ""
+"A string token generated against the current user's session id and the batch "
+"id, used to ensure that only the user who submitted the batch can "
+"effectively access it."
+msgstr ""
+
+#: modules/system/system.install:496
+msgid ""
+"A Unix timestamp indicating when this batch was submitted for processing. "
+"Stale batches are purged at cron time."
+msgstr ""
+
+#: modules/system/system.install:500
+msgid "A serialized array containing the processing data for the batch."
+msgstr ""
+
+#: modules/system/system.install:510
+msgid ""
+"Generic cache table for caching things not separated out into their own "
+"tables. Contributed modules may also use this to store cached items."
+msgstr ""
+
+#: modules/system/system.install:513
+msgid "Primary Key: Unique cache ID."
+msgstr ""
+
+#: modules/system/system.install:519
+msgid "A collection of data to cache."
+msgstr "איסוף נתונים למטמון."
+
+#: modules/system/system.install:524
+msgid ""
+"A Unix timestamp indicating when the cache entry should expire, or 0 for "
+"never."
+msgstr ""
+
+#: modules/system/system.install:529
+msgid "A Unix timestamp indicating when the cache entry was created."
+msgstr ""
+
+#: modules/system/system.install:534
+msgid "Any custom HTTP headers to be added to cached data."
+msgstr ""
+
+#: modules/system/system.install:538
+msgid "A flag to indicate whether content is serialized (1) or not (0)."
+msgstr ""
+
+#: modules/system/system.install:549
+msgid ""
+"Cache table for the form system to store recently built forms and their "
+"storage data, to be used in subsequent page requests."
+msgstr ""
+
+#: modules/system/system.install:551
+msgid ""
+"Cache table used to store compressed pages for anonymous users, if page "
+"caching is enabled."
+msgstr ""
+
+#: modules/system/system.install:553
+msgid ""
+"Cache table for the menu system to store router information as well as "
+"generated link trees for various menu/page/user combinations."
+msgstr ""
+
+#: modules/system/system.install:556
+msgid "Stores information for uploaded files."
+msgstr ""
+
+#: modules/system/system.install:559
+msgid "Primary Key: Unique files ID."
+msgstr ""
+
+#: modules/system/system.install:564
+msgid "The {users}.uid of the user who is associated with the file."
+msgstr ""
+
+#: modules/system/system.install:570
+msgid "Name of the file."
+msgstr "שם הקובץ."
+
+#: modules/system/system.install:576
+msgid "Path of the file relative to Drupal root."
+msgstr ""
+
+#: modules/system/system.install:582
+msgid "The file MIME type."
+msgstr ""
+
+#: modules/system/system.install:588
+msgid "The size of the file in bytes."
+msgstr "גודל הקובץ בבתים."
+
+#: modules/system/system.install:594
+msgid "A flag indicating whether file is temporary (1) or permanent (0)."
+msgstr ""
+
+#: modules/system/system.install:599
+msgid "UNIX timestamp for when the file was added."
+msgstr ""
+
+#: modules/system/system.install:614
+msgid ""
+"Flood controls the threshold of events, such as the number of contact "
+"attempts."
+msgstr ""
+
+#: modules/system/system.install:617
+msgid "Unique flood event ID."
+msgstr ""
+
+#: modules/system/system.install:621
+msgid "Name of event (e.g. contact)."
+msgstr ""
+
+#: modules/system/system.install:627
+msgid "Hostname of the visitor."
+msgstr "שם המחשב של המבקר."
+
+#: modules/system/system.install:633
+msgid "Timestamp of the event."
+msgstr "זמן האירוע."
+
+#: modules/system/system.install:645
+msgid "A record of which {users} have read which {node}s."
+msgstr ""
+
+#: modules/system/system.install:648
+msgid "The {users}.uid that read the {node} nid."
+msgstr ""
+
+#: modules/system/system.install:653
+msgid "The {node}.nid that was read."
+msgstr ""
+
+#: modules/system/system.install:658
+msgid "The Unix timestamp at which the read occurred."
+msgstr ""
+
+#: modules/system/system.install:669
+msgid "Maps paths to various callbacks (access, page and title)"
+msgstr ""
+
+#: modules/system/system.install:672
+msgid "Primary Key: the Drupal path this entry describes"
+msgstr ""
+
+#: modules/system/system.install:678
+msgid ""
+"A serialized array of function names (like node_load) to be called to load "
+"an object corresponding to a part of the current path."
+msgstr ""
+
+#: modules/system/system.install:684
+msgid ""
+"A serialized array of function names (like user_current_to_arg) to be called "
+"to replace a part of the router path with another string."
+msgstr ""
+
+#: modules/system/system.install:690
+msgid ""
+"The callback which determines the access to this router path. Defaults to "
+"user_access."
+msgstr ""
+
+#: modules/system/system.install:696
+msgid "A serialized array of arguments for the access callback."
+msgstr ""
+
+#: modules/system/system.install:700
+msgid "The name of the function that renders the page."
+msgstr "שם הפונקציה שבונה את העמוד."
+
+#: modules/system/system.install:706
+msgid "A serialized array of arguments for the page callback."
+msgstr ""
+
+#: modules/system/system.install:710
+msgid "A numeric representation of how specific the path is."
+msgstr ""
+
+#: modules/system/system.install:715
+msgid "Number of parts in this router path."
+msgstr "מספר החלקים במסלול ניתוב זה."
+
+#: modules/system/system.install:721
+msgid ""
+"Only for local tasks (tabs) - the router path of the parent page (which may "
+"also be a local task)."
+msgstr ""
+
+#: modules/system/system.install:727
+msgid ""
+"Router path of the closest non-tab parent page. For pages that are not local "
+"tasks, this will be the same as the path."
+msgstr ""
+
+#: modules/system/system.install:733
+msgid ""
+"The title for the current page, or the title for the tab if this is a local "
+"task."
+msgstr ""
+
+#: modules/system/system.install:739
+msgid "A function which will alter the title. Defaults to t()"
+msgstr ""
+
+#: modules/system/system.install:745
+msgid ""
+"A serialized array of arguments for the title callback. If empty, the title "
+"will be used as the sole argument for the title callback."
+msgstr ""
+
+#: modules/system/system.install:751
+msgid ""
+"Numeric representation of the type of the menu item, like MENU_LOCAL_TASK."
+msgstr ""
+
+#: modules/system/system.install:756
+msgid ""
+"Name of a function used to render the block on the system administration "
+"page for this item."
+msgstr ""
+
+#: modules/system/system.install:762
+msgid "A description of this item."
+msgstr "תיאור הפריט."
+
+#: modules/system/system.install:766
+msgid ""
+"The position of the block (left or right) on the system administration page "
+"for this item."
+msgstr ""
+
+#: modules/system/system.install:772
+msgid ""
+"Weight of the element. Lighter weights are higher up, heavier weights go "
+"down."
+msgstr ""
+
+#: modules/system/system.install:777
+msgid ""
+"The file to include for this element, usually the page callback function "
+"lives in this file."
+msgstr ""
+
+#: modules/system/system.install:789
+msgid "Contains the individual links within a menu."
+msgstr ""
+
+#: modules/system/system.install:792
+msgid ""
+"The menu name. All links with the same menu name (such as 'navigation') are "
+"part of the same menu."
+msgstr ""
+
+#: modules/system/system.install:798
+msgid "The menu link ID (mlid) is the integer primary key."
+msgstr ""
+
+#: modules/system/system.install:803
+msgid ""
+"The parent link ID (plid) is the mlid of the link above in the hierarchy, or "
+"zero if the link is at the top level in its menu."
+msgstr ""
+
+#: modules/system/system.install:809
+msgid "The Drupal path or external path this link points to."
+msgstr ""
+
+#: modules/system/system.install:815
+msgid ""
+"For links corresponding to a Drupal path (external = 0), this connects the "
+"link to a {menu_router}.path for joins."
+msgstr ""
+
+#: modules/system/system.install:821
+msgid ""
+"The text displayed for the link, which may be modified by a title callback "
+"stored in {menu_router}."
+msgstr ""
+
+#: modules/system/system.install:827
+msgid ""
+"A serialized array of options to be passed to the url() or l() function, "
+"such as a query string or HTML attributes."
+msgstr ""
+
+#: modules/system/system.install:831
+msgid "The name of the module that generated this link."
+msgstr "שם המודול שייצר את הקישור הזה."
+
+#: modules/system/system.install:837
+msgid ""
+"A flag for whether the link should be rendered in menus. (1 = a disabled "
+"menu item that may be shown on admin screens, -1 = a menu callback, 0 = a "
+"normal, visible link)"
+msgstr ""
+
+#: modules/system/system.install:843
+msgid ""
+"A flag to indicate if the link points to a full URL starting with a "
+"protocol, like http:// (1 = external, 0 = internal)."
+msgstr ""
+
+#: modules/system/system.install:849
+msgid ""
+"Flag indicating whether any links have this link as a parent (1 = children "
+"exist, 0 = no children)."
+msgstr ""
+
+#: modules/system/system.install:855
+msgid ""
+"Flag for whether this link should be rendered as expanded in menus - "
+"expanded links always have their child links displayed, instead of only when "
+"the link is in the active trail (1 = expanded, 0 = not expanded)"
+msgstr ""
+
+#: modules/system/system.install:861
+msgid "Link weight among links in the same menu at the same depth."
+msgstr ""
+
+#: modules/system/system.install:866
+msgid ""
+"The depth relative to the top level. A link with plid == 0 will have depth "
+"== 1."
+msgstr ""
+
+#: modules/system/system.install:872
+msgid ""
+"A flag to indicate that the user has manually created or edited the link (1 "
+"= customized, 0 = not customized)."
+msgstr ""
+
+#: modules/system/system.install:878
+msgid ""
+"The first mlid in the materialized path. If N = depth, then pN must equal "
+"the mlid. If depth > 1 then p(N-1) must equal the plid. All pX where X > "
+"depth must equal zero. The columns p1 .. p9 are also called the parents."
+msgstr ""
+
+#: modules/system/system.install:884
+msgid "The second mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:890
+msgid "The third mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:896
+msgid "The fourth mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:902
+msgid "The fifth mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:908
+msgid "The sixth mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:914
+msgid "The seventh mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:920
+msgid "The eighth mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:926
+msgid "The ninth mlid in the materialized path. See p1."
+msgstr ""
+
+#: modules/system/system.install:932
+msgid ""
+"Flag that indicates that this link was generated during the update from "
+"Drupal 5."
+msgstr ""
+
+#: modules/system/system.install:950
+msgid ""
+"Drupal's session handlers read and write into the sessions table. Each "
+"record represents a user session, either anonymous or authenticated."
+msgstr ""
+
+#: modules/system/system.install:953
+msgid "The {users}.uid corresponding to a session, or 0 for anonymous user."
+msgstr ""
+
+#: modules/system/system.install:958
+msgid "Primary key: A session ID. The value is generated by PHP's Session API."
+msgstr ""
+
+#: modules/system/system.install:964
+msgid "The IP address that last used this session ID (sid)."
+msgstr ""
+
+#: modules/system/system.install:970
+msgid ""
+"The Unix timestamp when this session last requested a page. Old records are "
+"purged by PHP automatically."
+msgstr ""
+
+#: modules/system/system.install:975
+msgid ""
+"The time of this user's last post. This is used when the site has specified "
+"a minimum_cache_lifetime. See cache_get()."
+msgstr ""
+
+#: modules/system/system.install:980
+msgid ""
+"The serialized contents of $_SESSION, an array of name/value pairs that "
+"persists across page requests by this session ID. Drupal loads $_SESSION "
+"from here at the start of each request and saves it at the end."
+msgstr ""
+
+#: modules/system/system.install:993
+msgid ""
+"A list of all modules, themes, and theme engines that are or have been "
+"installed in Drupal's file system."
+msgstr ""
+
+#: modules/system/system.install:996
+msgid ""
+"The path of the primary file for this item, relative to the Drupal root; e."
+"g. modules/node/node.module."
+msgstr ""
+
+#: modules/system/system.install:1002
+msgid "The name of the item; e.g. node."
+msgstr "שם הפריט; למשל פריט תוכן."
+
+#: modules/system/system.install:1008
+msgid "The type of the item, either module, theme, or theme_engine."
+msgstr ""
+
+#: modules/system/system.install:1014
+msgid "A theme's 'parent'. Can be either a theme or an engine."
+msgstr ""
+
+#: modules/system/system.install:1020
+msgid "Boolean indicating whether or not this item is enabled."
+msgstr ""
+
+#: modules/system/system.install:1025
+msgid ""
+"Boolean indicating whether this item is disabled when the throttle.module "
+"disables throttleable items."
+msgstr ""
+
+#: modules/system/system.install:1031
+msgid ""
+"Boolean indicating whether this module is loaded during Drupal's early "
+"bootstrapping phase (e.g. even before the page cache is consulted)."
+msgstr ""
+
+#: modules/system/system.install:1036
+msgid ""
+"The module's database schema version number. -1 if the module is not "
+"installed (its tables do not exist); 0 or the largest N of the module's "
+"hook_update_N() function that has either been run or existed when the module "
+"was first installed."
+msgstr ""
+
+#: modules/system/system.install:1042
+msgid ""
+"The order in which this module's hooks should be invoked relative to other "
+"modules. Equal-weighted modules are ordered by name."
+msgstr ""
+
+#: modules/system/system.install:1047
+msgid ""
+"A serialized array containing information from the module's .info file; keys "
+"can include name, description, package, version, core, dependencies, "
+"dependents, and php."
+msgstr ""
+
+#: modules/system/system.install:1060
+msgid ""
+"A list of URL aliases for Drupal paths; a user may visit either the source "
+"or destination path."
+msgstr ""
+
+#: modules/system/system.install:1063
+msgid "A unique path alias identifier."
+msgstr ""
+
+#: modules/system/system.install:1068
+msgid "The Drupal path this alias is for; e.g. node/12."
+msgstr ""
+
+#: modules/system/system.install:1074
+msgid "The alias for this path; e.g. title-of-the-story."
+msgstr ""
+
+#: modules/system/system.install:1080
+msgid ""
+"The language this alias is for; if blank, the alias will be used for unknown "
+"languages. Each Drupal path can have an alias for each supported language."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:20
+msgid "Drupal"
+msgstr "דרופל"
+
+#: (duplicate) modules/system/system.install:30
+msgid "Web server"
+msgstr "שרת אינטרנט"
+
+#: (duplicate) modules/system/system.install:40
+msgid ""
+"Your PHP installation is too old. Drupal requires at least PHP %version."
+msgstr "התקנת PHP שלך ישנה מדי. דרופל דורש גרסה %version ומעלה."
+
+#: (duplicate) modules/system/system.install:46
+msgid "PHP register globals"
+msgstr ""
+
+#: (duplicate) modules/system/system.install:55
+msgid ""
+"<em>register_globals</em> is enabled. Drupal requires this configuration "
+"directive to be disabled. Your site may not be secure when "
+"<em>register_globals</em> is enabled. The PHP manual has instructions for <a "
+"href=\"http://php.net/configuration.changes\">how to change configuration "
+"settings</a>."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:57
+msgid "Enabled ('@value')"
+msgstr ""
+
+#: (duplicate) modules/system/system.install:66
+msgid "PHP memory limit"
+msgstr ""
+
+#: (duplicate) modules/system/system.install:73
+msgid ""
+"Consider increasing your PHP memory limit to %memory_minimum_limit to help "
+"prevent errors in the installation process."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:76
+msgid ""
+"Consider increasing your PHP memory limit to %memory_minimum_limit to help "
+"prevent errors in the update process."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:79
+msgid ""
+"Depending on your configuration, Drupal can run with a %memory_limit PHP "
+"memory limit. However, a %memory_minimum_limit PHP memory limit or above is "
+"recommended, especially if your site uses additional custom or contributed "
+"modules."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:84
+msgid ""
+"Increase the memory limit by editing the memory_limit parameter in the file %"
+"configuration-file and then restart your web server (or contact your system "
+"administrator or hosting provider for assistance)."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:87
+msgid ""
+"Contact your system administrator or hosting provider for assistance with "
+"increasing your PHP memory limit."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:90
+msgid "See the <a href=\"@url\">Drupal requirements</a> for more information."
+msgstr "ראה <a href=\"@url\">דרישות קדם לדרופל</a> לקבלת מידע נוסף."
+
+#: (duplicate) modules/system/system.install:107 ;254
+msgid "Not protected"
+msgstr "לא מוגן"
+
+#: (duplicate) modules/system/system.install:112
+msgid ""
+"The directory %file is not protected from modifications and poses a security "
+"risk. You must change the directory's permissions to be non-writable. "
+msgstr ""
+"הספריה %file אינה מוגנת משינויי כתיבה, ולכן זהו סיכון אבטחה. חובה לשנות את "
+"הרשאות הספריה כך שלא ניתן יהיה לכתוב את הקובץ."
+
+#: (duplicate) modules/system/system.install:115
+msgid ""
+"The file %file is not protected from modifications and poses a security "
+"risk. You must change the file's permissions to be non-writable."
+msgstr ""
+"הקובץ %file אינו מוגן משינויי כתיבה, ולכן זהו סיכון אבטחה. חובה לשנות את "
+"הרשאות הכתיבה כך לא ניתן יהיה לכתוב את הקובץ."
+
+#: (duplicate) modules/system/system.install:120 ;261
+msgid "Protected"
+msgstr "מוגן"
+
+#: (duplicate) modules/system/system.install:123
+msgid "Configuration file"
+msgstr "קובץ הגדרות"
+
+#: (duplicate) modules/system/system.install:133
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@cron-"
+"handbook\">configuring cron jobs</a>."
+msgstr ""
+"למידע נוסף, קרא בספר ההדרכה על <a href=\"@cron-handbook\">הגדרת משימות cron</"
+"a>."
+
+#: (duplicate) modules/system/system.install:157
+msgid ""
+"Cron has not run. Please visit the <a href=\"@status\">status report</a> for "
+"more information."
+msgstr ""
+"cron לא הורץ. אנא בדוק את <a href=\"@status\">דו\"ח המצב</a> לקבלת מידע נוסף."
+
+#: (duplicate) modules/system/system.install:162
+msgid "Never run"
+msgstr "לא הורץ מעולם"
+
+#: (duplicate) modules/system/system.install:163
+msgid "Cron has not run."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:166
+msgid "Last run !time ago"
+msgstr "ריצה אחרונה לפני !time"
+
+#: (duplicate) modules/system/system.install:169
+msgid "Cron has not run recently."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:174
+msgid "Cron maintenance tasks"
+msgstr "משימות תחזוקת cron"
+
+#: (duplicate) modules/system/system.install:177
+msgid "You can <a href=\"@cron\">run cron manually</a>."
+msgstr "ניתן <a href=\"@cron\">להריץ את cron ידנית</a>."
+
+#: (duplicate) modules/system/system.install:196
+msgid "Not writable"
+msgstr "לא ניתן לכתוב"
+
+#: (duplicate) modules/system/system.install:201
+msgid "The directory %directory is not writable."
+msgstr "לא ניתן לכתוב לספריה %directory."
+
+#: (duplicate) modules/system/system.install:205
+msgid ""
+"You may need to set the correct directory at the <a href=\"@admin-file-system"
+"\">file system settings page</a> or change the current directory's "
+"permissions so that it is writable."
+msgstr ""
+"צריך לקבוע את הספריה ב<a href=\"@admin-file-system\">עמוד הגדרות קבצי "
+"המערכת</a>, או להחליף את ההרשאות של הספריה הנוכחית כדי שיהיה אפשר לכתובת "
+"אליה."
+
+#: (duplicate) modules/system/system.install:210
+msgid ""
+"An automated attempt to create this directory failed, possibly due to a "
+"permissions problem. To proceed with the installation, either create the "
+"directory and modify its permissions manually, or ensure that the installer "
+"has the permissions to create it automatically. For more information, please "
+"see INSTALL.txt or the <a href=\"@handbook_url\">on-line handbook</a>."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:220
+msgid "Writable (<em>public</em> download method)"
+msgstr "ניתן לכתוב (שיטת הורדה <em>ציבורית</em>)"
+
+#: (duplicate) modules/system/system.install:223
+msgid "Writable (<em>private</em> download method)"
+msgstr "ניתן לכתוב (שיטת הורדה <em>פרטית</em>)"
+
+#: (duplicate) modules/system/system.install:230
+msgid "Database updates"
+msgstr "עדכוני מסד נתונים"
+
+#: (duplicate) modules/system/system.install:243
+msgid ""
+"Some modules have database schema updates to install. You should run the <a "
+"href=\"@update\">database update script</a> immediately."
+msgstr ""
+"יש רכיבים שצריכים לעדכן את סכמת מסד הנתונים. יש להריץ את <a href=\"@update"
+"\">תסריט עדכון מסד הנתנים</a> לאלתר."
+
+#: (duplicate) modules/system/system.install:256
+msgid ""
+"The update.php script is accessible to everyone without authentication "
+"check, which is a security risk. You must change the $update_free_access "
+"value in your settings.php back to FALSE."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:264
+msgid "Access to update.php"
+msgstr "גישה ל update.php"
+
+#: (duplicate) modules/system/system.install:275
+msgid "Not enabled"
+msgstr "לא מאופשר"
+
+#: (duplicate) modules/system/system.install:277
+msgid ""
+"Update notifications are not enabled. It is <strong>highly recommended</"
+"strong> that you enable the update status module from the <a href=\"@module"
+"\">module administration page</a> in order to stay up-to-date on new "
+"releases. For more information please read the <a href=\"@update\">Update "
+"status handbook page</a>."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:286
+msgid "HTTP request status"
+msgstr ""
+
+#: (duplicate) modules/system/system.install:287
+msgid "Fails"
+msgstr "נכשל"
+
+#: (duplicate) modules/system/system.install:289
+msgid ""
+"Your system or network configuration does not allow Drupal to access web "
+"pages, resulting in reduced functionality. This could be due to your "
+"webserver configuration or PHP settings, and should be resolved in order to "
+"download information about available updates, fetch aggregator feeds, sign "
+"in via OpenID, or use other network-dependent services."
+msgstr ""
+
+#: (duplicate) modules/system/system.install:293
+msgid "Update notifications"
+msgstr "אפשרויות עדכון"
+
+#: modules/system/system.js:0
+msgid "Testing clean URLs..."
+msgstr ""
+
+#: modules/system/system.js:0
+msgid ""
+"Your system configuration does not currently support this feature. The <a "
+"href=\"http://drupal.org/node/15365\">handbook page on Clean URLs</a> has "
+"additional troubleshooting information."
+msgstr ""

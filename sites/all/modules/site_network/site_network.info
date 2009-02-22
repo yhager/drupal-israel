@@ -1,0 +1,10 @@
+; $Id: site_network.info,v 1.1.1.1.2.1 2008/07/31 05:37:19 brmassa Exp $
+core        = "6.x"
+name        = "Site Network"
+description = "Let users from other Drupal site login using they old username and password"
+; Information added by drupal.org packaging script on 2008-08-15
+version = "6.x-1.01"
+core = "6.x"
+project = "site_network"
+datestamp = "1218758422"
+

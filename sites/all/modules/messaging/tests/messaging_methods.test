@@ -1,0 +1,44 @@
+<?php
+// $Id: messaging_methods.test,v 1.1.2.1.2.1 2008/04/12 18:40:14 jareyero Exp $ 
+/**
+ * Class for testing messaging module.
+ *
+ * Tests basic API functions
+ */
+ 
+require_once 'messaging_testcase.inc';
+
+class Messaging_Methods_Tests extends MessagingTestCase {
+  
+  function get_info() {
+    return array('name' => 'Sending methods', 'group' => 'Messaging', 'desc' => 'API compatibility for sending method plug-ins' );
+  }
+
+  /**
+   * Test message sending callbacks for enabled plug-ins
+   */
+  function testMessagingMethods() {
+    $this->messagingStartTest();
+    // Start time for message cleanup later
+    $start_time = time();
+    // Enable debug mode so messages are not actually sent and create user for testing
+    $this->drupalModuleEnable('messaging_debug');
+    $this->drupalVariableSet('messaging_debug', 0);
+    $user = $this->drupalCreateUserRolePerm(array());
+    
+    // Try each sending method and retrieve messages from store
+    
+    $count = 0;
+    foreach (messaging_method_info() as $method => $info) {
+      $name = $info['name'];
+      // This should create 3 messages for each method
+      $message = $this->randomMessage();
+      $this->assertEqual(messaging_message_send_user($user, $message, $method, TRUE), TRUE, 'Message sent for user using: '.$name);
+      $this->assertEqual(messaging_message_send(array($user, $user), $message, $method, TRUE), TRUE, 'Bulk messages sent using: '.$name);
+      $queued = messaging_store('get', array('uid' => $user->uid, 'method' => $method));
+      $this->assertEqual(count($queued), 3, 'The right number of messages have been queued for method: '.$name.' ('.count($queued).')');
+    
+    }    
+    $this->messagingCleanUp();
+  }  
+}

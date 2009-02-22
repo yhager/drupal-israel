@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file
+ * Simple mail using Drupal API. Messaging method plug-in
+ * 
+ * @ TO DO Review filtering
+ */
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_private_messaging($op) {
+  switch($op) {
+    case 'send methods':
+      $info['privatemsg'] = array(
+        'name' => t('Privatemsg'),
+        'group' => 'web',
+        'send' => 'messaging_private_send',
+        'type' => MESSAGING_TYPE_PUSH,
+        'access' => 'access private messages',
+        'glue' => "\n",
+        'description' => t('Send messages through Privatemsg'),
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Send mail message to user accounts
+ * 
+ * @param $destination
+ *   User account
+ */
+function messaging_private_send($destination, $message) {
+  // Hand over to privatemsg  
+  privatemsg_send_privatemsg($destination, $message['subject'], $message['body']);
+  // @ TO DO How to check for success?
+  return 1;
+}

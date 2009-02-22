@@ -1,0 +1,115 @@
+<?php
+// $Id: site_network.module,v 1.1.1.1.2.20 2008/08/14 19:32:45 brmassa Exp $
+/**
+ * @file
+ * Lets users log in using a Drupal ID and can notify a central
+ * server about your site.
+ */
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Change the normal form login form behavior.
+ *
+ * @ingroup form
+ */
+function site_network_form_user_login_alter(&$form, $form_state) {
+  if (variable_get('site_network_client', FALSE)) {
+    // Reset the validate and submit functions
+    module_load_include('authentication.inc', 'site_network');
+    array_unshift($form['#validate'], '_site_network_login_validate');
+
+    // Login notice
+    if (variable_get('site_network_client_notice', TRUE)) {
+      if (variable_get('site_network_client_server_only', FALSE)) {
+        $message = t('Note: you should use your account of %server instead of registering.',
+          array('%server' => variable_get('site_network_client_server', '')));
+      }
+      else {
+        $message = t('Note: if you have an account with one of our affiliates <strong>Drupal</strong>, you may <strong>login now</strong> instead of registering.');
+      }
+      $form['site-network'] = array(
+        '#value'  => $message,
+      );
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Change the normal form login form behavior.
+ *
+ * @ingroup form
+ */
+function site_network_form_user_login_block_alter(&$form, $form_state) {
+  return site_network_form_user_login_alter($form, $form_state);
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function site_network_help($path, $arg) {
+  switch ($path) {
+    case 'admin/settings/site-network':
+    case 'user/help#site-network':
+      return '<p>'. t('<a href="@Drupal">Drupal</a> is the name of the software that powers %this-site. There are Drupal websites all over the world, and many of them share their registration databases so that users may freely log in to any Drupal site using a single <strong>Drupal ID</strong>.',
+        array('@Drupal' => 'http://drupal.org', '%this-site' => variable_get('site_name', 'Drupal')))
+        .'</p><p>'.
+        t('So please feel free to log in to your account here at %this-site with a username from another Drupal site. The format of a Drupal ID is similar to an e-mail address: <strong>username</strong>@<em>server</em>. An example of a valid Drupal ID is <strong>example</strong>@<em>drupal.org</em>.')
+        .'</p>';
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function site_network_menu() {
+  $items['admin/settings/site-network'] = array(
+    'title'             => 'Site network',
+    'description'       => 'Allow your site to accept logins from other Drupal sites such as drupal.org.',
+    'file'              => 'site_network.settings.inc',
+    'page callback'     => 'drupal_get_form',
+    'page arguments'    => array('_site_network_settings'),
+    'access arguments'  => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_xmlrpc().
+ */
+function site_network_xmlrpc() {
+  $xmlrpc[] = array(
+    'drupal.login',
+    '_site_network_login',
+    array('int', 'string', 'string'),
+    t('Logging into a Drupal site')
+  );
+  return $xmlrpc;
+}
+
+/**
+ * Called when authenticating remote clients. Remote clients are
+ * usually other Drupal instances.
+ *
+ * Callback function from site_network_xmlrpc().
+ *
+ * @param $username
+ *   String. The Drupal user name
+ * @param $password
+ *   String. The user password
+ * @return
+ *   Integer. The user ID of the given user or 0 if the authentication
+ *   failes
+ */
+function _site_network_login($username, $password) {
+  if (variable_get('site_network_server', FALSE)
+      and $user = user_load(array('name' => $username, 'pass' => $password, 'status' => 1))) {
+    return $user->uid;
+  }
+  return 0;
+}

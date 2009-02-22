@@ -1,0 +1,81 @@
+# $Id: ja.po,v 1.1.2.1 2008/04/12 14:52:12 imagine Exp $
+# -----------------------------------------------------------------------------
+# Japanese translation of Drupal (modules-yui_editor)
+#
+# Copyright (c) 2006-2008  Drupal Japan  ( http://drupal.jp/ )  /
+#                          Takafumi      ( jp.drupal@imagine **reverse order**)
+#
+# Generated from file:
+#  yui_editor.module: n/a
+#  yui_editor.info: n/a
+#
+# -----------------------------------------------------------------------------
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2008-04-12 19:10+0900\n"
+"Last-Translator: Takafumi <jp.drupal@imagine **reverse order**>\n"
+"Language-Team: Drupal Japan\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: yui_editor.module:18
+msgid "YUI editor settings"
+msgstr "YUIエディタの設定"
+
+#: yui_editor.module:23
+msgid "View/Modify YUI editor settings"
+msgstr "YUIエディタの設定の表示と変更を行います。"
+
+#: yui_editor.module:57
+msgid "Paths"
+msgstr "パス"
+
+#: yui_editor.module:58
+msgid "Define where should YUI replace the body textarea, each path on a new line. You can use wildcards (*). (Leave blank for every form)"
+msgstr "本文のテキストエリアをYUIエディタで置き換えるパスを、行単位で入力してください。 ワイルドカード(*)が使用できます。 空欄にした場合、すべてのフォームで置き換えられます。 例： node/add/*"
+
+#: yui_editor.module:64
+msgid "IDs"
+msgstr "ID"
+
+#: yui_editor.module:65
+msgid "Define which textareas do you want the editor to replace, write the ID of each textarea on a seperate line. (if empty the editor will only replace the body textarea)"
+msgstr "エディタを置き換えたいテキストエリアのIDを、行単位で入力してください。 空欄にした場合、本文のテキストエリアのみが置き換えられます。 例： edit-body"
+
+#: yui_editor.module:72
+msgid "Height"
+msgstr "高さ"
+
+#: yui_editor.module:74
+msgid "The height of the editor in pixels"
+msgstr "エディタの高さをピクセル単位で入力してください。"
+
+#: yui_editor.module:77
+msgid "Width"
+msgstr "幅"
+
+#: yui_editor.module:79
+msgid "The width of the editor in pixels"
+msgstr "エディタの幅をピクセル単位で入力してください。"
+
+#: yui_editor.module:45
+msgid "Access YUI editor"
+msgstr "YUIエディタへのアクセス"
+
+#: yui_editor.module:0
+msgid "yui_editor"
+msgstr "yui_editor"
+
+#: yui_editor.info:0
+msgid "YUI editor"
+msgstr "YUIエディタ"
+
+#: yui_editor.info:0
+msgid "Enables the usage of the Yahoo User Interface library's Rich Text Editor."
+msgstr "Yahoo! UIライブラリのリッチテキストエディタを利用できるようにします。"
+
+#: yui_editor.info:0
+msgid "Yahoo YUI"
+msgstr "Yahoo YUI"

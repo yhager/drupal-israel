@@ -1,0 +1,104 @@
+<?php
+// $Id: notifications_api.test,v 1.1.2.1.2.1 2008/09/20 15:43:30 jareyero Exp $
+/**
+ * Class for testing notifications module.
+ * Tests basic API functions
+ */
+class NotificationsBasicTests extends DrupalWebTestCase {
+  
+  function getInfo() {
+    return array(
+      'name' => 'Notifications Basics',
+      'group' => 'Notifications', 
+      'description' => 'Notifications API functions and administration pages');
+  }
+  
+  function setUp() {
+    parent::setUp('notifications');
+
+    // Log in with administrator permissions
+    $user = $this->drupalCreateUser(array('administer notifications', 'maintain own subscriptions', 'administer site configuration'));
+    $this->drupalLogin($user);
+    
+    // Next, perform any required steps for the test methods within this test grouping.
+    // variable_set('some_variable');
+  }
+
+  /**
+   * Play with creating, retrieving, deleting a pair subscriptions
+   */
+  function testNotificationsBasicAPI() {
+    $test_type = 'test';
+    $test_event_type = 'test event';
+    
+    // Any user will do for exercising the API
+    $user = $this->drupalCreateUser();
+    
+    $s1 = new Stdclass();
+    $s1->uid = $user->uid;
+    $s1->type = $test_type;
+    $s1->event_type = $test_event_type;
+    $s1->fields = array('field1' => 1, 'field2' => 2);
+    
+    $s2 = $s1;
+
+    // Create the subscription and check assigned sid
+    notifications_save_subscription($s1);
+    $this->assertEqual(is_numeric($s1->sid) && $s1->sid > 0, TRUE, 'The subscription has been created');
+    
+    // Retrieve the subscription and check values
+    $s = notifications_load_subscription($s1->sid, TRUE);
+    $this->assertEqual($s, $s1, 'The subscription has been retrieved and values are ok');
+
+    // Attempt to create a second one with the same values
+    notifications_save_subscription($s2);
+    $this->assertEqual($s1->sid, $s2->sid, 'A duplicate subscription has been detected and updated');
+    
+    // Now really create a second one
+    $s2 = clone($s1);
+    $s2->sid = 0;
+    $s2->fields['field2'] = 3;
+    notifications_save_subscription($s2);
+    $this->assertEqual(is_numeric($s2->sid) && $s2->sid > $s1->sid, TRUE, 'Another subscription has been created');
+    
+    // Trying several recovery options
+    $subs = notifications_get_subscriptions(array('type' => $test_type));
+    $this->assertEqual(count($subs), 2, 'Retrieved subscriptions by type');
+    $subs = notifications_get_subscriptions(array('type' => $test_type), array('field1' => $s1->fields['field1']), TRUE);
+    $this->assertEqual(count($subs), 0, 'Retrieved subscriptions by type and limited field');
+    $subs = notifications_get_subscriptions(array('type' => $test_type), array('field1' => $s1->fields['field1']), FALSE);
+    $this->assertEqual(count($subs), 2, 'Retrieved subscriptions by type and general field');
+    $subs = notifications_get_subscriptions(array('type' => $test_type), array('field1' => $s1->fields['field1'], 'field2' => $s1->fields['field2']), FALSE);
+    $this->assertEqual(count($subs), 1, 'Retrieved subscriptions by type and general field');
+       
+    // Delete the subscriptions and check
+    notifications_delete_subscriptions(array('type' => $test_type));
+    $subs = notifications_get_subscriptions(array('type' => $test_type));
+    $this->assertEqual(count($subs), 0, 'The subscriptions have been deleted');
+  }
+
+  /**
+   * Log in as administrator and test page loading
+   */
+  function testNotificationsBasicPages() {
+    //$user = user_load(array('uid' => 1));
+    //$this->drupalLogin($user);
+    $this->drupalGet('admin/messaging/notifications');
+    $this->assertText('General settings', 'General settings page showing up');
+    $this->drupalGet('admin/messaging/notifications/events');
+    $this->assertText('events', 'Enabled events page showing up');
+    $this->drupalGet('admin/messaging/notifications/intervals');
+    $this->assertText('Send intervals', 'Intervals page showing up');    
+  }
+
+  /**
+   * Implementation of tearDown().
+   */
+  function tearDown() {
+    // Perform any clean-up tasks.
+    //variable_del('some_variable');
+
+    // The last thing a tearDown() method should always do is call its parent tearDown() method.
+    parent::tearDown();
+  }
+}

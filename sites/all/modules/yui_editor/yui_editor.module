@@ -1,0 +1,183 @@
+<?php
+/*
+ * @file
+ * yui_editor Module for Drupal 6.x
+ *
+ * This module allows Drupal to replace textarea fields with YUI editor.
+ */
+
+/*
+ * Implementation of hook_menu().
+ */
+function yui_editor_menu() {
+  $items['admin/settings/yui_editor'] = array(
+    'title' => t('YUI editor settings'),
+    'page callback' => 'yui_editor_profile_list',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+    'description' => t("View/Modify YUI editor settings"),
+    'file' => 'yui_editor.admin.inc',
+  );
+  $items['admin/settings/yui_editor/list'] = array(
+    'title' => 'List',
+    'file' => 'yui_editor.admin.inc',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/yui_editor/add'] = array(
+    'title' => 'Add profile',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('yui_editor_profile'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'yui_editor.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+  $items['admin/settings/yui_editor/edit/%'] = array(
+    'title' => 'Edit profile',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('yui_editor_profile'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'yui_editor.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/settings/yui_editor/delete/%/%'] = array(
+    'title' => 'Delete profile',
+    'page callback' => 'yui_editor_profile_delete',
+    'page arguments' => array(4, 5),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'yui_editor.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  _yui_editor_plugin('menu', $items, $items);
+
+  return $items;
+}
+
+/*
+ * Implementation of hook_init().
+ */
+function yui_editor_init() {
+  if (!user_access('Access YUI editor')) {
+    return;
+  }
+
+  global $user;
+  $path = drupal_get_path_alias($_GET['q']);
+  $profiles = variable_get('yui_editor_profiles', array());
+  $role_pass = false;
+
+  foreach($profiles as $priority => $list) {
+    foreach ($list as $pid => $profile) {
+      $regexp = '/^('. preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/', '/(^|\|)\\\\<front\\\\>($|\|)/'), array('|', '.*', '\1'. preg_quote(variable_get('site_frontpage', 'node'), '/') .'\2'), preg_quote($profile['include'], '/')) .')$/';
+
+      foreach ($user->roles as $rid => $name) {
+        if ($profile['roles'][$rid] == $rid) {
+          $role_pass = true;
+          break;
+        }
+      }
+      if ((empty($profile['include']) or preg_match($regexp, $path)) and $role_pass) {
+        yui_render_editor($profile);
+        break 2;
+      }
+    }
+  }
+}
+
+/*
+ * Add the javascript/CSS needed to render the editor 
+ */
+function yui_render_editor($profile) {
+  _yui_editor_plugin('render', $profile, $profile);
+
+  yui_editor_load_libs();
+  drupal_add_css(drupal_get_path("module", "yui_editor")."/yui_editor.css");
+  drupal_add_js(drupal_get_path("module", "yui_editor")."/yui_editor.js");
+
+  if ($profile['button_profile'] != 1) {
+    drupal_add_js(drupal_get_path("module", "yui_editor")."/toolbars/".$profile['button_profile']);
+  }
+  else {
+    $toolbar = "function yui_editor_toolbar() { this.toolbar = { titlebar: '', collapse: true, draggable: false, buttonType: 'advanced', buttons: [" . $profile['custom'] . "] }; }";
+    drupal_add_js($toolbar, 'inline', 'footer');
+  }
+
+  $ids = $profile['ids'];
+  $ids = str_replace(array("\r\n", "\n\r", "\r"), "\n", $ids);
+
+  $textareas = array();
+  if (!empty($ids)) {
+    $textareas = explode("\n", $ids);
+  }
+  else {
+    $textareas[] = 'edit-body';
+  }
+
+  $settings = '';
+  unset($profile['custom']);
+  unset($profile['_custom_html']);
+  drupal_to_js($profile);
+  foreach($textareas as $id) {
+    drupal_add_js("YAHOO.Drupal.editors.push(new YAHOO.Drupal.yui_editor('$id', { $settings base_path: '".base_path()."'"."}));", 'inline', 'footer');
+  }
+
+  drupal_add_js('YAHOO.Drupal.yui_editor_load.fire();', 'inline', 'footer');
+}
+
+function yui_editor_load_libs() {
+  // TODO: only load CSS/JS based on the settings...
+  $yui_source = variable_get('yui_source','http://yui.yahooapis.com/2.6.0');
+  yui_add_css('editor', $yui_source, '/build/menu/assets/skins/sam/menu.css');
+  yui_add_css('editor', $yui_source, '/build/button/assets/skins/sam/button.css');
+  yui_add_css('editor', $yui_source, '/build/fonts/fonts-min.css');
+  yui_add_css('editor', $yui_source, '/build/container/assets/skins/sam/container.css');
+  yui_add_css('editor', $yui_source, '/build/autocomplete/assets/skins/sam/autocomplete.css');
+  yui_add_css('editor', $yui_source, '/build/editor/assets/skins/sam/editor.css');
+  yui_add_css('editor', $yui_source, '/build/resize/assets/skins/sam/resize.css');
+  yui_add_js('editor', $yui_source, '/build/yahoo-dom-event/yahoo-dom-event.js');
+  yui_add_js('editor', $yui_source, '/build/utilities/utilities.js');
+  yui_add_js('editor', $yui_source, '/build/dragdrop/dragdrop-min.js');
+  yui_add_js('editor', $yui_source, '/build/animation/animation-min.js');
+  if (preg_match('/2.6.[0-9]$/iU', $yui_source)) {
+    yui_add_js('editor', $yui_source, '/build/element/element-min.js');
+  }
+  else {
+    yui_add_js('editor', $yui_source, '/build/element/element-beta-min.js');
+  }
+  yui_add_js('editor', $yui_source, '/build/container/container-min.js');
+  yui_add_js('editor', $yui_source, '/build/menu/menu-min.js');
+  yui_add_js('editor', $yui_source, '/build/button/button-min.js');
+  if (preg_match('/2.6.[0-9]$/iU', $yui_source)) {
+    yui_add_js('editor', $yui_source, '/build/resize/resize-min.js');
+    yui_add_js('editor', $yui_source, '/build/datasource/datasource-min.js');
+    yui_add_js('editor', $yui_source, '/build/autocomplete/autocomplete-min.js');
+    yui_add_js('editor', $yui_source, '/build/editor/editor-min.js');
+  }
+  else {
+    yui_add_js('editor', $yui_source, '/build/resize/resize-beta-min.js');
+    yui_add_js('editor', $yui_source, '/build/autocomplete/autocomplete-min.js');
+    yui_add_js('editor', $yui_source, '/build/editor/editor-beta-min.js');
+  }
+}
+
+function _yui_editor_plugin($op, &$d1, &$d2) {
+  static $plugins;
+
+  if ($plugins == null) {
+    $d = dir(drupal_get_path("module", "yui_editor")."/plugins");
+    while (false !== ($entry = $d->read())) {
+     if ($entry != '.' and $entry != '..' and preg_match('/\.inc$/', $entry)) {
+       require_once(drupal_get_path("module", "yui_editor")."/plugins/".$entry);
+       $plugins[] = preg_replace('/\.inc$/', '', $entry);
+     }
+    }
+    $d->close();
+  }
+
+  foreach ($plugins as $plugin) {
+    if (function_exists("yui_editor_${plugin}_$op")) {
+      call_user_func_array("yui_editor_${plugin}_$op", array(&$d1, &$d2));
+    }
+  }
+}

@@ -1,0 +1,42 @@
+<?php
+/*
+ * Implementation of hook_install().
+ */
+ 
+require_once(drupal_get_path("module", "yui_editor")."/yui_editor.admin.inc");
+
+function yui_editor_install() {
+  yui_editor_update_6200();
+}
+
+function yui_editor_update_6200() {
+  $profiles = variable_get('yui_editor_profiles', array());
+  if (sizeof($profiles) == 0) {
+    // Get a default profile
+    $profile = yui_editor_profile_default();
+
+    // Add in settings from previous install
+    $profile['include'] = variable_get('yui_editor_include', '');
+    $profile['ids'] = variable_get('yui_editor_ids', '');
+    $profile['title'] = variable_get('yui_editor_title', '');
+    $profile['titlebar'] = variable_get('yui_editor_titlebar', 0);
+    $profile['height'] = variable_get('yui_editor_height', '250px');
+    $profile['width'] = variable_get('yui_editor_width', '100%');
+    $profile['markup'] = variable_get('yui_editor_markup', 'xhtml');
+    $profile['resize'] = variable_get('yui_editor_resize', 0);
+    $profile['plaintext'] = variable_get('yui_editor_plaintext', 0);
+    $profile['coder'] = variable_get('yui_editor_coder', 0);
+    $profile['collapse'] = variable_get('yui_editor_collapse', 0);
+    $profile['draggable'] = variable_get('yui_editor_draggable', 0);
+    $profile['dom'] = variable_get('yui_editor_dom', 1);
+    $profile['img_upload'] = variable_get('yui_editor_img_upload', 0);
+    $profile['flickr'] = variable_get('yui_editor_flickr', 0);
+    $profile['flickr_api_key'] = variable_get('yui_editor_flickr_api_key', '');
+    $profile['button_type'] = variable_get('yui_editor_button_type', 'simple');
+    $profile['button_profile'] = variable_get('yui_editor_profile', 'yui_editor_toolbar_default.js');
+    
+    $profiles[10][time()] = $profile;
+    variable_set('yui_editor_profiles', $profiles);
+  }
+  return array(array('success' => TRUE, 'query' => check_plain('Imported your YUI Editor settings to 2.x')));
+}

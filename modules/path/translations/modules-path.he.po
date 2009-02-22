@@ -1,0 +1,160 @@
+# translation of general.po to Hebrew
+# Amnon Levav <amnon@levavie.com>, 2006.
+# Haggai Eran <haggai.eran@gmail.com>, 2006.
+# Yuval Hager <yuval@avramzon.net>, 2007.
+# Hebrew translation of דרופל ישראל
+# Copyright (c) 2006 ליאור <lior@linnovate.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: Drupal 6.0\n"
+"POT-Creation-Date: 2008-02-15 13:50+0100\n"
+"PO-Revision-Date: 2007-02-26 11:58+0200\n"
+"Last-Translator: Yuval Hager <yuval@avramzon.net>\n"
+"Language-Team: Hebrew <he@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: modules/path/path.admin.inc:30
+msgid "Alias"
+msgstr "מיקום"
+
+#: modules/path/path.admin.inc:54
+msgid "No URL aliases available."
+msgstr "טרם הוגדרו מיקומים."
+
+#: modules/path/path.admin.inc:93
+msgid "Existing system path"
+msgstr "כתובת URL במערכת"
+
+#: modules/path/path.admin.inc:97
+msgid ""
+"Specify the existing path you wish to alias. For example: node/28, forum/1, "
+"taxonomy/term/1+2."
+msgstr "כתובת URL קיימת במערכת. לדוגמה: node/28, forum/1, taxonomy/term/1+2."
+
+#: modules/path/path.admin.inc:107
+msgid ""
+"Specify an alternative path by which this data can be accessed. For example, "
+"type \"about\" when writing an about page. Use a relative path and don't add "
+"a trailing slash or the URL alias won't work."
+msgstr ""
+"רשום מיקום חילופי שבעזרתו ניתן יהיה לגשת למידע זה. לדוגמה , כתוב \"about\" "
+"כשאתה כותב עמוד אודות האתר. השתמש בנתיב יחסי ואל תוסיף בסוף לוכסן, אחרת זה "
+"לא יעבוד."
+
+#: modules/path/path.admin.inc:118
+msgid "Update alias"
+msgstr "עדכן מיקום"
+
+#: modules/path/path.admin.inc:121
+msgid "Create new alias"
+msgstr "צור מיקום חדש"
+
+#: modules/path/path.admin.inc:154
+msgid "The alias has been saved."
+msgstr "המיקום נשמר."
+
+#: modules/path/path.admin.inc:167
+msgid "Are you sure you want to delete path alias %title?"
+msgstr "האמנם למחוק את המיקום %title?"
+
+#: modules/path/path.module:15
+msgid ""
+"The path module allows you to specify aliases for Drupal URLs. Such aliases "
+"improve readability of URLs for your users and may help internet search "
+"engines to index your content more effectively. More than one alias may be "
+"created for a given page."
+msgstr ""
+
+#: modules/path/path.module:16
+msgid ""
+"<p>Some examples of URL aliases are:</p>\n"
+"<ul>\n"
+"<li>user/login =&gt; login</li>\n"
+"<li>image/tid/16 =&gt; store</li>\n"
+"<li>taxonomy/term/7+19+20+21 =&gt; store/products/whirlygigs</li>\n"
+"<li>node/3 =&gt; contact</li>\n"
+"</ul>\n"
+msgstr ""
+
+#: modules/path/path.module:24
+msgid ""
+"The path module enables appropriately permissioned users to specify an "
+"optional alias in all node input and editing forms, and provides an "
+"interface to view and edit all URL aliases. The two permissions related to "
+"URL aliasing are <em>administer url aliases</em> and <em>create url aliases</"
+"em>. "
+msgstr ""
+
+#: modules/path/path.module:25
+msgid ""
+"This module also provides user-defined mass URL aliasing capabilities, which "
+"is useful if you wish to uniformly use URLs different from the default. For "
+"example, you may want to have your URLs presented in a different language. "
+"Access to the Drupal source code on the web server is required to set up "
+"mass URL aliasing. "
+msgstr ""
+
+#: modules/path/path.module:31
+msgid ""
+"Enter the path you wish to create the alias for, followed by the name of the "
+"new alias."
+msgstr ""
+"יש לרשום את כתובת הדף שעבורו ברצונך ליצור מיקום, ולאחריה את המיקום החדש."
+
+#: modules/path/path.module:80
+msgid "The alias has been deleted."
+msgstr "המיקום נמחק."
+
+#: modules/path/path.module:140
+msgid "The path is already in use."
+msgstr "מיקום זה כבר נמצא בשימוש."
+
+#: modules/path/path.module:182
+msgid "URL path settings"
+msgstr "הגדרת מיקום חלופי"
+
+#: modules/path/path.module:194
+msgid ""
+"Optionally specify an alternative URL by which this node can be accessed. "
+"For example, type \"about\" when writing an about page. Use a relative path "
+"and don't add a trailing slash or the URL alias won't work."
+msgstr ""
+"ניתן להגדיר גם מיקום חילופי שדרכו ניתן לגשת לפריט תוכן זה. לדוגמה, רשום "
+"\"about\" כשאתה כותב עמוד אודות האתר. יש להשתמש במיקום יחסי ולא להוסיף לוכסן "
+"בסוף, אחרת זה לא יעבוד."
+
+#: modules/path/path.module:209
+msgid "create url aliases"
+msgstr "יצירת מיקומים"
+
+#: modules/path/path.module:209
+msgid "administer url aliases"
+msgstr "ניהול מיקומים"
+
+#: modules/path/path.module:40
+msgid "URL aliases"
+msgstr "מיקומים"
+
+#: modules/path/path.module:41
+msgid "Change your site's URL paths by aliasing them."
+msgstr "שנה את כתובות ה-URL של האתר שלך ע\"י יצירת מיקומים חלופיים עבורן."
+
+#: modules/path/path.module:47
+msgid "Edit alias"
+msgstr "עדכן מיקום"
+
+#: modules/path/path.module:53
+msgid "Delete alias"
+msgstr "מחק מיקום"
+
+#: modules/path/path.module:65
+msgid "Add alias"
+msgstr "הוסף מיקום"
+
+#: modules/path/path.module:0
+msgid "path"
+msgstr "מיקום"

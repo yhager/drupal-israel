@@ -1,0 +1,34 @@
+@charset "utf-8";
+/*
+  * Tendu Drupal 5.x Theme For Developers CSS
+  * Updated: May 24, 2008 
+  * Author: Tom Bigelajzen - http://tombigel.com
+  */
+
+/*Incremental CSS overrides for RTL designs*/
+
+/* Drupal reset */
+ul.menu{text-align:right;padding:0 1em 0 0}
+ul.menu li{margin:0 .5em 0 0;}
+
+/* Set text direction */
+body {direction:rtl}
+table, td, th{text-align:right;}
+#page{padding:0 1px;}/*Fix Horizontal scroll bug in FF2 (WTF?) */
+
+/* Flip sidebars */
+#sidebar-left{float:right;}
+#sidebar-right{float:left;}
+.one-sidebar #content{padding-left:0 !important;padding-right:0 !important;margin-left:0;margin-right:0}/*Reset LTR paddings and margins*/
+.with-sidebar-left #content{margin-right:170px;padding-right:20px !important;padding-right:17px;}/*IE6 3px gap bug*/
+.with-sidebar-right #content{margin-left:170px;padding-left:20px !important;padding-left:17px;}/*IE6 3px gap bug*/
+
+/* Flip main navagation */
+#main-nav li {float:right;margin-left:0em;margin-right:1em}
+
+/* Flip everything else */
+#header-blocks {float:left;}
+#site-logo{float:right}
+#site-details{float:right;}
+
+

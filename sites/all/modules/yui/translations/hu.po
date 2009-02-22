@@ -1,0 +1,64 @@
+# $Id: hu.po,v 1.1.2.1 2008/09/12 17:41:38 bakyildiz Exp $
+#
+# Hungarian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  yui.module: n/a
+#  yui.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-08-04 10:40+0200\n"
+"PO-Revision-Date: 2008-08-04 10:46+0100\n"
+"Last-Translator: \n"
+"Language-Team: Hungarian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: yui.module:15
+msgid "YUI Common parameters."
+msgstr "YUI Általános paraméterek."
+
+#: yui.module:43
+msgid "Location of YUI library"
+msgstr "YUI könyvtár helye"
+
+#: yui.module:44
+msgid "Default location is Yahoo Server. <BR>If you install YUI library locally please enter the path as follows: files/lib"
+msgstr "A Yahoo Szerveren található meg alapbeállításként. <BR>Ha helyileg installáltad a YUI könyvtárat, kérlek add meg az elérési utat így: files/lib"
+
+#: yui.module:50;51
+msgid "Skin to use for YUI"
+msgstr "A YUI skin"
+
+#: yui.module:63
+msgid "YUI Common Settings"
+msgstr "YUI Általános Beállítások"
+
+#: yui.module:64
+msgid "YUI Description"
+msgstr "YUI Leírás"
+
+#: yui.module:23
+msgid "Access YUI"
+msgstr "YUI Hozzáférés"
+
+#: yui.module:0
+msgid "yui"
+msgstr "yui"
+
+#: yui.info:0
+msgid "YUI"
+msgstr "YUI"
+
+#: yui.info:0
+msgid "YUI Module Common paramerets"
+msgstr "YUI Modul Általános paraméterek"
+
+#: yui.info:0
+msgid "Yahoo YUI"
+msgstr "Yahoo YUI"
+

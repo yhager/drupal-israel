@@ -1,0 +1,6 @@
+<?php
+// $Id: dopl.install,v 1.1.2.1 2008/12/10 12:32:59 zstolar Exp $
+
+function dopl_install() {
+  drupal_set_message(t('In order to activate the Drupal.org project link filter, you must !activate_it in the input formats admin screen.', array('!activate_it' => l(t('activate it'), 'admin/settings/filters'))));
+}

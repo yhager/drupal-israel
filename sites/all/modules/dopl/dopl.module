@@ -1,0 +1,77 @@
+<?php
+// $Id: dopl.module,v 1.1.2.4 2009/02/08 13:05:49 zstolar Exp $
+
+/**
+ * @file
+ * Generate Drpual.org project links
+ */
+
+/**
+ * Implementation of hook_filter().
+ */
+function dopl_filter($op, $delta = 0, $format = -1, $text = '') {
+  switch ($op) {
+    case 'no cache':
+      return FALSE;
+    case 'list':
+      return array(0 => t('Drupal.org project link filter'));
+    case 'description':
+      return t('Facilitate linking to Drupal.org projects.');
+    case 'process':
+      return dopl_process($text);
+    default:
+      return $text;
+  }
+}
+
+/**
+ * Implementation of hook_filter_tips().
+ */
+function dopl_filter_tips($delta, $format, $long = false) {
+  return t('Use one of the forms <em>name.module</em>, <em>name.theme</em>, <em>name.translation</em>, <em>name.installprofile</em> or <em>name.project</em>, in order to link to <em>http://drupal.org/project/name</em>. Note that a link will be generated even if a project does not exist.');
+}
+
+
+function dopl_process($text) {
+  $pattern = '/(\b)(\w+)(\.(module|theme|translation|installprofile|project))(\b)/';
+  // Old style. Kept for reference:
+  // $replacement = '$1<a href="http://drupal.org/project/$2">$2$3</a>$5';
+  $text = preg_replace_callback($pattern, 'dopl_update_clone', $text);
+  return $text;
+}
+
+function dopl_update_clone($matches = array()){
+  $name = $matches[2]; // the plain module name (e.g., cck, views, dopl)
+  // First try to fetch data from cache 
+  if ($link = cache_get('dopl:'. $matches[2])) {
+    return $link->data;
+  }
+  else if (module_exists('update')) {
+    module_load_include('inc', 'update', 'update.fetch');
+    // Try to fetch the project's full name, using update.module's functions:
+    $core_compatibility = array('7.x', '6.x', '5.x', '4.7.x');
+    $url = variable_get('update_fetch_url', UPDATE_DEFAULT_URL);
+    foreach ($core_compatibility as $key => $value) {
+      $current_url = $url . '/' . $name . '/' . $value;
+      $xml = drupal_http_request($current_url);
+      if (isset($xml->data)) {
+        $data[] = $xml->data;
+      }
+      if ($data) {
+        $parser = new update_xml_parser;
+        $available = $parser->parse($data);
+      }
+      if ($project_title = $available[$name]['title']) {
+        $link = $matches[1] . '<a href="http://drupal.org/project/' . $matches[2] . '">' . $project_title . '</a>' . $matches[5];
+        // Update cache:
+        cache_set('dopl:'. $matches[2], $link);
+        return $link; 
+      }
+    }
+    // if we reached here it means there is no active project of this name:
+    return $matches[0];
+  }
+  else {
+    return $matches[1] . '<a href="http://drupal.org/project/' . $matches[2] . '">' . $matches[2] . $matches[3] . '</a>' . $matches[5];
+  }
+}

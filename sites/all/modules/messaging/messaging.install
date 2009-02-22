@@ -1,0 +1,108 @@
+<?php
+// $Id: messaging.install,v 1.2.2.4.2.3 2008/07/29 16:19:40 jareyero Exp $
+
+/**
+* Implementation of hook_schema().
+*/
+function messaging_schema() {
+  $schema['messaging_store'] = array(
+    'fields' => array(
+      'mqid'    => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'uid'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'sender' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'method' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'destination' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'subject' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'body' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big'),
+      'params' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big'),
+      'created' => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+      'sent' => array('type' => 'int', 'not null' => TRUE, 'default' => 0),  
+      'cron' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+      'queue' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+      'log' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
+    ),    
+    'primary key' => array('mqid'),
+  );
+
+  $schema['messaging_message_parts'] = array(
+    'fields' => array(
+      'type'    => array('type' => 'varchar', 'length' => 100, 'not null' => TRUE, 'default' => ''),
+      'method'    => array('type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'default' => ''),
+      'msgkey' => array('type' => 'varchar', 'length' => 100, 'not null' => TRUE, 'default' => ''),
+      'module' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'message' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big'),
+    ),
+    'indexes' => array(
+      'type'    => array('type'),
+      'method' => array('method'),
+      'msgkey' => array('msgkey'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+* Implementation of hook_install().
+*/
+function messaging_install() {
+  // Create tables.
+  drupal_install_schema('messaging');
+  // Create default plain text filter
+  _messaging_install_create_filter();
+}
+
+/**
+ * Create a default plain text filter, just to have some reasonable default to get started
+ */
+function _messaging_install_create_filter() {
+  // Create default filter, plain text
+  db_query("INSERT INTO {filter_formats} (name, cache) VALUES('%s', 0)", t('Messaging plain text'));
+  $format = db_last_insert_id('filter_formats', 'format');
+  db_query("INSERT INTO {filters} (format, module, delta, weight) VALUES(%d, 'messaging', 1, 0)", $format);
+  variable_set('messaging_default_filter', $format);
+  drupal_set_message(t("A new Input format has been created: %name", array('%name' => t('Messaging plain text'))));
+}
+
+/**
+* Implementation of hook_uninstall().
+*/
+function messaging_uninstall() {
+  // Remove tables.
+  drupal_uninstall_schema('messaging');
+}
+
+/**
+ * Update method settings
+ */
+function messaging_update_1() {
+  $ret = array();
+  if ($settings = variable_get('messaging_methods', array())) {
+    foreach ($settings as $key => $info){
+      $info['subject_filter'] = $info['filter'];
+      variable_set('messaging_method_'. $key, $info);
+    }
+    drupal_set_message('Your messaging settings have been updated. Please review them.');
+  }
+  return $ret;
+}
+
+/**
+ * Create queue storage
+ */
+function messaging_update_2() {
+  $ret = array();
+  drupal_install_schema('messaging_store');
+  return $ret; 
+}
+
+/**
+ * Updates for Drupal 6 version
+ */
+function messaging_update_6001() {
+  $ret = array();
+  _messaging_install_create_filter();
+  return $ret;
+}
+
+

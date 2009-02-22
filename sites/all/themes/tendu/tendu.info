@@ -1,0 +1,24 @@
+; $Id: tendu.info,v 1.0 2008/13/10 11:00:00 goba Exp $
+name = Tendu
+description = Wireframe BiDi Theme for Developers. Tableless, Cross browser support. 
+version = VERSION
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = style.css
+stylesheets[print][] = print.css
+
+; Information added by drupal.org packaging script on 2008-10-08
+version = "6.5"
+project = "drupal"
+datestamp = "1223497210"
+regions[sidebar_left] = Left sidebar
+regions[sidebar_right] = Right sidebar
+regions[content] = Content
+regions[header] = Header
+regions[footer] = Footer
+regions[content_bottom] = Beneath Content
+regions[content_top] = Above Content
+regions[main_nav] = Main navigation
+regions[closure] = Closure region
+regions[footer] = Footer
+

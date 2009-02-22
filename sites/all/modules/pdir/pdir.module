@@ -1,0 +1,69 @@
+<?php
+// $Id: pdir.module,v 1.1.2.3 2008/12/07 08:58:39 zstolar Exp $
+
+/**
+ * @file
+ * Determines the directionaliy of a paragraph
+ */
+
+/**
+ * Implementation of hook_filter_tips().
+ */
+function pdir_filter($op, $delta = 0, $format = -1, $text = '') {
+  switch ($op) {
+    case 'no cache':
+      return FALSE;
+    case 'list':
+      return array(0 => t('Paragraph Directionality Filter'));
+    case 'description':
+      return t('Sets the directionality of a paragraph, according to it\'s first alphabetic chracter. <strong>This filter should be generally used after the Line break converter filter</strong>.');
+    case 'process':
+      return pdir_pdir($text);
+    default:
+      return $text;
+  }
+}
+
+function pdir_pdir($text) {
+  # find first text within a paragraph (ignore html inside paragraphs)
+  $chunks = preg_split('@(</?[^>]*>)@i', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+  # Find paragraphs, and check the next chunk
+  $i = 0;
+  while ($i <= count($chunks)) {
+    if ($chunks[$i] == '<p>') {
+      $text_chunk = pdir_text_chuck($chunks, $i+1);
+      if ($text_chunk) {
+        $dir = pdir_determine_dir($chunks[$text_chunk]);
+        $chunks[$i] .= '<p style="direction:' . $dir . '">';
+        $output .= $chunks[$i];
+      }
+    }
+    else {
+      $output .= $chunks[$i];
+    }
+    $i++;
+  }
+  return $output;
+}
+
+function pdir_text_chuck($chunks, $i) {
+  # If the current chunk is a valid text, return it, otherwise, keep digging.
+  if (preg_match('@^<[^>]*>@u', $chunks[$i]) || empty($chunks[$i])) {
+    $next = pdir_text_chuck($chunks, $i+1);
+    return $next;
+  }
+  else {
+    return $i;
+  }
+}
+
+function pdir_determine_dir($chunk) {
+  # Check wehther the first alphabethic character is an RTL one (e.g., belongs to an RTL language)
+  $neutral_chars = array('@\PL@u', '@\d@u');
+  $chunk = preg_replace($neutral_chars, '', $chunk);
+  if (preg_match('@(^[\x{0590}-\x{05f4}])@u', $chunk) || // Hebrew
+      preg_match('@(^[\x{0600}-\x{06ff}])@u', $chunk)) { // Arabic
+    return 'rtl';
+  }
+  else return 'ltr';
+}

@@ -1,0 +1,1623 @@
+# translation of modules-user.po to Hebrew
+# Amnon Levav <amnon@levavie.com>, 2006.
+# Haggai Eran <haggai.eran@gmail.com>, 2006.
+# Yuval Hager <yuval@avramzon.net>, 2007, 2008.
+# Hebrew translation of דרופל ישראל
+# Copyright (c) 2006 ליאור <lior@linnovate.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: modules-user\n"
+"POT-Creation-Date: 2008-02-15 13:50+0100\n"
+"PO-Revision-Date: 2008-03-14 07:51+0200\n"
+"Last-Translator: Yuval Hager <yuval@avramzon.net>\n"
+"Language-Team: Hebrew <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: modules/user/user.admin.inc:13 modules/user/user.module:667;2425;908
+msgid "Create new account"
+msgstr "הצטרפות"
+
+#: modules/user/user.admin.inc:43
+msgid "Show only users where"
+msgstr "הראה רק משתמשים עבורם"
+
+#: modules/user/user.admin.inc:52
+msgid ""
+"<em>and</em> where <strong>%property</strong> is <strong>%value</strong>"
+msgstr ""
+
+#: modules/user/user.admin.inc:55
+msgid "<strong>%property</strong> is <strong>%value</strong>"
+msgstr ""
+
+#: modules/user/user.admin.inc:137;911 modules/user/user.module:621
+msgid "Member for"
+msgstr "חבר במשך"
+
+#: modules/user/user.admin.inc:138;912
+msgid "Last access"
+msgstr "כניסה אחרונה"
+
+#: modules/user/user.admin.inc:169 modules/user/user.module:1957
+msgid "blocked"
+msgstr "חסום"
+
+#: modules/user/user.admin.inc:169 modules/user/user.module:1957
+msgid "active"
+msgstr "פעיל"
+
+#: modules/user/user.admin.inc:221
+msgid "No users selected."
+msgstr "לא נבחרו משתמשים."
+
+#: modules/user/user.admin.inc:233
+msgid "User registration settings"
+msgstr "הגדרות הצטרפות"
+
+#: modules/user/user.admin.inc:234
+msgid "Public registrations"
+msgstr "הצטרפות חברים חדשים"
+
+#: modules/user/user.admin.inc:234
+msgid "Visitors can create accounts and no administrator approval is required."
+msgstr "גולשי האתר יכולים להצטרף ללא אישור מנהל."
+
+#: modules/user/user.admin.inc:234
+msgid "Visitors can create accounts but administrator approval is required."
+msgstr "גולשי האתר יכולים לבקש להצטרף אך נדרש אישור מנהל."
+
+#: modules/user/user.admin.inc:235
+msgid "Require e-mail verification when a visitor creates an account"
+msgstr "דרוש אישור בדוא\"ל כאשר אורח יוצר חשבון משתמש"
+
+#: modules/user/user.admin.inc:235
+msgid ""
+"If this box is checked, new users will be required to validate their e-mail "
+"address prior to logging into the site, and will be assigned a system-"
+"generated password. With it unchecked, users will be logged in immediately "
+"upon registering, and may select their own passwords during registration."
+msgstr ""
+
+#: modules/user/user.admin.inc:236
+msgid "User registration guidelines"
+msgstr "הנחיות הצטרפות"
+
+#: modules/user/user.admin.inc:236
+msgid ""
+"This text is displayed at the top of the user registration form and is "
+"useful for helping or instructing your users."
+msgstr ""
+"הודעה זו מוצגת בראש טופס ההצטרפות. היא שימושית כדי לעזור למצטרפים או להנחות "
+"אותם."
+
+#: modules/user/user.admin.inc:241
+msgid "User e-mail settings"
+msgstr "הגדרות דואר אלקטרוני של המשתמש"
+
+#: modules/user/user.admin.inc:242
+msgid ""
+"Drupal sends emails whenever new users register on your site, and "
+"optionally, may also notify users after other account actions. Using a "
+"simple set of content templates, notification e-mails can be customized to "
+"fit the specific needs of your site."
+msgstr ""
+
+#: modules/user/user.admin.inc:246
+msgid "Available variables are:"
+msgstr "המשתנים הזמינים הם:"
+
+#: modules/user/user.admin.inc:250
+msgid "Welcome, new user created by administrator"
+msgstr "תוכן ההודעה (עבור משתמש הנוצר על ידי מנהל)"
+
+#: modules/user/user.admin.inc:253
+msgid ""
+"Customize welcome e-mail messages sent to new member accounts created by an "
+"administrator."
+msgstr ""
+"התאמת גוף ההודעה הנשלחת לחברים חדשים עם הצטרפותם, כאשר החשבון נוצר בידי מנהל."
+
+#: modules/user/user.admin.inc:270
+msgid "Welcome, no approval required"
+msgstr "תוכן ההודעה, כאשר לא נדרש אישור"
+
+#: modules/user/user.admin.inc:273
+msgid ""
+"Customize welcome e-mail messages sent to new members upon registering, when "
+"no administrator approval is required."
+msgstr ""
+"התאמת גוף ההודעה הנשלחת לחברים חדשים עם הצטרפותם, כאשר לא נדרש אישור מנהל."
+
+#: modules/user/user.admin.inc:290
+msgid "Welcome, awaiting administrator approval"
+msgstr "תוכן ההודעה, כאשר החשבון החדש ממתין לאישור מנהל"
+
+#: modules/user/user.admin.inc:293
+msgid ""
+"Customize welcome e-mail messages sent to new members upon registering, when "
+"administrative approval is required."
+msgstr ""
+"התאמת גוף ההודעה הנשלחת לחברים חדשים עם הצטרפותם, כאשר נדרש אישור מנהל."
+
+#: modules/user/user.admin.inc:310
+msgid "Password recovery email"
+msgstr "הודעה לאחזור סיסמא"
+
+#: modules/user/user.admin.inc:313
+msgid "Customize e-mail messages sent to users who request a new password."
+msgstr "התאם את ההודעה הנשלחת למשתמשים שמבקשים סיסמא חדשה."
+
+#: modules/user/user.admin.inc:330
+msgid "Account activation email"
+msgstr "הודעה בהפעלת חשבון"
+
+#: modules/user/user.admin.inc:333
+msgid ""
+"Enable and customize e-mail messages sent to users upon account activation "
+"(when an administrator activates an account of a user who has already "
+"registered, on a site where administrative approval is required)."
+msgstr ""
+
+#: modules/user/user.admin.inc:337
+msgid "Notify user when account is activated."
+msgstr "הודע למשתמש על חשבון חדש."
+
+#: modules/user/user.admin.inc:355
+msgid "Account blocked email"
+msgstr "הודעה בחסימת חשבון"
+
+#: modules/user/user.admin.inc:358
+msgid ""
+"Enable and customize e-mail messages sent to users when their accounts are "
+"blocked."
+msgstr ""
+
+#: modules/user/user.admin.inc:362
+msgid "Notify user when account is blocked."
+msgstr "הודע למשתמש כאשר חשבונו נחסם."
+
+#: modules/user/user.admin.inc:380
+msgid "Account deleted email"
+msgstr "הודעה שנשלחת כאשר החשבון נמחק"
+
+#: modules/user/user.admin.inc:383
+msgid ""
+"Enable and customize e-mail messages sent to users when their accounts are "
+"deleted."
+msgstr ""
+
+#: modules/user/user.admin.inc:387
+msgid "Notify user when account is deleted."
+msgstr "הודע למשתמש כאשר חשבונו נמחק."
+
+#: modules/user/user.admin.inc:406
+msgid "Signatures"
+msgstr "חתימות"
+
+#: modules/user/user.admin.inc:410
+msgid "Signature support"
+msgstr "תמיכה בחתימות"
+
+#: modules/user/user.admin.inc:423
+msgid "Pictures"
+msgstr "תמונות"
+
+#: modules/user/user.admin.inc:428
+msgid "Picture support"
+msgstr "תמיכה בתמונות"
+
+#: modules/user/user.admin.inc:448
+msgid "Picture image path"
+msgstr "מיקום קובץ תמונה"
+
+#: modules/user/user.admin.inc:452
+msgid "Subdirectory in the directory %dir where pictures will be stored."
+msgstr ""
+"תיקיית משנה בתוך התיקייה <span dir=\"ltr\">%dir</span>, שבה יאוחסנו התמונות."
+
+#: modules/user/user.admin.inc:456
+msgid "Default picture"
+msgstr "תמונת ברירת מחדל"
+
+#: modules/user/user.admin.inc:460
+msgid ""
+"URL of picture to display for users with no custom picture selected. Leave "
+"blank for none."
+msgstr ""
+"כתובת URL של תמונה שתוצג עבור חברים שלא בחרו תמונה מותאמת אישית. השאר ריק אם "
+"אין כזו תמונה."
+
+#: modules/user/user.admin.inc:464
+msgid "Picture maximum dimensions"
+msgstr "מימדי תמונה מקסימליים"
+
+#: modules/user/user.admin.inc:468
+msgid "Maximum dimensions for pictures, in pixels."
+msgstr "מימדים מקסימליים עבור תמונות, בפיקסלים."
+
+#: modules/user/user.admin.inc:472
+msgid "Picture maximum file size"
+msgstr "גודל מקסימלי של קובץ תמונה"
+
+#: modules/user/user.admin.inc:476
+msgid "Maximum file size for pictures, in kB."
+msgstr "גודל מקסימלי של קובץ תמונה, בקילובייט."
+
+#: modules/user/user.admin.inc:480
+msgid "Picture guidelines"
+msgstr "הנחיות  לגבי טעינת תמונות"
+
+#: modules/user/user.admin.inc:482
+msgid ""
+"This text is displayed at the picture upload form in addition to the default "
+"guidelines. It's useful for helping or instructing your users."
+msgstr ""
+"ההודעה המוצגת בטופס טעינת התמונה בנוסף להנחיות הרגילות. שימושי כדי לעזור או "
+"להנחות את המשתמשים."
+
+#: modules/user/user.admin.inc:543
+msgid "Save permissions"
+msgstr "שמור הרשאות"
+
+#: modules/user/user.admin.inc:563 modules/user/user.pages.inc:280;346
+msgid "The changes have been saved."
+msgstr "השינויים נשמרו."
+
+#: modules/user/user.admin.inc:582 modules/user/user.module:1941
+msgid "@module module"
+msgstr "רכיב @module"
+
+#: modules/user/user.admin.inc:595
+msgid "Permission"
+msgstr "הרשאה"
+
+#: modules/user/user.admin.inc:624
+msgid "Role name"
+msgstr "שם תפקיד"
+
+#: modules/user/user.admin.inc:629
+msgid ""
+"The name for this role. Example: \"moderator\", \"editorial board\", \"site "
+"architect\"."
+msgstr "שם התפקיד. לדוגמא: \"עורך\", \"כתב\", \"עורך ראשי\", \"מנהל אתר\"."
+
+#: modules/user/user.admin.inc:637;662;679
+msgid "Save role"
+msgstr "שמור תפקיד"
+
+#: modules/user/user.admin.inc:641;683
+msgid "Delete role"
+msgstr "מחק תפקיד"
+
+#: modules/user/user.admin.inc:652;667;691
+msgid "Add role"
+msgstr "הוסף תפקיד"
+
+#: modules/user/user.admin.inc:664;669
+msgid "The role name %name already exists. Please choose another role name."
+msgstr "התפקיד %role כבר קיים. אנא בחר שם תפקיד אחר."
+
+#: modules/user/user.admin.inc:674
+msgid "You must specify a valid role name."
+msgstr "יש להזין שם תפקיד תקין."
+
+#: modules/user/user.admin.inc:681
+msgid "The role has been renamed."
+msgstr "שונה שם התפקיד."
+
+#: modules/user/user.admin.inc:689
+msgid "The role has been deleted."
+msgstr "התפקיד נמחק."
+
+#: modules/user/user.admin.inc:693
+msgid "The role has been added."
+msgstr "התפקיד החדש נשמר."
+
+#: modules/user/user.admin.inc:715;737
+msgid "You must enter a mask."
+msgstr "יש להזין הנחיות סינון תוכן."
+
+#: modules/user/user.admin.inc:720
+msgid "The access rule has been added."
+msgstr "הכלל החדש נשמר."
+
+#: modules/user/user.admin.inc:728 modules/user/user.module:1007
+msgid "Add rule"
+msgstr "הוסף כלל"
+
+#: modules/user/user.admin.inc:741
+msgid "The access rule has been saved."
+msgstr "כלל הגישה נשמר."
+
+#: modules/user/user.admin.inc:748
+msgid "Save rule"
+msgstr "שמירת כלל"
+
+#: modules/user/user.admin.inc:759;886
+msgid "Access type"
+msgstr "סוג גישה"
+
+#: modules/user/user.admin.inc:761
+msgid "Allow"
+msgstr "אפשר"
+
+#: modules/user/user.admin.inc:761
+msgid "Deny"
+msgstr "חסוֹם"
+
+#: modules/user/user.admin.inc:763
+msgid "Host"
+msgstr "שם שרת"
+
+#: modules/user/user.admin.inc:766;886
+msgid "Rule type"
+msgstr "סוג כלל"
+
+#: modules/user/user.admin.inc:772;886
+msgid "Mask"
+msgstr "מסיכה"
+
+#: modules/user/user.admin.inc:776
+msgid "Matches any number of characters, even zero characters"
+msgstr "מתאים לכל כמות של תוים, אפילו אפס"
+
+#: modules/user/user.admin.inc:776
+msgid "Matches exactly one character."
+msgstr "מתאים לתו אחד בדיוק."
+
+#: modules/user/user.admin.inc:786
+msgid "No value entered. Please enter a test string and try again."
+msgstr "לא הוכנס כל ערך. אנא הכנס מחרוזת לבדיקה ונסה שוב."
+
+#: modules/user/user.admin.inc:792
+msgid "Enter a username to check if it will be denied or allowed."
+msgstr "הכנס כינוי משתמש כדי לבדוק אם הוא ייחסם או יאופשר."
+
+#: modules/user/user.admin.inc:794
+msgid "Check username"
+msgstr "בדיקת כינוי משתמש"
+
+#: modules/user/user.admin.inc:803
+msgid "Enter an e-mail address to check if it will be denied or allowed."
+msgstr "הכנס כתובת דואר אלקטרוני כדי לבדוק אם היא תיחסם או תאופשר."
+
+#: modules/user/user.admin.inc:805
+msgid "Check e-mail"
+msgstr "בדיקת דואר אלקטרוני"
+
+#: modules/user/user.admin.inc:814
+msgid ""
+"Enter a hostname or IP address to check if it will be denied or allowed."
+msgstr "הכנס שם מחשב מארח או כתובת IP כדי לבדוק אם היא תיחסם או תאופשר."
+
+#: modules/user/user.admin.inc:816
+msgid "Check hostname"
+msgstr "בדיקת מחשב"
+
+#: modules/user/user.admin.inc:827
+msgid "The username %name is not allowed."
+msgstr "המשתמש %name לא מורשה להכנס."
+
+#: modules/user/user.admin.inc:830
+msgid "The username %name is allowed."
+msgstr "המשתמש %name מורשה להכנס."
+
+#: modules/user/user.admin.inc:835
+msgid "The e-mail address %mail is not allowed."
+msgstr "כתובת הדואר האלקטרוני %mail אינה מורשית להכנס."
+
+#: modules/user/user.admin.inc:838
+msgid "The e-mail address %mail is allowed."
+msgstr "כתובת הדואר האלקטרוני %mail מורשית להכנס."
+
+#: modules/user/user.admin.inc:843
+msgid "The hostname %host is not allowed."
+msgstr "המחשב %host אינו מורשה להכנס."
+
+#: modules/user/user.admin.inc:846
+msgid "The hostname %host is allowed."
+msgstr "המחשב %host מורשה להכנס."
+
+#: modules/user/user.admin.inc:861;888
+msgid "username"
+msgstr "כינוי"
+
+#: modules/user/user.admin.inc:861;888
+msgid "e-mail"
+msgstr "דוא\"ל"
+
+#: modules/user/user.admin.inc:861;888
+msgid "host"
+msgstr "שם שרת"
+
+#: modules/user/user.admin.inc:867
+msgid "Are you sure you want to delete the @type rule for %rule?"
+msgstr "האם אתם מעוניינים למחוק את הכלל @type עבור %rule?"
+
+#: modules/user/user.admin.inc:877
+msgid "The access rule has been deleted."
+msgstr "הכלל נמחק."
+
+#: modules/user/user.admin.inc:891
+msgid "allow"
+msgstr "אפשרי"
+
+#: modules/user/user.admin.inc:891
+msgid "deny"
+msgstr "לא אפשרי"
+
+#: modules/user/user.admin.inc:894
+msgid "There are currently no access rules."
+msgstr "אין כעת כללי גישה."
+
+#: modules/user/user.admin.inc:931
+msgid "No users available."
+msgstr "אין משתמשים זמינים."
+
+#: modules/user/user.admin.inc:952
+msgid "edit permissions"
+msgstr "עדכן הרשאות"
+
+#: modules/user/user.admin.inc:954
+msgid "edit role"
+msgstr "עדכון תפקיד"
+
+#: modules/user/user.admin.inc:957
+msgid "locked"
+msgstr "נעול"
+
+#: modules/user/user.pages.inc:34
+msgid "Username or e-mail address"
+msgstr "כינוי או כתובת דואר אלקטרוני"
+
+#: modules/user/user.pages.inc:39
+msgid "E-mail new password"
+msgstr "שלח סיסמה חדשה בדואר האלקטרוני"
+
+#: modules/user/user.pages.inc:56
+msgid "Sorry, %name is not recognized as a user name or an e-mail address."
+msgstr "סליחה, אך %name לא מוכר כשם משתמש או ככתובת דואר אלקטרוני."
+
+#: modules/user/user.pages.inc:67
+msgid "Further instructions have been sent to your e-mail address."
+msgstr "הסיסמה שלך והנחיות נוספות נשלחו לכתובת הדואר האלקטרוני שלך."
+
+#: modules/user/user.pages.inc:81
+msgid ""
+"You have already used this one-time login link. It is not necessary to use "
+"this link to login anymore. You are already logged in."
+msgstr ""
+"כבר השתמשת בקישור כניסה החד פעמי הזה. כעת אין כבר צורך להשתמש בקישור זה כדי "
+"להכנס לאתר. את/ה כבר בתוך האתר."
+
+#: modules/user/user.pages.inc:92
+msgid ""
+"You have tried to use a one-time login link that has expired. Please request "
+"a new one using the form below."
+msgstr ""
+"ניסית להשתמש בקישור לכניסה חד פעמית אשר אינו תקף יותר. יש לבקש חדש בטופס הבא."
+
+#: modules/user/user.pages.inc:104
+msgid ""
+"You have just used your one-time login link. It is no longer necessary to "
+"use this link to login. Please change your password."
+msgstr ""
+"כרגע השתמשת בכתובת כניסה חד פעמית. אין צורך להשתמש בכתובת זו בעתיד. אנא שנה/"
+"י את סיסמתך."
+
+#: modules/user/user.pages.inc:108
+msgid ""
+"<p>This is a one-time login for %user_name and will expire on %"
+"expiration_date.</p><p>Click on this button to login to the site and change "
+"your password.</p>"
+msgstr ""
+"<p> זוהי כתובת כניסה חד פעמית עבור %user_name ותוקפה יפוג ב- %"
+"expiration_date </p><p> יש ללחוץ על הכפתור על מנת להכנס לאתר ולשנות את "
+"הסיסמה.</p>"
+
+#: modules/user/user.pages.inc:109
+msgid "This login can be used only once."
+msgstr "ניתן להשתמש בכניסה זו פעם אחת בלבד."
+
+#: modules/user/user.pages.inc:110 modules/user/user.module:663;1255;902
+msgid "Log in"
+msgstr "כניסה"
+
+#: modules/user/user.pages.inc:116
+msgid ""
+"You have tried to use a one-time login link which has either been used or is "
+"no longer valid. Please request a new one using the form below."
+msgstr ""
+"ניסית להשתמש בכניסה חד פעמית אשר אינה תקפה יותר. יש לבקש סיסמא חדשה בטופס "
+"הבא."
+
+#: modules/user/user.pages.inc:263;332;261;330
+#: modules/user/user.module:1768;2277
+msgid "Detected malicious attempt to alter protected user fields."
+msgstr "איתור נסיונות זדוניים לשנות מידע במאפייני משתמש פרטיים."
+
+#: modules/user/user.pages.inc:308
+msgid "Are you sure you want to delete the account %name?"
+msgstr "האמנם ברצונך למחוק את %name מהאתר?"
+
+#: modules/user/user.pages.inc:310
+msgid ""
+"All submissions made by this user will be attributed to the anonymous "
+"account. This action cannot be undone."
+msgstr ""
+"כל התכנים שהועלו על ידי חבר זה ישוייכו לחשבון האנונימי. אין אפשרות לשחזר "
+"פעולה זו."
+
+#: modules/user/user.pages.inc:319
+msgid "%name has been deleted."
+msgstr "%name נמחק."
+
+#: modules/user/user.pages.inc:66
+msgid "Password reset instructions mailed to %name at %email."
+msgstr "סיסמא נשלחה אל %name לכתובת %email."
+
+#: modules/user/user.pages.inc:98
+msgid "User %name used one-time login link at time %timestamp."
+msgstr "המשתמש %name השתמש בכניסה חד פעמית ב%timestamp."
+
+#: modules/user/user.pages.inc:134
+msgid "Session closed for %name."
+msgstr "יציאה מהמערכת: %name."
+
+#: modules/user/user.module:379
+msgid "You must enter a username."
+msgstr "חובה להכניס שם משתמש."
+
+#: modules/user/user.module:380
+msgid "The username cannot begin with a space."
+msgstr "שם משתמש אינו יכול להתחיל בתו 'רווח'."
+
+#: modules/user/user.module:381
+msgid "The username cannot end with a space."
+msgstr "כינוי לא יכול להסתיים ברווח. יש למחוק את הרווחים המיותרים בסוף הכינוי."
+
+#: modules/user/user.module:382
+msgid "The username cannot contain multiple spaces in a row."
+msgstr "שם משתמש אינו יכול להכיל רצף של תווי 'רווח' ."
+
+#: modules/user/user.module:383;394
+msgid "The username contains an illegal character."
+msgstr "הכינוי שבחרת מכיל אותיות שאינן מותרות."
+
+#: modules/user/user.module:396
+msgid "The username is not a valid authentication ID."
+msgstr "שם המשתמש אינו רצף תווי זיהוי תקין."
+
+#: modules/user/user.module:397
+msgid "The username %name is too long: it must be %max characters or less."
+msgstr "שם המשתמש %name ארוך מידי: הגודל המרבי הוא %max תווים."
+
+#: modules/user/user.module:401
+msgid "You must enter an e-mail address."
+msgstr "חובה להכניס כתובת דואר אלקטרוני."
+
+#: modules/user/user.module:403
+msgid "The e-mail address %mail is not valid."
+msgstr "כתובת הדואר האלקטרוני אינה תקינה."
+
+#: modules/user/user.module:429
+msgid ""
+"Failed to upload the picture image; the %directory directory doesn't exist "
+"or is not writable."
+msgstr ""
+"תקלה בעת קבלת התמונה; הספריה %directory אינה קיימת, או שלא ניתן לכתוב לתוכה."
+
+#: modules/user/user.module:617
+msgid "History"
+msgstr "היסטוריה"
+
+#: modules/user/user.module:639
+msgid "Account settings"
+msgstr "הגדרות חשבון"
+
+#: modules/user/user.module:667
+msgid "Create a new user account."
+msgstr "צור חבר קהילה חדש."
+
+#: modules/user/user.module:669;917
+msgid "Request new password"
+msgstr "חידוש סיסמה"
+
+#: modules/user/user.module:669
+msgid "Request new password via e-mail."
+msgstr "בקש סיסמה חדשה בדואר אלקטרוני."
+
+#: modules/user/user.module:681;728
+msgid "User login"
+msgstr "כניסה"
+
+#: modules/user/user.module:690;749
+msgid "Who's new"
+msgstr "מי חדש"
+
+#: modules/user/user.module:693;788
+msgid "Who's online"
+msgstr "מי מחובר"
+
+#: modules/user/user.module:700
+msgid "Number of users to display"
+msgstr "מספר משתמשים להצגה"
+
+#: modules/user/user.module:708
+msgid "User activity"
+msgstr "פעילות חבר הקהילה"
+
+#: modules/user/user.module:708
+msgid ""
+"A user is considered online for this long after they have last viewed a page."
+msgstr "המשתמש נחשב מחובר לזמן זה שאחרי הפעם האחרונה שהוא צפה בדף כלשהוא."
+
+#: modules/user/user.module:709
+msgid "User list length"
+msgstr "אורך רשימת חברי האתר"
+
+#: modules/user/user.module:709
+msgid "Maximum number of currently online users to display."
+msgstr "מספר מקסימלי של משתמשים מחוברים שיש להציג."
+
+#: modules/user/user.module:776
+msgid "There is currently %members and %visitors online."
+msgstr "כרגע מחוברים %members ו%visitors."
+
+#: modules/user/user.module:779
+msgid "There are currently %members and %visitors online."
+msgstr "כרגע מחוברים לאתר %members ו-%visitors."
+
+#: modules/user/user.module:785
+msgid "Online users"
+msgstr "חברים שמחוברים עכשיו"
+
+#: modules/user/user.module:816
+msgid "@user's picture"
+msgstr "התמונה של @user"
+
+#: modules/user/user.module:1171;1041
+msgid "My account"
+msgstr "החשבון שלי"
+
+#: modules/user/user.module:1247
+msgid "Enter your @s username."
+msgstr "הכנס את הכינוי שלך ."
+
+#: modules/user/user.module:1250
+msgid "Enter the password that accompanies your username."
+msgstr "הכנס את הסיסמה שלך."
+
+#: modules/user/user.module:1289
+msgid "The username %name has not been activated or is blocked."
+msgstr "הכינוי %name לא הופעל או חסום."
+
+#: modules/user/user.module:1293
+msgid "The name %name is a reserved username."
+msgstr "הכינוי %name הוא מילה שמורה."
+
+#: modules/user/user.module:1313
+msgid ""
+"Sorry, unrecognized username or password. <a href=\"@password\">Have you "
+"forgotten your password?</a>"
+msgstr ""
+"צר לי, אך שם המשתמש והסיסמא אינם מוכרים. <a href=\"@password\">האם שכחת את "
+"סיסמתך?</a>"
+
+#: modules/user/user.module:1419
+msgid "Account information"
+msgstr "מידע על חשבון"
+
+#: modules/user/user.module:1427
+msgid ""
+"Spaces are allowed; punctuation is not allowed except for periods, hyphens, "
+"and underscores."
+msgstr "אפשר להשתמש ברווחים; סימני פיסוק אסורים מלבד נקודה, מקף וקו תחתי."
+
+#: modules/user/user.module:1435
+msgid ""
+"A valid e-mail address. All e-mails from the system will be sent to this "
+"address. The e-mail address is not made public and will only be used if you "
+"wish to receive a new password or wish to receive certain news or "
+"notifications by e-mail."
+msgstr ""
+"כתובת דואר תקפה. כל הודעות הדואל מהמערכת יישלחו לכתובת זו. הכתובת תישאר "
+"חסויה ולשימוש האתר בלבד לצורך חידוש סיסמה, קבלת עדכונים והתרעות וכדומה."
+
+#: modules/user/user.module:1440
+msgid ""
+"To change the current user password, enter the new password in both fields."
+msgstr "כדי לשנות את סיסמת החבר הנוכחית, יש להכניס סיסמה בשני השדות."
+
+#: modules/user/user.module:1447
+msgid "Provide a password for the new account in both fields."
+msgstr "רשום את הססמה של החשבון החדש פעמיים."
+
+#: modules/user/user.module:1457
+msgid "Blocked"
+msgstr "חסום"
+
+#: modules/user/user.module:1492
+msgid "Signature settings"
+msgstr "הגדרות חתימות"
+
+#: modules/user/user.module:1497
+msgid "Signature"
+msgstr "חתימה"
+
+#: modules/user/user.module:1499
+msgid "Your signature will be publicly displayed at the end of your comments."
+msgstr "החתימה שלך תוצג באתר בסוף כל תגובה שתכתוב."
+
+#: modules/user/user.module:1505
+msgid "Picture"
+msgstr "תמונה"
+
+#: modules/user/user.module:1509
+msgid "Delete picture"
+msgstr "מחק תמונה"
+
+#: modules/user/user.module:1509
+msgid "Check this box to delete your current picture."
+msgstr "סמנ\\י תיבה זו כדי למחוק את התמונה הנוכחית שלך."
+
+#: modules/user/user.module:1514
+msgid "Upload picture"
+msgstr "טען תמונה"
+
+#: modules/user/user.module:1514
+msgid ""
+"Your virtual face or picture. Maximum dimensions are %dimensions and the "
+"maximum size is %size kB."
+msgstr ""
+"הפנים או התמונה שלך, כפי שתוצג באתר. גודל תמונה מירבי - %dimensions. גודל "
+"קובץ מירבי - %size ק\"ב."
+
+#: modules/user/user.module:1530
+msgid "The name %name is already taken."
+msgstr "הכינוי %name כבר תפוס."
+
+#: modules/user/user.module:1533
+msgid "The name %name has been denied access."
+msgstr "הרשאה ל-%name נחסמה."
+
+#: modules/user/user.module:1542
+msgid ""
+"The e-mail address %email is already registered. <a href=\"@password\">Have "
+"you forgotten your password?</a>"
+msgstr ""
+"כתובת הדוא\"ל %email כבר רשומה. <a href=\"@password\">האם שכחת את הסיסמא?</a>"
+
+#: modules/user/user.module:1545
+msgid "The e-mail address %email has been denied access."
+msgstr ""
+"לא ניתן להצטרף לאתר דרך כתובת הדואר האלקטרוני %email. כתובת זו נחסמה על ידי "
+"מנהל האתר."
+
+#: modules/user/user.module:1625
+msgid "Account details for !username at !site"
+msgstr "פרטי חשבון עבור  !username באתר !site"
+
+#: modules/user/user.module:1627
+msgid ""
+"!username,\n"
+"\n"
+"Thank you for registering at !site. You may now log in to !login_uri using "
+"the following username and password:\n"
+"\n"
+"username: !username\n"
+"password: !password\n"
+"\n"
+"You may also log in by clicking on this link or copying and pasting it in "
+"your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password.\n"
+"\n"
+"\n"
+"--  !site team"
+msgstr ""
+"!username,\n"
+"\n"
+"תודה על הרשמתך לאתר !site. אפשר עתה להיכנס לאתר בכתובת !login_uri תוך שימוש "
+"בכינוי ובסיסמה הבאים:\n"
+"כינוי: !username \n"
+"סיסמה: !password \n"
+"\n"
+"ניתן להכנס גם בלחיצה על הקישור הבא, או העתקתו והדבקתו אל הדפדפן:\n"
+"!login_url\n"
+"\n"
+"זוהי כניסה חד פעמית, וניתן להשתמש בה פעם אחת בלבד. \n"
+"\n"
+"לאחר שנכנסת, תופנה ל!edit_uri כדי שתוכל לשנות את סיסמתך.\n"
+"\n"
+"\n"
+"-- צוות !site"
+
+#: modules/user/user.module:1629
+msgid "An administrator created an account for you at !site"
+msgstr "מנהל יצר עבורך חשבון באתר !site"
+
+#: modules/user/user.module:1631
+msgid ""
+"!username,\n"
+"\n"
+"A site administrator at !site has created an account for you. You may now "
+"log in to !login_uri using the following username and password:\n"
+"\n"
+"username: !username\n"
+"password: !password\n"
+"\n"
+"You may also log in by clicking on this link or copying and pasting it in "
+"your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password.\n"
+"\n"
+"\n"
+"--  !site team"
+msgstr ""
+"!username,\n"
+" מנהל יצר חשבון עבורך.אפשר עתה להיכנס לאתר בכתובת !login_uri תוך שימוש "
+"בכינוי ובסיסמה הבאים: \n"
+"\n"
+"כינוי: !username, \n"
+"סיסמה: !password. \n"
+"\n"
+"אפשר גם להכנס ע\"י לחיצה על הקישור הבא, או העתקה והדבקה שלו לדפדפן שלך:\n"
+"\n"
+"!login_url \n"
+"זוהי כניסה חד פעמית, ולכן ניתן להכנס דרך קישור זה פעם אחת בלבד. \n"
+"לאחר הכניסה תועבר ל - !edit_uri, שם תוכל לשנות את הסיסמה שלך.\n"
+"\n"
+"\n"
+"-- צוות !site"
+
+#: modules/user/user.module:1634
+msgid "Account details for !username at !site (pending admin approval)"
+msgstr "פרטי חשבון עבור  !username באתר !site (ממתין לאישור מנהל)"
+
+#: modules/user/user.module:1636
+msgid ""
+"!username,\n"
+"\n"
+"Thank you for registering at !site. Your application for an account is "
+"currently pending approval. Once it has been approved, you will receive "
+"another e-mail containing information about how to log in, set your "
+"password, and other details.\n"
+"\n"
+"\n"
+"--  !site team"
+msgstr ""
+"!username,\n"
+"\n"
+"תודה על בקשתך להצטרף אל !site. בקשתך להצטרף מחכה כעת לאישור. ברגע שתאושר, "
+"תקבל הודעה בדואר האלקטרוני עם פרטים נוספים כיצד להכנס לחשבון, לשנות סיסמא "
+"ועוד.\n"
+"\n"
+"\n"
+"-- צוות !site"
+
+#: modules/user/user.module:1638
+msgid ""
+"!username has applied for an account.\n"
+"\n"
+"!edit_uri"
+msgstr ""
+"!username הגיש בקשה לפתיחת חשבון.\n"
+"\n"
+"!edit_uri"
+
+#: modules/user/user.module:1640
+msgid "Replacement login information for !username at !site"
+msgstr "מידע חילופי לכניסה למערכת עבור !username באתר !site"
+
+#: modules/user/user.module:1642
+msgid ""
+"!username,\n"
+"\n"
+"A request to reset the password for your account has been made at !site.\n"
+"\n"
+"You may now log in to !uri_brief by clicking on this link or copying and "
+"pasting it in your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once. It expires after one "
+"day and nothing will happen if it's not used.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password."
+msgstr ""
+"!username,\n"
+"\n"
+"נסיון לחידוש סיסמה עבור חשבונך נעשה באתר !site.\n"
+"\n"
+"תוכל/י כעת להכנס לאתר !uri_brief על ידי לחיצה על הקישור הבא, או העתקתו "
+"והדבקתו לתוך הדפדפן שלך:\n"
+"\n"
+"!login_url\n"
+"\n"
+"זהו קישור חד-פעמי. ניתן להשתמש בו פעם אחד בלבד. תוקפו יפוג לאחר יממה ודבר לא "
+"יקרה אם לא תשתמש/י בו.\n"
+"\n"
+"לאחר הכניסה, תועבר/י לכתובת !edit_uri ושם ניתן לשנות את הסיסמה שלך."
+
+#: modules/user/user.module:1644
+msgid "Account details for !username at !site (approved)"
+msgstr "פרטי חשבון עבור  !username באתר !site (מאושר)"
+
+#: modules/user/user.module:1646
+msgid ""
+"!username,\n"
+"\n"
+"Your account at !site has been activated.\n"
+"\n"
+"You may now log in by clicking on this link or copying and pasting it in "
+"your browser:\n"
+"\n"
+"!login_url\n"
+"\n"
+"This is a one-time login, so it can be used only once.\n"
+"\n"
+"After logging in, you will be redirected to !edit_uri so you can change your "
+"password.\n"
+"\n"
+"Once you have set your own password, you will be able to log in to !"
+"login_uri in the future using:\n"
+"\n"
+"username: !username\n"
+msgstr ""
+"!username,\n"
+"\n"
+"חשבונך באתר !site הופעל. \n"
+"תוכל/י כעת להכנס לאתר על ידי לחיצה על הקישור הבא, או העתקתו והדבקתו לתוך "
+"הדפדפן שלך:\n"
+"\n"
+"!login_url\n"
+"\n"
+"זהו קישור חד-פעמי. ניתן להשתמש בו פעם אחד בלבד.\n"
+"\n"
+"לאחר הכניסה, תועבר/י לכתובת !edit_uri ושם ניתן לשנות את הסיסמה שלך.\n"
+"\n"
+"לאחר שתקבע את סיסמתך, תוכל להכנס בעתיד לכתובת !login_uri תוך שימוש בשם "
+"המשתמש !username\n"
+
+#: modules/user/user.module:1648
+msgid "Account details for !username at !site (blocked)"
+msgstr "פרטי חשבון עבור  !username באתר !site (חסום)"
+
+#: modules/user/user.module:1650
+msgid ""
+"!username,\n"
+"\n"
+"Your account on !site has been blocked."
+msgstr ""
+"!username,\n"
+"\n"
+"חשבונך באתר !site נחסם."
+
+#: modules/user/user.module:1652
+msgid "Account details for !username at !site (deleted)"
+msgstr "פרטי חשבון עבור  !username באתר !site (נמחק)"
+
+#: modules/user/user.module:1654
+msgid ""
+"!username,\n"
+"\n"
+"Your account on !site has been deleted."
+msgstr ""
+"!username,\n"
+"\n"
+"חשבונך באתר !site נמחק."
+
+#: modules/user/user.module:1714
+msgid "Unblock the selected users"
+msgstr "הסר חסימה מהמשתמשים שנבחרו"
+
+#: modules/user/user.module:1718
+msgid "Block the selected users"
+msgstr "חסום את המשתמשים שנבחרו"
+
+#: modules/user/user.module:1722
+msgid "Delete the selected users"
+msgstr "מחק את המשתמשים שנבחרו"
+
+#: modules/user/user.module:1742
+msgid "Add a role to the selected users"
+msgstr "הוסף תפקיד למשתמשים שנבחרו"
+
+#: modules/user/user.module:1745
+msgid "Remove a role from the selected users"
+msgstr "מחק תפקיד מהמשתמשים שנבחרו"
+
+#: modules/user/user.module:1847
+msgid "Are you sure you want to delete these users?"
+msgstr "האמנם ברצונך למחוק משתמשים אלו?"
+
+#: modules/user/user.module:1857
+msgid "The users have been deleted."
+msgstr "המשתמשים נמחקו."
+
+#: modules/user/user.module:1871
+msgid ""
+"The user module allows users to register, login, and log out. Users benefit "
+"from being able to sign on because it associates content they create with "
+"their account and allows various permissions to be set for their roles. The "
+"user module supports user roles which establish fine grained permissions "
+"allowing each role to do only what the administrator wants them to. Each "
+"user is assigned to one or more roles. By default there are two roles "
+"<em>anonymous</em> - a user who has not logged in, and <em>authenticated</"
+"em> a user who has signed up and who has been authorized."
+msgstr ""
+
+#: modules/user/user.module:1872
+msgid ""
+"Users can use their own name or handle and can specify personal "
+"configuration settings through their individual <em>My account</em> page. "
+"Users must authenticate by supplying a local username and password or "
+"through their OpenID, an optional and secure method for logging into many "
+"websites with a single username and password. In some configurations, users "
+"may authenticate using a username and password from another Drupal site, or "
+"through some other site-specific mechanism."
+msgstr ""
+
+#: modules/user/user.module:1873
+msgid ""
+"A visitor accessing your website is assigned a unique ID, or session ID, "
+"which is stored in a cookie. The cookie does not contain personal "
+"information, but acts as a key to retrieve information from your site. Users "
+"should have cookies enabled in their web browser when using your site."
+msgstr ""
+
+#: modules/user/user.module:1874
+msgid ""
+"For more information, see the online handbook entry for <a href=\"@user"
+"\">User module</a>."
+msgstr ""
+"למידע נוסף על הגדרות והתאמות קרא במדריך למשתמש ב<a href=\"@user\">רכיב "
+"משתמשים</a>."
+
+#: modules/user/user.module:1877
+msgid ""
+"Drupal allows users to register, login, log out, maintain user profiles, "
+"etc. Users of the site may not use their own names to post content until "
+"they have signed up for a user account."
+msgstr ""
+"דרופל מאפשר לחברים להרשם, להכנס, לצאת, להגדיר העדפות, לנהל מידע אישי, להוסיף "
+"תוכן ועוד. רק חברים שהצטרפו יכולים להשתמש בשמם למשלוח תוכן."
+
+#: modules/user/user.module:1880
+msgid ""
+"This web page allows administrators to register new users. Users' e-mail "
+"addresses and usernames must be unique."
+msgstr ""
+"עמוד זה מאפשר למנהלים לצרף משתמשים לאתר. כתובות דוא\"ל ושמות משתמשים חייבים "
+"להיות ייחודיים."
+
+#: modules/user/user.module:1882
+msgid ""
+"Set up username and e-mail address access rules for new <em>and</em> "
+"existing accounts (currently logged in accounts will not be logged out). If "
+"a username or e-mail address for an account matches any deny rule, but not "
+"an allow rule, then the account will not be allowed to be created or to log "
+"in. A host rule is effective for every page view, not just registrations."
+msgstr ""
+"הגדרת כללים להצטרפות חברים חדשים  (כתובות דואר אלקטרוני, כינויים מותרים), "
+"<em> וגם </em> לחברים קיימים. (חברים קיימים אשר בתוך האתר כרגע לא ינותקו "
+"ממנו).אם כינוי משתמש או כתובת דואר אלקטרוני מתאימים לכלל חסימה, אבל לא לכלל "
+"איפשור, יצירת החשבון החדש תיחסם. כללי מחשב מארח יחסמו צפיה כלשהי בדף, ולא רק "
+"כניסה או הרשמה."
+
+#: modules/user/user.module:1884
+msgid ""
+"Permissions let you control what users can do on your site. Each user role "
+"(defined on the <a href=\"@role\">user roles page</a>) has its own set of "
+"permissions. For example, you could give users classified as \"Administrators"
+"\" permission to \"administer nodes\" but deny this power to ordinary, "
+"\"authenticated\" users. You can use permissions to reveal new features to "
+"privileged users (those with subscriptions, for example). Permissions also "
+"allow trusted users to share the administrative burden of running a busy "
+"site."
+msgstr ""
+
+#: modules/user/user.module:1886
+msgid ""
+"<p>Roles allow you to fine tune the security and administration of Drupal. A "
+"role defines a group of users that have certain privileges as defined in <a "
+"href=\"@permissions\">user permissions</a>. Examples of roles include: "
+"anonymous user, authenticated user, moderator, administrator and so on. In "
+"this area you will define the <em>role names</em> of the various roles. To "
+"delete a role choose \"edit\".</p><p>By default, Drupal comes with two user "
+"roles:</p>\n"
+"      <ul>\n"
+"      <li>Anonymous user: this role is used for users that don't have a user "
+"account or that are not authenticated.</li>\n"
+"      <li>Authenticated user: this role is automatically granted to all "
+"logged in users.</li>\n"
+"      </ul>"
+msgstr ""
+"<p>תפקידים מאפשרים לעדן את הגדרות האבטחה והניהול של דרופל. תפקיד מגדיר קבוצת "
+"משתמשים שיש להם זכויות מסויימות כפי שמוגדרות <a href=\"%permission\">בהרשאות "
+"המשתמש</a>. תפקידים לדוגמה: גולש אנונימי (anonymous user), חבר מזוהה "
+"(authenticated user), מפקח, מנהל, וכו'. באזור זה מוגדים <em>שמות התפקיד</em> "
+"של התפקידים השונים. כדי למחוק תפקיד - לחץ על \"עדכן\". <br />\n"
+"כברירת מחדל, דרופל מגיע עם שני תפקידים:\n"
+"\n"
+" <ul>  <li>גולש אנונימי (anonymous user): תפקיד זה משמש לגולשים שעדיין אין "
+"להם חשבון או לחברים שאינם מזוהים.</li>  <li>חבר מזוהה (authenticated user): "
+"תפקיד זה משוייך אוטומיטת לחברים מזוהים. רוב החברים המזוהים ישתייכו לתפקיד זה "
+"אלא אם כן הוגדר אחרת.</li>  </ul></p>"
+
+#: modules/user/user.module:1892
+msgid ""
+"Enter a simple pattern (\"*\" may be used as a wildcard match) to search for "
+"a username or e-mail address. For example, one may search for \"br\" and "
+"Drupal might return \"brian\", \"brad\", and \"brenda@example.com\"."
+msgstr ""
+"הכנס תבנית פשוטה (ניתן להשתמש ב\"*\" כדי לחפש מילה חלקית) לחיפוש משתמשים או "
+"כתובות דוא\"ל. לדוגמא, אפשר לחפש \"יו\" ודרופל יכול להחזיר \"יואל\", \"יורם"
+"\" ו\"יובל\"."
+
+#: modules/user/user.module:1929
+msgid "role"
+msgstr "תפקיד"
+
+#: modules/user/user.module:1947
+msgid "permission"
+msgstr "הרשאה"
+
+#: modules/user/user.module:2149
+msgid "Password strength:"
+msgstr "חוזק הסיסמא:"
+
+#: modules/user/user.module:2150
+msgid "Low"
+msgstr "חלש"
+
+#: modules/user/user.module:2152
+msgid "High"
+msgstr "חזק"
+
+#: modules/user/user.module:2153
+msgid ""
+"It is recommended to choose a password that contains at least six "
+"characters. It should include numbers, punctuation, and both upper and "
+"lowercase letters."
+msgstr ""
+"מומלץ לבחור סיסמא שמכילה לפחות 6 תוים. כדאי שיהיו ספרות, סימני פיסוק, שילוב "
+"של אותיות קטנות וגדולות, או אף שימוש משולב בעברית ואנגלית."
+
+#: modules/user/user.module:2154
+msgid "The password does not include enough variation to be secure. Try:"
+msgstr "אין מספיק שונות בסיסמא כך שהיא אינה בטוחה. נסה:"
+
+#: modules/user/user.module:2155
+msgid "Adding both upper and lowercase letters."
+msgstr ""
+"להוסיף אותיות גדולות וקטנות (באנגלית), או אותיות עבריות ואנגליות יחדיו."
+
+#: modules/user/user.module:2156
+msgid "Adding numbers."
+msgstr "להוסיף ספרות."
+
+#: modules/user/user.module:2157
+msgid "Adding punctuation."
+msgstr "להוסיף סימני פיסוק."
+
+#: modules/user/user.module:2158
+msgid "It is recommended to choose a password different from the username."
+msgstr "מומלץ שהסיסמא תהיה שונה משם המשתמש."
+
+#: modules/user/user.module:2161
+msgid "Passwords match:"
+msgstr "סיסמאות תואמות:"
+
+#: modules/user/user.module:2176
+msgid "After a user account has been created"
+msgstr "אחרי שנוצר חשבון משתמש"
+
+#: modules/user/user.module:2179
+msgid "After a user's profile has been updated"
+msgstr "אחרי שפרופיל משתמש מעודכן"
+
+#: modules/user/user.module:2182
+msgid "After a user has been deleted"
+msgstr "אחרי שמשתמש נמחק"
+
+#: modules/user/user.module:2185
+msgid "After a user has logged in"
+msgstr "אחרי שהמשתמש נכנס לאתר"
+
+#: modules/user/user.module:2188
+msgid "After a user has logged out"
+msgstr "אחרי שהמשתמש יצא מהאתר"
+
+#: modules/user/user.module:2191
+msgid "When a user's profile is being viewed"
+msgstr "כשפרופיל המשתמש נצפה"
+
+#: modules/user/user.module:2204
+msgid "Block current user"
+msgstr "חסום את המשתמש הנוכחי"
+
+#: modules/user/user.module:2210
+msgid "Ban IP address of current user"
+msgstr "חסום את כתובת ה IP של המשתמש הנוכחי"
+
+#: modules/user/user.module:2303
+msgid ""
+"Welcome to Drupal. You are now logged in as user #1, which gives you full "
+"control over your website."
+msgstr ""
+"ברוך הבא לדרופל. אתה כרגע משתמש מספר 1, ויש לך יכולות מלאות לשליטה באתרך."
+
+#: modules/user/user.module:2305
+msgid ""
+"</p><p> Your password is <strong>%pass</strong>. You may change your "
+"password below.</p>"
+msgstr "</p><p> סיסמתך היא <strong>%pass</strong>. תוכל לשנות אותה בהמשך.</p>"
+
+#: modules/user/user.module:2317
+msgid ""
+"Created a new user account for <a href=\"@url\">%name</a>. No e-mail has "
+"been sent."
+msgstr ""
+"חשבון משתמש חדש נוצר עבור <a href=\"@url\">%name</a>. לא נשלחה כל הודעה."
+
+#: modules/user/user.module:2324
+msgid "Registration successful. You are now logged in."
+msgstr "ההרשמה הסתיימה בהצלחה ונכנסת לאתר."
+
+#: modules/user/user.module:2334
+msgid ""
+"Password and further instructions have been e-mailed to the new user <a href="
+"\"@url\">%name</a>."
+msgstr ""
+"הסיסמא והנחיות נוספות נשלחו לכתובת הדואר האלקטרוני של המשתמש החדש <a href="
+"\"@url\">%name</a>."
+
+#: modules/user/user.module:2337
+msgid ""
+"Your password and further instructions have been sent to your e-mail address."
+msgstr "הסיסמה שלך והנחיות נוספות נשלחו לכתובת הדואר האלקטרוני שלך."
+
+#: modules/user/user.module:2345
+msgid ""
+"Thank you for applying for an account. Your account is currently pending "
+"approval by the site administrator.<br />In the meantime, a welcome message "
+"with further instructions has been sent to your e-mail address."
+msgstr ""
+"תודה על בקשתך לפתיחת חשבון. החשבון שלך כרגע ממתין לאישור אצל מנהל האתר.<br /"
+">בינתיים, הודעה ראשונית וכן הוראות נוספות נשלחו לכתובת הדוא\"ל שציינת."
+
+#: modules/user/user.module:2382
+msgid "Notify user of new account"
+msgstr "הודע למשתמש על חשבון חדש"
+
+#: modules/user/user.module:1314
+msgid "Login attempt failed for %user."
+msgstr "נסיון כניסה למערכת נכשל עבור  %user."
+
+#: modules/user/user.module:1351
+msgid "Session opened for %name."
+msgstr "התחברות לאתר: %name."
+
+#: modules/user/user.module:1400
+msgid "New external user: %name using module %module."
+msgstr "משתמש חיצוני חדש: %name משתמש ברכיב %module."
+
+#: modules/user/user.module:1577
+msgid "Deleted user: %name %email."
+msgstr "נמחק החשבון: %name %email."
+
+#: modules/user/user.module:2235
+msgid "Blocked user %name."
+msgstr "המשתמש %name נחסם."
+
+#: modules/user/user.module:2245
+msgid "Banned IP address %ip"
+msgstr "הכתובת %ip נחסמה"
+
+#: modules/user/user.module:2299
+msgid "New user: %name (%email)."
+msgstr "משתמש חדש: %name (%email)."
+
+#: modules/user/user.module:776;779
+msgid "1 guest"
+msgid_plural "@count guests"
+msgstr[0] "אורח אחד"
+msgstr[1] "@count אורחים"
+
+#: modules/user/user.module:544
+msgid "administer permissions"
+msgstr "נהל הרשאות"
+
+#: modules/user/user.module:544
+msgid "administer users"
+msgstr "ניהול חברי האתר"
+
+#: modules/user/user.module:544
+msgid "access user profiles"
+msgstr "גישה לפרופילי חברים"
+
+#: modules/user/user.module:544
+msgid "change own username"
+msgstr "שינוי שם המשתמש שלך"
+
+#: modules/user/user.module:884
+msgid "User autocomplete"
+msgstr "השלמה אוטומטית של כינויים"
+
+#: modules/user/user.module:894
+msgid "User account"
+msgstr "חשבון משתמש"
+
+#: modules/user/user.module:925
+msgid "Reset password"
+msgstr "איפוס ססמה"
+
+#: modules/user/user.module:935
+msgid "User management"
+msgstr "ניהול חברי האתר"
+
+#: modules/user/user.module:936
+msgid "Manage your site's users, groups and access to site features."
+msgstr ""
+"נהל את משתמשי האתר שלך, קבוצות המשתמשים, וזכויות גישה לחלקי האתר השונים."
+
+#: modules/user/user.module:945
+msgid "List, add, and edit users."
+msgstr "הצג, הוסף וערוך משתמשים."
+
+#: modules/user/user.module:957
+msgid "Add user"
+msgstr "הוסף חבר"
+
+#: modules/user/user.module:963
+msgid "User settings"
+msgstr "הגדרות משתמש"
+
+#: modules/user/user.module:964
+msgid ""
+"Configure default behavior of users, including registration requirements, e-"
+"mails, and user pictures."
+msgstr ""
+"קבע הנהגות ברירת מחדל עבור משתמשים, כולל דרישות רישום, כתובות דוא\"ל ותמונות "
+"משתמשים."
+
+#: modules/user/user.module:973
+msgid "Permissions"
+msgstr "הרשאות"
+
+#: modules/user/user.module:974
+msgid "Determine access to features by selecting permissions for roles."
+msgstr "קבע את הרשאות הגישה ע\"י בחירת הרשאות לתפקידים."
+
+#: modules/user/user.module:982
+msgid "List, edit, or add user roles."
+msgstr "הצג, עדכן או הוסף תפקידים."
+
+#: modules/user/user.module:989
+msgid "Edit role"
+msgstr "עדכון תפקיד"
+
+#: modules/user/user.module:995
+msgid "Access rules"
+msgstr "כללי גישה"
+
+#: modules/user/user.module:996
+msgid ""
+"List and create rules to disallow usernames, e-mail addresses, and IP "
+"addresses."
+msgstr "הצג וצור חוקים כדי לחסום שמות משתמשים, כתובות דוא\"ל וכתובות IP."
+
+#: modules/user/user.module:1013
+msgid "Check rules"
+msgstr "בדיקת כללים"
+
+#: modules/user/user.module:1019
+msgid "Edit rule"
+msgstr "עדכון כלל"
+
+#: modules/user/user.module:1025
+msgid "Delete rule"
+msgstr "מחיקת כלל"
+
+#: modules/user/user.module:1033
+msgid "Log out"
+msgstr "יציאה"
+
+#: modules/user/user.module:1080
+msgid "Account"
+msgstr "חשבון"
+
+#: modules/user/user.module:0
+msgid "anonymous user"
+msgstr "אורח"
+
+#: modules/user/user.module:0
+msgid "authenticated user"
+msgstr "משתמש מזוהה"
+
+#: modules/user/user.install:9
+msgid "Stores site access rules."
+msgstr "שומר חוקי כניסה לאתר."
+
+#: modules/user/user.install:14
+msgid "Primary Key: Unique access ID."
+msgstr ""
+
+#: modules/user/user.install:21
+msgid "Text mask used for filtering access."
+msgstr ""
+
+#: modules/user/user.install:28
+msgid "Type of access rule: name, mail or host."
+msgstr ""
+
+#: modules/user/user.install:35
+msgid "Whether rule is to allow(1) or deny(0) access."
+msgstr ""
+
+#: modules/user/user.install:42
+msgid "Stores distributed authentication mapping."
+msgstr ""
+
+#: modules/user/user.install:45
+msgid "Primary Key: Unique authmap ID."
+msgstr ""
+
+#: modules/user/user.install:54
+msgid "User's {users}.uid."
+msgstr ""
+
+#: modules/user/user.install:61
+msgid "Unique authentication name."
+msgstr ""
+
+#: modules/user/user.install:68
+msgid "Module which is controlling the authentication."
+msgstr ""
+
+#: modules/user/user.install:76
+msgid "Stores permissions for users."
+msgstr "שמור הרשאות למשתמשים."
+
+#: modules/user/user.install:81
+msgid "Primary Key: Unique permission ID."
+msgstr ""
+
+#: modules/user/user.install:88
+msgid "The {role}.rid to which the permissions are assigned."
+msgstr ""
+
+#: modules/user/user.install:94
+msgid "List of permissions being assigned."
+msgstr ""
+
+#: modules/user/user.install:101
+msgid "Originally intended for taxonomy-based permissions, but never used."
+msgstr ""
+
+#: modules/user/user.install:109
+msgid "Stores user roles."
+msgstr "שמור תפקידי משתמשים."
+
+#: modules/user/user.install:115
+msgid "Primary Key: Unique role id."
+msgstr ""
+
+#: modules/user/user.install:122
+msgid "Unique role name."
+msgstr "שם תפקיד ייחודי."
+
+#: modules/user/user.install:130
+msgid "Stores user data."
+msgstr ""
+
+#: modules/user/user.install:136
+msgid "Primary Key: Unique user ID."
+msgstr ""
+
+#: modules/user/user.install:143
+msgid "Unique user name."
+msgstr "שם משתמש ייחודי."
+
+#: modules/user/user.install:150
+msgid "User's password (md5 hash)."
+msgstr ""
+
+#: modules/user/user.install:157
+msgid "User's email address."
+msgstr "כתובת דוא\"ל של המשתמש."
+
+#: modules/user/user.install:164
+msgid ""
+"Per-user comment display mode (threaded vs. flat), used by the {comment} "
+"module."
+msgstr ""
+
+#: modules/user/user.install:171
+msgid ""
+"Per-user comment sort order (newest vs. oldest first), used by the {comment} "
+"module."
+msgstr ""
+
+#: modules/user/user.install:178
+msgid ""
+"Previously used by the {comment} module for per-user preferences; no longer "
+"used."
+msgstr ""
+
+#: modules/user/user.install:185
+msgid "User's default theme."
+msgstr "עיצוב ברירת המחדל של המשתמש."
+
+#: modules/user/user.install:192
+msgid "User's signature."
+msgstr "חתימת המשתמש."
+
+#: modules/user/user.install:198
+msgid "Timestamp for when user was created."
+msgstr ""
+
+#: modules/user/user.install:204
+msgid "Timestamp for previous time user accessed the site."
+msgstr ""
+
+#: modules/user/user.install:210
+msgid "Timestamp for user's last login."
+msgstr ""
+
+#: modules/user/user.install:217
+msgid "Whether the user is active(1) or blocked(0)."
+msgstr ""
+
+#: modules/user/user.install:223
+msgid "User's timezone."
+msgstr "איזור הזמן של המשתמש."
+
+#: modules/user/user.install:230
+msgid "User's default language."
+msgstr "שפת ברירת המחדל של המשתמש."
+
+#: modules/user/user.install:237
+msgid "Path to the user's uploaded picture."
+msgstr ""
+
+#: modules/user/user.install:244
+msgid "Email address used for initial account creation."
+msgstr ""
+
+#: modules/user/user.install:250
+msgid ""
+"A serialized array of name value pairs that are related to the user. Any "
+"form values posted during user edit are stored and are loaded into the $user "
+"object during user_load(). Use of this field is discouraged and it will "
+"likely disappear in a future version of Drupal."
+msgstr ""
+
+#: modules/user/user.install:265
+msgid "Maps users to roles."
+msgstr "מיפוי משתמשים לתפקידים."
+
+#: modules/user/user.install:272
+msgid "Primary Key: {users}.uid for user."
+msgstr ""
+
+#: modules/user/user.install:279
+msgid "Primary Key: {role}.rid for role."
+msgstr ""

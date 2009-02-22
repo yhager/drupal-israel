@@ -1,0 +1,66 @@
+<?php
+// $Id: site_network.install,v 1.1.1.1.2.7 2008/08/12 22:58:38 brmassa Exp $
+/**
+ * @file
+ * Install and uninstall all required databases.
+ * Also do incremental database updates.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function site_network_install() {
+  // Set the modules wieght very low to be executed
+  // before normal modules
+  db_query("UPDATE {system} SET weight = -5 WHERE name = 'site_network'");
+
+  // Set the modules weight very low to be executed
+  // before normal modules
+  $update[] = update_sql("UPDATE {system} SET weight = -5 WHERE name = 'site_network'");
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function site_network_uninstall() {
+  // Delete variables
+  variable_del('site_network_client');
+  variable_del('site_network_client_server');
+  variable_del('site_network_client_server_only');
+}
+
+/**
+ * Implementation of hook_update().
+ *
+ * It will update sites D5 sites that uses the deprecated 'Drupal' module.
+ */
+function drupal_update_6001() {
+  // Fix the authmap table
+  $update[] = update_sql("UPDATE {authmap} SET module = 'site_network' WHERE module = 'drupal'");
+
+  // Variable name changes
+  variable_set('site_network_client',             variable_get('drupal_authentication_service', ''));
+  variable_set('site_network_client_server',      variable_get('drupal_default_da_server', ''));
+  variable_set('site_network_client_server_only', variable_get('drupal_default_da_server_only', ''));
+  variable_set('site_network_server',             variable_get('drupal_authentication_service', ''));
+
+  // Deprecated variables
+  variable_del('drupal_directory');
+  variable_del('drupal_register');
+  variable_del('drupal_server');
+  variable_del('drupal_system');
+  variable_del('drupal_statistics');
+  variable_del('drupal_client_service');
+
+  return $update;
+}
+
+/**
+ * Implementation of hook_update().
+ *
+ * It will update sites D5 sites that uses the deprecated 'Drupal' module
+ * that was not done before.
+ */
+function site_network_update_6002() {
+  return drupal_update_6001();
+}

@@ -1,0 +1,6 @@
+<?php
+// $Id: pdir.install,v 1.1.2.3 2008/12/07 08:58:39 zstolar Exp $
+
+function pdir_install() {
+  drupal_set_message(t('In order to activate the paragraph directionality filter, you must !activate_it in the input formats admin screen.', array('!activate_it' => l(t('activate it'), 'admin/settings/filters'))));
+}

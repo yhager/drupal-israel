@@ -1,0 +1,37 @@
+CHANGELOG for Subscriptions 1.x for Drupal 6
+
+Subscriptions 6.x-1.x-dev:
+
+Subscriptions 6.x-1.x-BETA2 (2008-08-30):
+   - Add subscriptions_cck.module for D6.
+   - Two missing pieces for mail_edit 6.x-1.x.
+   - Avoid potential naming conflicts.
+   - Clean up: eliminate notices.
+   - Implement support for mail_edit 6.x-1.x.
+   - Fix the anchor on the node form fieldset.
+   - #296995: Change defaults to send comments and updates.
+   - Remove obsolete database table backup function when upgrading from 5.x-1.x.
+   - #294381: Fine-tune the German translation, fix some replacable strings in all languages.
+   - #294381: Update German translation.
+   - #283721: Add a List-Id header according to RFC 2919.
+   - #291929: Use hook_taxonomy() and hook_node_type() to catch deletions and clean out orphaned subscriptions.
+   - #292654: On-comment subscriptions by author must check the node author, not the comment author.
+   - #290882: Fix prior patch for #289965.
+   - #289965: 'Blocked content types' must override 'Auto-subscribe'.
+   - #288553: Fix untranslated 'Auto-subscribe'.
+   - #280182: Split the checkboxes and their labels into two separate columns to avoid toggling the checkboxes when clicking a label link.
+   - Fix display of empty Page form.
+   - #287591: Don't display Subscribe UI for anonymous users.
+   - #269617: Fix pgsql section of contributed moderate_content_notifications_install().
+   - #281600: Add explanatory code comment for error message about missing {subscriptions_user} records (no significant functional changes).
+   - #284442: Fix call to undefined function language_initialize() for sites that have only one language.
+   - #282840: drupal_html_to_text() is now part of core, no more need for the HTML_to_text module.
+   - #278107: Check for the existence of the {mail_edit} table before attempting to remove entries in subscriptions_uninstall().
+   - Don't use drupal_goto() in a form submit handler.
+   - #273960: Fix multi-language support.
+   - #273537: Allow translating the entries in the 'Type' column of the Overview page.
+
+Subscriptions 6.x-1.x-BETA1 (2008-06-22):
+   - Various fixes.
+   - Initial port to D6 (ALPHA quality).
+   - Copied Subscriptions 5.x-2.1-dev (2008-05-18).

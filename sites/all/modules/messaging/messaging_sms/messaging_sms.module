@@ -1,0 +1,104 @@
+<?php
+/**
+ * @file
+ * SMS Messsaging using SMS Framework. Messaging method plug-in
+ */
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_sms_messaging($op = 'info') {
+  switch($op) {
+    case 'send methods':
+      $info['sms'] = array(
+        'name' => t('SMS'),
+        'group' => 'sms', // Class of send method
+        'send' => 'messaging_sms_send',
+        'send_user' => 'messaging_sms_send_user',
+        'type' => MESSAGING_TYPE_PUSH,
+        'render' => 'messaging_sms_render',
+        'glue' => '',
+        'description' => t('Send SMS using SMS Framework.'),
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Message Render callback
+ */
+function messaging_sms_render($message, $info) {
+  // We need to apply filtering first or run through the render function
+    $message = messaging_message_render($message, $info);
+    // We can assume that we'll get max 110 characters for subject + body
+  // Because from and data take up about 50 characters and total character limit
+  // subject + from + date + body < 160
+  $message['subject'] = messaging_sms_truncate($message['subject'], 40);
+  $message['body'] = '--' . messaging_sms_truncate("Learn More: " . $GLOBALS['base_url'],(110 - strlen($message['subject'])));
+  return $message;
+}
+
+/**
+ * Send mail message to user account
+ */
+function messaging_sms_send_user($account, $message) {
+  if ($account->sms_user['status'] == 2) {
+  $destination->number = $account->sms_user['number'];
+  foreach ($account->sms_user['gateway'] as $key => $field) {
+    $destination->$key = $field;
+  }
+    $destinations[] = $destination;
+    return messaging_message_send($destinations, $message, 'sms');
+  }
+}
+
+/**
+ * Send message to multiple destinations
+ * 
+ * This is just a wrapper for sms_send()
+ */
+function messaging_sms_send($destination, $message, $params = array()) {
+  // This function takes an array of destinations so 
+  return sms_send(array($destination), $message['subject'].$message['body']);
+}
+ 
+/**
+ * Truncate messages to 160 Characters.  Adapted from node_teaser() in node.module
+ */
+function messaging_sms_truncate($message,$length = 160) {
+
+  // If we have a short message, return the message
+  if (strlen($message) < $length) {
+    return $message;
+  }
+
+  // Initial slice.
+  $teaser = truncate_utf8($message, $length);
+  $position = 0;
+  // Cache the reverse of the message.
+  $reversed = strrev($teaser);
+
+  // split at paragraph boundaries.
+  $breakpoints = array('</p>' => 0, '<br />' => 6, '<br>' => 4, "\n" => 1);
+  // We use strpos on the reversed needle and haystack for speed.
+  foreach ($breakpoints as $point => $offset) {
+    $length = strpos($reversed, strrev($point));
+    if ($length !== FALSE) {
+      $position = - $length - $offset;
+      return ($position == 0) ? $teaser : substr($teaser, 0, $position);
+    }
+  }
+
+  // When even the first paragraph is too long, we try to split at the end of
+  // the last full sentence.
+  $breakpoints = array('. ' => 1, '! ' => 1, '? ' => 1, ' ' => 0);
+  $min_length = strlen($reversed);
+  foreach ($breakpoints as $point => $offset) {
+    $length = strpos($reversed, strrev($point));
+    if ($length !== FALSE) {
+      $min_length = min($length, $min_length);
+      $position = 0 - $length - $offset;
+    }
+  }
+  return ($position == 0) ? $teaser : substr($teaser, 0, $position);
+}

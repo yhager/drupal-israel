@@ -1,0 +1,4 @@
+/* REMOVE DRUPAL BACKGROUND IMAGE FROM LI WITHIN EDITOR TOOLBAR */
+.yui-toolbar-groupitem {
+  background-image: none;
+}

@@ -1,0 +1,200 @@
+@charset "utf-8";
+/**
+  * Tendu Drupal 5.x Theme For Developers CSS
+  * Updated: May 24, 2008 
+  * Author: Tom Bigelajzen - http://tombigel.com
+  */
+
+/* Basic CSS Reset */
+body, div,  dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, p, a,
+pre, code, form, fieldset, legend, input, textarea, p, blockquote, table, th, td {margin:0;padding:0;}
+img, fieldset, legend, table, tr, td, th {border:none;}
+ol, ul, li {list-style-type:none;}
+table, td{vertical-align:top;text-align:left;}
+th{vertical-align:middle;text-align:left;}
+fieldset{padding:0;margin:0;}
+body{word-wrap: break-word;}/* The one and only propriaty IE style I use */
+
+/* Drupal Defaults reset 
+ * Notes:
+ * - This section is optional (I like to have total control over all the styles in my designs), I've put it up here for sematic reasons.
+ */
+ul.menu{padding:0 0 0 1em;}
+ul.menu li{margin:0 0 0 .5em;}
+.item-list ul li{list-style-image:none;list-style-type:none;padding:0;margin:0;}
+li.leaf{list-style-image:none;list-style-type:none;}
+.profile,
+.node-form .standard{clear:none;}
+
+ /* Page layout:
+  *****************************************************
+  * In this section the only changes you need to do are:
+  * 1. Comment/Uncomment the lines that relate to full viewport height
+  * 2. Comment/Uncomment the lines that relate to fixed width or fluid width layout
+  * 3. Set the widths of the page, the content area and the sidebars.
+  * 
+  * For readability reasons some selectors has multiple style declerations.
+  * Keep this section clean, add your design CSS in the next section.  
+  */
+ 
+/* Full viewport height 
+ * Notes: 
+ * - Remove these lines if you don't need that the hight of the #page element to allways be 100% of the viewport
+ * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector
+ */
+html, body{height:100%;}
+#page{height:auto !important;height:100%;min-height:100%;position:relative;}
+
+/* Stick footer to bottom of the page 
+ * Notes:
+ * - Requires the above "Full viewport height"
+ * - The height of #footer and the padding-bottom of #main must be set concordingly, so the footer will not overlay the content of the page.
+ *   Set the padding and the height according to your design.
+ */
+#main{padding-bottom:40px;}
+#footer{width:100%;position:absolute;bottom:0;height:30px;}
+
+/* Fonts
+ * Notes:
+ * - I'm using relative font sizes for 2 reasons:
+ *  1. Accessibility - So users of IE6 will be able to resize fonts.
+ *  2. If all font sizes are relative, the fonts of the entire design can be changes relatively with one change. 
+ * - Note that "line-height" unlike "font-size" is relative to the current element and not to a global line height.
+ * - Basic font size 12px, set as .75em of browsers default 16px size
+ * - Font sizes (when base size is .75em):
+ *	 10px = .83em
+ *	 11px = .916em
+ *	 12px = 1em
+ *	 13px = 1.083em
+ *	 14px = 1.166em
+ *	 16px = 1.333em
+ *	 18px = 1.5em
+ *	 20px = 1.666em
+ *   etc...
+ */
+body{font-family:Arial, Helvetica, sans-serif;font-size:100%;}
+#page{font-size:.75em;line-height:1.333em;}
+
+/* Main Layout: */
+
+/* Page width: For fixed width Layout */
+/*#page{width:980px;margin:0 auto;position:relative;}*/
+
+/* Page width: For Fluid width Layout 
+  * Notes: 
+  * - min and max widths must be set on #content too, calculated according to sidebars widths.
+  * - As a thumb rule I don't deal with non-standard IE hacks so this design degrades to a fixed width in IE6
+  * - To have a full page width in IE6, remove the "width" declerations from #page and #content, apply "height:1%" to trigger "hasLayout" 
+  * - (For fluid width in IE6 you can use the "width:expression()" hack. But you really shouldn't.)
+  * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector
+  */
+#page{min-width:760px;max-width:1220px;width:auto !important;width:980px;margin:0 auto;}
+
+#header{width:100%;overflow:hidden;}
+#main{width:100%;overflow:hidden;}
+
+
+.no-sidebars #content{width:100%;}
+
+/* Content width: For fixed width Layout 
+ * - width calculated from: page width - (sidebar-left  width + sidebar-right width + [sidebars padding + sidebars margin]) 
+ */
+/*.one-sidebar #content{width:790px}
+  .two-sidebars #content{width:600px;}*/
+ 
+/* Content width: For Fluid width Layout  
+ * Notes: 
+ * - min and max width calculated from: page width - (sidebar-left  width + sidebar-right width + [sidebars padding + sidebars margin]) 
+ * - As a thumb rule I don't deal with non-standard IE hacks so this design degrades to a fixed  width in IE6
+ * - To have a full page width in IE6, remove the "width" declerations from #page and #content, apply "height:1%" to trigger "hasLayout" 
+ * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector
+ */
+.one-sidebar #content{min-width:570px;max-width:1030px;width:auto !important;width:790px}
+.two-sidebars #content{min-width:380px;max-width:840px;width:auto !important;width:600px;}
+
+/* Sidebars widths 
+ * - To gracefully overcome IE6 "3px float gap" bug without hacks I set the paddings on the sidebars to be 3px narrower then in other browsers.
+ * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector 
+ */
+#sidebar-left{float:left;width:170px;}
+#sidebar-right{float:right;width:170px;}
+
+.with-sidebar-left #content{margin-left:170px;padding-left:20px !important;padding-left:17px;}
+.with-sidebar-right #content{margin-right:170px;padding-right:20px !important;padding-right:17px;}
+
+/* Set hasLayout in IE for content areas
+ * Notes:
+ * - Add "overflow:hidden" here if you are experiencing float clearing problems 
+ */
+#content-header,
+#content-top,
+#content-area,
+#content-bottom{width:100%;}
+
+/* End of Layout section
+ *****************************************************
+ */
+
+/* Page Design
+ *****************************************************
+ */
+
+/* General Tags */
+body{color:#535d66;background:#fff;}
+h1{font-size:1.833em;line-height:1.333em;font-weight:bold;}
+h2{font-size:1.5em;line-height:1.333em;font-weight:bold;}
+h3{font-size:1.333em;line-height:1.333em;font-weight:bold;}
+h4{font-size:1em;line-height:1.333em;font-weight:bold;}
+p{padding-bottom:.5em;}
+
+/* Form Elements  */
+input, select, textarea{font-family:Arial, Helvetica, sans-serif;font-weight:normal;line-height:1em;font-size:1em;}
+textarea{line-height:1.2em;}
+button{font-family:Arial, Helvetica, sans-serif;font-weight:bold;line-height:1em;font-size:13px}
+button{cursor:pointer;}
+
+/* Links */
+a{color:#5297dd;text-decoration:none;}
+a:visited{}
+a:hover, a:focus{text-decoration:underline;}
+
+/* Header and Navagation */
+#header{background:#f0f1f3;}
+	#header-blocks{float:right;padding:5px;font-size:.916em;color:#444;}
+	#header-blocks a{color:#444;font-weight:bold;}
+	#site-details{float:left;padding:15px;}
+	#site-logo{float:left;padding:15px;}
+	#site-name{}
+	#site-slogan{font-size:1.5em;line-height:1.333em;}
+	#main-nav{clear:both;width:100%;overflow:hidden;}
+	#main-nav ul{}
+	#main-nav li{float:left;padding:2px;margin-left:1em;}
+
+/* Views, Blocks and Nodes*/
+#sidebar-left .block,
+#sidebar-right .block{margin:10px 0;padding:6px;background:#f5f6f8;}
+#sidebar-left .block li,
+#sidebar-right .block li{border-top:1px dotted #ddd;padding:3px 0;}
+.content-title .title{padding:10px;}
+#content{margin-top:10px;}
+#content .block,
+#content .node,
+#content .view,
+#content .profile{padding:12px;background:#f8f6f5;margin-bottom:10px;}
+#content .view .block, 
+#content .node .block, 
+.block .block{padding:0;background:0;}
+#mission{padding:12px;background:#f6f8f5;font-size:1.166em;margin-bottom:10px;}
+.messages{padding:12px;background:#f0fdf0;border:1px solid #e0ede0;margin-bottom:10px;}
+#nav a{font-weight:bold;font-size:1.083em;}
+
+/* Footer */
+#footer{text-align:center;font-size:.916em;color:#888;line-height:30px;background:#f0f1f3;}
+#footer p{padding:0;}
+
+/*Tweaks for Admin pannels */
+#blocks .block{padding:0;margin:0;}
+
+/* End of Page Design section
+ *****************************************************
+ */

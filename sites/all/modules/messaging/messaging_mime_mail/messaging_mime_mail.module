@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file
+ * Mime mail using Drupal API. Messaging method plug-in
+ */
+
+/**
+ * Implementation of hook_messaging
+ */
+function messaging_mime_mail_messaging($op = 'info') {
+  switch($op) {
+    case 'send methods':
+      $info['mail'] = array(
+        'name' => t('Mime Mail'), // Name for display
+        'group' => 'mail', // Class of send method
+        'destination' => 'mail', // Account property to use as destination
+        'send' => 'messaging_mime_mail_send', // Sending callback
+        'type' => MESSAGING_TYPE_PUSH,  // Method type: push || pull
+        'glue' => "<br>", // don't use <br/> nor <br /> for maximum HTML email client compatibility
+        'footer' => "<br><br>--",  // Separator for message footer
+      );
+      return $info;  
+  }
+}
+
+/**
+ * Send mime mail message to user account
+ * 
+ * @param $destination
+ *   Array of e-mails
+ * @param $message
+ *   Message array
+ */
+function messaging_mime_mail_send($destination, $message, $params = array()) {
+  
+  $params = messaging_mail_params($message, $params);
+  
+  return mimemail($params['from'], $destination, $message['subject'], $message['body'], NULL, $params['headers'], NULL, array(), $params['mailkey']);
+}
