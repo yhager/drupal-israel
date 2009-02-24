@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $Id: admin_menu-rtl.css,v 1.1.2.3 2008/10/29 20:02:01 sun Exp $ */
 
 #admin-menu { text-align: right; direction: rtl; }
 #admin-menu li.admin-menu-action { float: left; }
@@ -11,6 +11,7 @@
 /* width needed or else Opera goes nuts */
 #admin-menu li { float: right; position: relative; }
 #admin-menu li li { position: static; }
+#admin-menu li ul { right: 0; }
 
 /* third-and-above-level lists */
 #admin-menu li li.expandable ul { margin: -20px 160px 0 0; }

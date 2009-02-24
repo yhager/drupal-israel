@@ -5,7 +5,7 @@ package = Image
 dependencies[] = image
 core = 6.x
 ; Information added by Acquia.com packaging script
-version = "6.x-1.0-alpha3"
+version = "6.x-1.0-alpha4"
 core = "6.x"
 project = "image"
 acquia = "1"

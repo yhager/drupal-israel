@@ -1,0 +1,27 @@
+;$Id: doil.info,v 1.1.2.1 2009/01/18 17:44:36 tombigel Exp $
+
+name = Doil
+version = 2.1
+description = A theme for Drupal.org.il: subtheme of Tendu - Wireframe BiDi Theme for Developers. Tableless, Cross browser support.
+core = 6.x
+engine = phptemplate
+base theme = tendu
+
+stylesheets[all][] = style_subtheme.css
+conditional-stylesheets[if IE][all][] = ie_subtheme.css
+
+regions[header] = Header
+regions[left] = First sidebar
+regions[right] = Second sidebar
+regions[content_before] = Before Content and Sidebars
+regions[content_top] = Above Main Content   
+regions[content] = Main Content
+regions[content_bottom] = Bellow Main Content 
+regions[content_after] = After Content and Sidebars
+regions[footer] = Footer
+; Information added by drupal.org packaging script on 2009-01-25
+version = "6.x-2.1-beta3"
+core = "6.x"
+project = "tendu"
+datestamp = "1232919341"
+

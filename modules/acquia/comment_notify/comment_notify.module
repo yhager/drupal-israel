@@ -355,7 +355,7 @@ function _comment_notify_mailalert($comment) {
         '!commname' => $commname,
         '!commtext' => $commtext,
         '!commsubj' => $commsubj,
-        '!comment_url' => url('node/'. $nid, NULL, NULL, 1) .'#comment-'. $cid,
+        '!comment_url' => url('node/'. $nid, array('absolute' => TRUE, 'fragment' => 'comment-'. $cid)),
         '!node_title' =>  $node->title,
         '!node_teaser' => $node->teaser,
         '!mission' => variable_get('site_mission', ''),
@@ -365,8 +365,8 @@ function _comment_notify_mailalert($comment) {
         '!uri' => $base_url,
         '!uri_brief' => substr($base_url, strlen('http://')),
         '!date' => format_date(time()),
-        '!login_uri' => url('user', NULL, NULL, 1),
-        '!edit_uri' => url('user/'. $alert->uid .'/edit', NULL, NULL, 1)
+        '!login_uri' => url('user', array('ablsolute' => TRUE)),
+        '!edit_uri' => url('user/'. $alert->uid .'/edit', array('absolute' => TRUE))
       )
     );
     drupal_mail('node_notify_mail', $author->mail, $subject, $message, $from, array());
@@ -405,7 +405,7 @@ function _comment_notify_mailalert($comment) {
           '!commname' => $comment->name,
           '!commtext' => $comment->comment,
           '!commsubj' => $comment->subject,
-          '!comment_url' => url('node/'. $nid, array('absolute' => TRUE)) .'#comment-'. $cid,
+          '!comment_url' => url('node/'. $nid, array('absolute' => TRUE, 'fragment' => 'comment-'. $cid)),
           '!node_title' =>  $node->title,
           '!node_teaser' => $node->teaser,
           '!mission' => variable_get('site_mission', ''),

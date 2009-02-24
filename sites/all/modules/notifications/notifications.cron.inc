@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications.cron.inc,v 1.6.2.6.2.5 2008/09/20 15:43:30 jareyero Exp $
+// $Id: notifications.cron.inc,v 1.6.2.6.2.18 2009/01/30 20:45:46 jareyero Exp $
 /**
  * Subscriptions module. Queue processing.
  * 
@@ -30,7 +30,7 @@ define('NOTIFICATIONS_TIME_MARGIN', 5);
  * after 1 hour 15 mins may be ok if the system is overloaded.
  */
 function notifications_process_run($cron = TRUE) {  
-  notifications_log('Starting queue process');
+  notifications_log('Starting notifications process');
   notifications_process('start');
   // There may be special time adjustments for cron
   if ($cron) {
@@ -39,16 +39,21 @@ function notifications_process_run($cron = TRUE) {
   $stop = FALSE;
   $send_intervals = _notifications_send_intervals();
   unset($send_intervals[-1]);
-  $max_sqid = notifications_process_prepare();
-  foreach ($send_intervals as $interval => $name) {
-    notifications_log('Processing send interval '. $name);
-    while (notifications_process_queue($interval, $max_sqid)) {
-      $stop = !notifications_process('check');
+  if ($max_sqid = notifications_process_prepare()) {
+    foreach ($send_intervals as $interval => $name) {
+      notifications_log('Processing queue', array('send interval' => $name));
+      while (notifications_process_queue($interval, $max_sqid)) {
+        $stop = !notifications_process('check');
+      }
+      if ($stop) {
+        notifications_log('Process stopped, reached processing limits');
+        break;
+      } else {
+        notifications_log('Process finished', array('send interval' => $name));
+      }
     }
-    if ($stop) {
-      notifications_log('Process stopped');
-      break;
-    }
+  } else {
+    notifications_log('No rows in queue');
   }
 }
 
@@ -60,19 +65,20 @@ function notifications_process_run($cron = TRUE) {
  * @return
  *   Max $sqid that will be processed this cron
  */
-function notifications_process_prepare($module = 'notifications') {
-  // Another funny race condition may occur when the event is saved but the subs queue not yet populated  
-  $expiretime = time() - 60;
-  // Clean up event table.
-  // @ TODO Consider a different timing for this cleanup
-  db_query("DELETE FROM {notifications_event} WHERE created < %d AND eid NOT IN (SELECT eid FROM {notifications_queue})", $expiretime);
-  $squid = db_result(db_query("SELECT max(sqid) FROM {notifications_queue}"));
-  if ($squid) {
-    // Delete non existent or blocked users
-    db_query("DELETE FROM {notifications_queue} WHERE module = '%s' AND uid NOT IN (SELECT uid FROM {users} WHERE status = 1)", $module);
+function notifications_process_prepare() {
+  // Clean up expired logs from queue if logging enabled
+  if ($keep = variable_get('notifications_log', 0)) {
+    db_query("DELETE FROM {notifications_queue} WHERE cron = 0 AND sent < %d", time() - $keep);
   }
-  // @ TODO We may use this step to fill in some data or doing some other optimizations
-  return $squid;
+  // Clean up event table. As events are created sequentially, we use this fact to speed up the query
+  // This expiretime will prevent some race condition that occurs when the event is saved but the subs queue not yet populated  
+  $expiretime = time() - 60;  
+  db_query("DELETE FROM {notifications_event} WHERE counter = 0 AND created < %d", $expiretime);
+  db_query("DELETE FROM {notifications_event} WHERE created < %d AND eid < (SELECT MIN(eid) FROM {notifications_queue})", $expiretime);
+  
+  // This will get the latest notification in queue so we don't mess with new ones being created during cron run
+  // It will also prevent clashes with the immediate sending feature
+  return db_result(db_query("SELECT max(sqid) FROM {notifications_queue}"));
 }
 
 /**
@@ -110,13 +116,13 @@ function notifications_process($op = 'check', $name = NULL, $value = NULL) {
       // Max execution time may be zero meaning no limit, then no limits based on this
       if ($maxtime = ini_get('max_execution_time')) {
         $timelimit[] =  $cronstart + $maxtime - NOTIFICATIONS_TIME_MARGIN;
-        if ($limit['percent']) {
+        if (!empty($limit['percent'])) {
           $timelimit[] = time() + $maxtime * $limit['percent'] / 100;
           unset($limit['percent']);
         }
       }
       // This is an absolute limit, applies always if set
-      if ($limit['time']) {
+      if (!empty($limit['time'])) {
         $timelimit[] = time() + $limit['time'];
       }
       if ($timelimit) {
@@ -137,7 +143,7 @@ function notifications_process($op = 'check', $name = NULL, $value = NULL) {
       if (isset($value)) {
         $options[$name] = $value;
       }
-      return $options[$name];
+      return isset($options[$name]) ? $options[$name] : FALSE;
   }
   
   $current['time'] = time();
@@ -162,6 +168,7 @@ function notifications_process($op = 'check', $name = NULL, $value = NULL) {
  *   Array of query conditions
  */
 function notifications_process_rows($conditions) {
+  notifications_log('Processing queue rows', $conditions);
   $account = NULL;
   $subscriptions = $events = $processed = array();
   $send_method = $send_interval = NULL;
@@ -183,7 +190,7 @@ function notifications_process_rows($conditions) {
         notifications_update_sent($account->uid, $send_method, $send_interval, time());
       }
       if ($processed) {
-        notifications_queue_delete(array('sqids' => $processed));        
+        notifications_queue_done(array('sqid' => $processed));        
       }
       $subscriptions = $events = $processed = array();
       if ($queue) {
@@ -193,14 +200,17 @@ function notifications_process_rows($conditions) {
       }
     }
     if ($queue) {
-      $event = notifications_load_event($queue->eid);
-      if (notifications_user_allowed('event', $account, $event)) {
-        $events[$queue->eid] = $event;
-        $subscriptions[$queue->eid][] = $queue->sid;
+      if ($event = notifications_load_event($queue->eid)) {
+        notifications_event_tracker('count', $event);
+        if (notifications_user_allowed('event', $account, $event)) {
+          $events[$queue->eid] = $event;
+          $subscriptions[$queue->eid][] = $queue->sid;
+        }
+        $processed[] = $queue->sqid;
       }
-      $processed[] = $queue->sqid;
     }
   }
+  notifications_event_tracker('update');
 }
 
 /**
@@ -218,13 +228,15 @@ function notifications_process_rows($conditions) {
  *   Send interval to process
  * @param $max_sqid
  *   Max queue id to process
- * @param $module
- *   Module's rows to process. There may be other types of rows sitting on the table
  * @return Number of rows processed
  * 
  * @ TODO Review time conditions
+ * @ TODO Per module queue processing
  */
-function notifications_process_queue($send_interval, $max_sqid, $module = 'notifications') {
+function notifications_process_queue($send_interval, $max_sqid) {
+  notifications_log('Starting queue processing', array('send interval' => $send_interval, 'max squid' => $max_sqid));
+  $test = notifications_process('option', 'test');
+  
   $count = 0;
   // This is the time from which stored rows will be sent
   $timelimit = time() - $send_interval;
@@ -232,18 +244,19 @@ function notifications_process_queue($send_interval, $max_sqid, $module = 'notif
   // Get users to process messages for, with this time interval and ordered by squid
   // Order by last sent for this send interval
   // Note: If we get the users with more messages pending first this may save some time
-  $sql = "SELECT q.uid, q.send_method, count(*) AS count FROM {notifications_queue} q ";
+  $sql = "SELECT q.uid, q.module, q.send_method, count(*) AS count FROM {notifications_queue} q ";
   $sql .= " LEFT JOIN {notifications_sent} su ON q.uid = su.uid AND q.send_interval = su.send_interval AND q.send_method = su.send_method ";
-  $sql .= " WHERE q.cron = 1 AND q.send_interval = '%d' AND q.sqid <= %d AND q.module = '%s'";
+  $sql .= " WHERE q.cron = 1 AND q.send_interval = '%d' AND q.sqid <= %d";
   $sql .= " AND (su.uid IS NULL OR su.sent < %d) ";
-   // Note: the group by su.sent seems to be needed by pgsql
-  $sql .= " GROUP BY q.uid, q.send_method, su.sent ORDER BY su.sent";
-  $result = db_query_range($sql, $send_interval, $max_sqid, $module, $timelimit, 0, NOTIFICATIONS_STEP_USERS);
+  // Note: the group by su.sent seems to be needed by pgsql
+  $sql .= " GROUP BY q.uid, q.module, q.send_method, su.sent ORDER BY su.sent";
+  $result = db_query_range($sql, $send_interval, $max_sqid, $timelimit, 0, NOTIFICATIONS_STEP_USERS);
 
   $sqid = 0;
   // @ TODO Add time conditions
   while (($user = db_fetch_object($result)) && notifications_process('check')) {
-    notifications_log("Processing user $user->uid, rows $user->count, send_method $user->send_method");
+    notifications_log('Queue processing', array('user' => $user->uid , 'rows' => $user->count, 'send method' => $user->send_method));
+    $module = $user->module;
     $events = $subscriptions = $processed = array();    
     $send_method = $user->send_method;
     // Users may be handled by a different module
@@ -253,33 +266,67 @@ function notifications_process_queue($send_interval, $max_sqid, $module = 'notif
     $result_subs = db_query_range("SELECT * FROM {notifications_queue} WHERE cron = 1 AND send_interval = '%d' AND uid = %d AND sqid <= %d ORDER BY send_method, sqid", $send_interval, $account->uid, $max_sqid, 0, NOTIFICATIONS_STEP_ROWS);
     while (($queue = db_fetch_object($result_subs)) && notifications_process('count', 'row')) {
       $count++;
-      $processed[] = $sqid = $queue->sqid;      
-      // Load event and check access
-      $event = notifications_load_event($queue->eid, TRUE);
-      if (notifications_callback($module, 'user_allowed', 'event', $account, $event)) {
-        // This will take care of duplicated events
-        $events[$queue->eid] = $event;
-        // We keep track also of subscriptions originating this event
-        $subscriptions[$queue->eid][] = $queue->sid;
-        notifications_log("Processing queued sid=$queue->sid event=$queue->eid ($event->type, $event->action) send_method=$send_method");
+      $processed[] = $sqid = $queue->sqid;
+      
+      // Load event, check it exists and check the user has access to the event objects
+      if ($event = notifications_load_event($queue->eid, TRUE)) {
+        notifications_event_tracker('count', $event);
+        notifications_log('Processing queued', array('queue sid' => $queue->sid , 'event' => $queue->eid, 'type' => $event->type, 'action' => $event->action, 'send method' =>$send_method));
+        if (notifications_callback($module, 'user_allowed', 'event', $account, $event)) {
+          // This will take care of duplicated events
+          $events[$queue->eid] = $event;
+          // We keep track also of subscriptions originating this event
+          $subscriptions[$queue->eid][] = $queue->sid;
+        } else {
+          notifications_log('Access denied for event', array('account' => $user->uid, 'event' => $queue->eid, 'type' => $event->type, 'action' => $event->action));
+        }
       } else {
-        notifications_log("Access denied for queued event sid=$queue->sid event=$queue->eid ($event->type, $event->action)");
+        notifiations_log('Cannot load event', array('eid' => $queue->eid, 'queue sid' => $queue->sid));
       }
     }
     if ($events) {
-      notifications_callback($module, 'process_send', $account, $events, $subscriptions, $send_method, $send_interval);
-      notifications_callback($module, 'update_sent', $user->uid, $send_method, $send_interval, time());  
+      notifications_process_send($account, $events, $subscriptions, $send_method, $send_interval);
+      if (!$test) {
+        notifications_update_sent($user->uid, $send_method, $send_interval, time());  
+      }
     }
-    if ($processed && !notifications_process('option', 'debug')) {
-       notifications_queue_delete(array('uid' => $user->uid, 'send_interval' => $send_interval, 'send_method' => $send_method, 'max_sqid' => $sqid));      
+    if ($processed && !$test) {
+      notifications_queue_done(array('uid' => $user->uid, 'send_interval' => $send_interval, 'send_method' => $send_method, 'max_sqid' => $sqid));      
     }
   }
-  
-  return $count;
+  // Update event counter
+  notifications_event_tracker('update');
+  // If doing a test run, return 0 so we don't go through this again
+  return $test ? 0 : $count;
 }
 
 /**
- * Update user last time sent
+ * Keep track of events and update event counter with processed rows eids
+ * 
+ * @param $op
+ *   count, reset, update
+ * @param $event
+ *   event object to track
+ */
+function notifications_event_tracker($op, $event = NULL) {
+  static $events = array();
+  
+  switch ($op) {
+    case 'count':
+      $events[$event->eid] = array_key_exists($event->eid, $events) ? $events[$event->eid] + 1 : 1;
+      break;
+    case 'update':
+      foreach ($events as $eid => $count) {
+        db_query('UPDATE {notifications_event} SET counter = counter - %d WHERE eid = %d', $count, $eid);
+      }
+      // Intentional no break (update will also reset)
+    case 'reset':
+      $events = array();
+  }  
+}
+
+/**
+ * Update user last time sent for each sending method / interval
  */
 function notifications_update_sent($uid, $method, $interval, $time) {
   db_query("UPDATE {notifications_sent} SET sent = %d WHERE uid = %d AND send_interval = '%d' AND send_method = '%s'", $time, $uid, $interval, $method);
@@ -287,6 +334,7 @@ function notifications_update_sent($uid, $method, $interval, $time) {
     db_query("INSERT INTO {notifications_sent}(uid, send_interval, send_method, sent) VALUES(%d, '%d', '%s', %d)", $uid, $interval, $method, $time);
   }
 }
+
 /**
  * Message delivery.
  * 
@@ -302,12 +350,12 @@ function notifications_update_sent($uid, $method, $interval, $time) {
  *   Array of arrays of subscription ids (sids) for each event(eid)
  */
 function notifications_process_send($account, $events, $subscriptions, $send_method, $send_interval) {
-  notifications_log("Sending out, method=$send_method, interval=$send_interval, events=". count($events));
+  notifications_log('Processing for sending', array('method' => $send_method, 'interval' => $send_interval, 'events' => count($events)));
   // Digest if send_interval > 0 (not immediate sending)
-  if ($send_interval) {
-     $message = notifications_process_digest($account, $events, $send_interval, $send_method);
-     $message['notifications'] = array('events' => $events, 'subscriptions' => $subscriptions, 'digest' => TRUE);
-     $messages[] = $message;
+  if ($digest = notifications_digest_method($send_interval)) {
+     $function = $digest['digest callback'];
+     // It can be digested in more than one message by some other digest plug-in
+     $messages = $function($account, $events, $subscriptions, $send_interval, $send_method);
   }
   else {
     $sender_option = variable_get('notifications_sender', 0);
@@ -327,53 +375,16 @@ function notifications_process_send($account, $events, $subscriptions, $send_met
       $messages[] = $message;
     }
   }
-  // Now send messages
+  // Now send messages, not if testing enabled
+  $test = notifications_process('option', 'test');
   foreach ($messages as $message) {
     notifications_process('count', 'send');
-    // notifications_log($message, 'message');
-    notifications_message_send($account, $message, $send_method);
-  }
-}
-
-/**
- * Digest multiple events in a single message
- * 
- * @return array with message 'subject' and 'body' elements
- */
-function notifications_process_digest($account, $events, $send_interval, $send_method) {
-  // Compile list of events for each object
-  $list = array();
-
-  // Build up the digested list with text replacement
-  // We need text replacement for each line because it depends on different objects
-  foreach ($events as $event) {
-    notifications_log($event, 'digesting');
-    $info = notifications_event_types($event->type, $event->action);
-    $digest_type = $info['digest'][0];
-    $digest_field = $info['digest'][1];
-    $digest_object = $event->objects[$digest_type];
-    $digest_value = $digest_object->$digest_field;
-    if (!isset($list[$digest_type][$digest_value]['name'])) {
-      $name = $list[$digest_type][$digest_value]['name'] = notifications_text_replace($info['name'], array($digest_type => $digest_object));
-      notifications_log("Digesting object $name (type=$digest_type value=$digest_value)");
-    }
-    // Check duplicate notifications for the same event
-    if (!isset($list[$digest_type][$digest_value]['line'][$event->eid])) {
-      $line = !empty($event->text['digest']) ? $event->text['digest'] : $info['line'];
-      $list[$digest_type][$digest_value]['line'][$event->eid] = notifications_text_replace($line, $event->objects);
+    notifications_log('Sending out', array('method' => $send_method, 'message' => $message));
+    if (!$test) {
+      notifications_message_send($account, $message, $send_method);
     }
   }
-  // Create message. Do all this in one replacement, then strip out the subject
-  $text['subject'] = notifications_message_part('digest', 'subject', $send_method);
-  $text['header'] = notifications_message_part('digest', 'header', $send_method);
-  $text['footer'] = notifications_message_part('digest', 'footer', $send_method);
-  // We dont pass a subscription object here, won't be too much use anyway
-  $text = notifications_text_replace($text, array('user' => $account, 'subscription' => NULL));
-  
-  // Compose body. All these lines have been text replaced
-  $body = theme('notifications_digest_body', $text, $list);
-  
-  return array('subject' => $text['subject'], 'body' => $body);
+  return $messages;
 }
 
 /**
@@ -410,7 +421,7 @@ function notifications_process_message($account, $event, $subscriptions, $send_m
   }
   $objects = array('user' => $account, 'event' => $event, 'subscription' => $subscription);
   $objects = array_merge($objects, $event->objects);
-  $text = notifications_text_replace($text, $objects);
+  $text = messaging_text_replace($text, $objects);
 
   // Get subject out of text and build the message array
   $subject = $text['subject'];
@@ -441,12 +452,21 @@ function notifications_process_message($account, $event, $subscriptions, $send_m
  *   Part of the message.
  *
  */
-function notifications_message_part($type, $key, $method, $event = NULL) {
+function notifications_message_part($type, $key, $method, $param = NULL) {
   // If event passed check for predefined text or get optional keys from event
-  if ($event && isset($event->text[$key])) {
-    return $event->text[$key];  
-  }
-  $options = $event ? array($event->type, $event->action) : array();
+  if ($type == 'event' && is_object($param)) {
+    if (isset($param->text[$key])) {
+      return $param->text[$key];  
+    } else {
+      $options = array($param->type, $param->action);
+    }
+  } elseif ($method == 'test') {
+    // Little trick for this to be testable
+    return "$type $key [type-name] [title] [site-name]";
+  } else {
+    $options = is_array($param) ? $param : array();
+  }  
+
   $keyparts = array_merge(array('notifications-'. $type), $options);
   // Output some debugging info in case we dont find a suitable message part
   $output = "[UNDEFINED type = $type, method = $method, key = ". implode('-', $keyparts) .']';
@@ -463,18 +483,9 @@ function notifications_message_part($type, $key, $method, $event = NULL) {
 }
 
 /**
- * Text replacement with tokens
- */
-function notifications_text_replace($text, $objects) {
-  // Add some token types
-  $objects['global'] = NULL;  
-  return token_replace_multiple($text, $objects);
-}
-
-/**
  * Message sending
  */
-function notifications_message_send($account, $message, $send_method) {
+function notifications_message_send($account, &$message, $send_method) {
   $message['type'] = 'notifications';
   notifications_process('count', 'message');
   messaging_message_send_user($account, $message, $send_method);
@@ -514,6 +525,36 @@ function notifications_load_event($id) {
 }
 
 /**
+ * Mark queue rows as done
+ * 
+ * Either log, if logging enabled, or delete
+ */
+function notifications_queue_done($params) {
+  if (variable_get('notifications_log', 0)) {
+    notifications_queue_update($params, array('cron' => 0, 'sent' => time()));
+  } else {
+    notifications_queue_delete($params);
+  }
+}
+
+/**
+ * Update queue rows with defined values
+ * 
+ * @arg $params
+ *   Parameters to select the queue rows for updating. Array of field => value pairs
+ * @arg $update
+ *   Fields values to update. Array of field => value pairs
+ */
+function notifications_queue_update($params, $updates) {
+  
+  $values =  _messaging_query_conditions('notifications_queue', $updates);
+  $where = notifications_queue_query($params);
+  $args = array_merge($values['args'], $where['args']);
+
+  return db_query('UPDATE {notifications_queue} SET ' . implode(', ', $values['conditions']) . ' WHERE ' . implode(' AND ', $where['where']), $args);
+}
+
+/**
  * Delete rows from subscriptions queue
  * 
  * @see notifications_queue_query()
@@ -539,42 +580,181 @@ function notifications_queue_delete($params) {
 function notifications_queue_query($params) {
   $where = $args = array();
   
-  foreach ($params as $field => $value) {
-    switch ($field) {
-      case 'max_sqid':
-        $where[] = "sqid <= %d";
-        $args[] = $value;
-        break;
-      case 'sqids':
-        $where[] = "sqid IN (%s)";
-        $args[] = implode(',', array_map('db_escape_string', $value));
-        break;      
-      default:
-        $where[] = "$field = '%s'";
-        $args[] = $value;
-        break;
-    }
-  }  
+  // Special condition max_sqid
+  if (isset($params['max_sqid'])) {
+    $where[] = "sqid <= %d";
+    $args[] = $params['max_sqid'];
+    unset ($params['max_sqid']);
+  }
+  // User generic query builder for the rest of fields
+  $values =  _messaging_query_conditions('notifications_queue', $params);  
+  $where = array_merge($where, $values['conditions']);
+  $args = array_merge($args, $values['args']);
+ 
   return array('where' => $where, 'args' => $args);
 }
 
+/** Digest functions **/
+
 /**
- * Log for debugging
+ * Get digest information for an event.
  */
-function notifications_log($info = NULL, $type = 'info') {
-  static $logs;
-  if ($info) {
-    $message = $type .': ';
-    $message .= is_string($info) ? $info : print_r($info, TRUE);
-    $logs[] = $message;
-    if ($type == 'watchdog') {
-      // Do not localize watchdog entry
-      watchdog('notifications', $info, NULL);
+function nofitications_digest_event_info($event) {
+  $info = notifications_event_types($event->type, $event->action);
+  $type = $info['digest'][0];
+  $field = $info['digest'][1];
+  // Check object and values
+  $object = !empty($event->objects[$type]) ? $event->objects[$type] : NULL;
+  $value = $object && isset($object->$field) ? $object->$field : 0;
+  return array('type' => $type, 'field' => $field, 'value' => $value, 'object' => $object);  
+}
+
+/**
+ * Digest multiple events in a single message, short format.
+ * 
+ * @return array with messages ready to be sent
+ */
+function notifications_process_digest_short($account, $events, $subscriptions, $send_interval, $send_method) {
+  // Compile list of events for each object
+  $list = array();
+
+  // Build up the digested list with text replacement
+  // We need text replacement for each line because it depends on different objects
+  foreach ($events as $event) {
+    notifications_log('Digesting short format', array('event' => $event));
+    $sid = is_array($subscriptions[$event->eid]) ? array_shift($subscriptions[$event->eid]) : 0;
+    $subscription = $sid ? notifications_load_subscription($sid) : NULL;
+    $objects = $event->objects + array('user' => $account, 'subscription' => $subscription);
+    // $info = notifications_event_types($event->type, $event->action);
+    $digest = nofitications_digest_event_info($event);
+    $digest_type = $digest['type'];
+    $digest_value = $digest['value'];
+
+    if (!isset($list[$digest_type][$digest_value]['group'])) {
+      $group = array(      
+        'title' => notifications_digest_group($digest, 'title', $send_method),
+        'footer' => notifications_digest_group($digest, 'footer', $send_method),
+      );
+      // The objects passed here for tokens will be the ones from the first event only
+      $list[$digest_type][$digest_value]['group'] = messaging_text_replace($group, $objects);
+      notifications_log('Digesting object', array('type' => $digest_type, 'value' => $digest_value));
+    }
+    // Check duplicate notifications for the same event so we do some deduping
+    if (!isset($list[$digest_type][$digest_value]['line'][$event->eid])) {
+      $line = notifications_digest_line($event, $send_method, $objects);
+      $list[$digest_type][$digest_value]['line'][$event->eid] = messaging_text_replace($line, $event->objects);
     }
   }
-  else {
-    return $logs;
+  // Create message. Do all this in one replacement, then strip out the subject
+  $text['subject'] = notifications_message_part('digest', 'subject', $send_method);
+  $text['header'] = notifications_message_part('digest', 'header', $send_method);
+  $text['footer'] = notifications_message_part('digest', 'footer', $send_method);
+
+  // We dont pass a subscription object here, won't be too much use anyway
+  $text = messaging_text_replace($text, array('user' => $account, 'subscription' => NULL));
+  
+  // Compose body. All these lines have been text replaced
+  $body = theme('notifications_digest_short_body', $text, $list);
+    
+  // Build the final digested message, and return in an array
+  $message = array(
+    'subject' => $text['subject'], 
+    'body' => $body,
+    'events' => $events,
+    'subscriptions' => $subscriptions,
+    'digest' => 'short',
+  );
+
+  return array($message);
+}
+
+/**
+ * Digest multiple events in a single message, long format.
+ * 
+ * @return array with messages ready to be sent
+ */
+function notifications_process_digest_long($account, $events, $subscriptions, $send_interval, $send_method) {
+  // Build the message body as an array of event notifications
+  $body = array();
+
+  // Build up the digested list with text replacement, body as big array
+  // We need text replacement for each line because it depends on different objects
+  foreach ($events as $event) {
+    notifications_log('Digesting long format', array('event' => $event));
+    // We use the regular template for the events
+    $part = notifications_message_part('event', 'main', $send_method, $event);
+    // Pass only the first subscription here
+    $sid = is_array($subscriptions[$event->eid]) ? array_shift($subscriptions[$event->eid]) : 0;
+    $subscription = $sid ? notifications_load_subscription($sid) : NULL;
+    $objects = $event->objects + array('user' => $account, 'subscription' => $subscription);
+    $body[] = messaging_text_replace($part, $objects);
   }
+  
+  // Create message. Do all this in one replacement, then strip out the subject
+  $text['subject'] = notifications_message_part('digest', 'subject', $send_method);
+  $text['header'] = notifications_message_part('digest', 'header', $send_method);
+  $text['footer'] = notifications_message_part('digest', 'footer', $send_method);
+
+  // We dont pass a subscription object here, won't be too much use anyway
+  $text = messaging_text_replace($text, array('user' => $account, 'subscription' => NULL));
+  
+  // Compose body. All these lines have been text replaced
+  $body = theme('notifications_digest_long_body', $text['header'], $body, $text['footer']);
+  
+  // Build the final digested message, and return in an array
+  $message = array(
+    'subject' => $text['subject'], 
+    'body' => $body,
+    'events' => $events,
+    'subscriptions' => $subscriptions,
+    'digest' => 'long',
+  );
+  return array($message);
+}
+
+/**
+ * Get text parts for digests.
+ * 
+ * Useful to get the group title and footer given some kind of digesting
+ */
+function notifications_digest_group($digest, $part, $method) {
+  static $texts = array();
+
+  $type = $digest['type'];
+  $value = $digest['value'];
+  
+  if (!isset($texts[$type][$value][$part][$method])) {
+    if ($line = notifications_message_part('digest', $part, $method, array($type, $digest['field']))) {
+      $output = $line;
+    } else {
+      $output = '';
+    }
+    $texts[$type][$value][$part][$method] = $output;
+  }
+  
+  return $texts[$type][$value][$part][$method];
+}
+
+/**
+ * Digest each line, with some caching for performance
+ */
+function notifications_digest_line($event, $method) {
+  static $digest = array();
+  
+  if (!isset($digest[$event->eid][$method])) {
+    // The event may have an specific digest line, otherwise use template if present or even information
+    if (!empty($event->text['digest'])) {
+      $line = $event->text['digest'];
+    } elseif ($part = notifications_message_part('event', 'digest', $method, $event)) {
+      $line = $part;
+    } else { // Get it from event information
+      $info = notifications_event_types($event->type, $event->action);
+      $line = $info['line'];
+    }    
+    $digest[$event->eid][$method] = $line;
+  }
+  
+  return $digest[$event->eid][$method];
 }
 
 /** Themeable functions **/
@@ -588,23 +768,41 @@ function notifications_log($info = NULL, $type = 'info') {
  *   Structured array with list of digested items. For each object type
  *   'type' => (  // Type may be node, user, etc...
  *      'oid' => ( // One for each object, may be nid, uid...
- *        'name' => Sub header for this digest section, object name
+ *        'group' => Group title and footer 
  *        'line' => Array of lines, one for each related event
  *       )
  *   )   
  * @return
  *   Structured array with 'header', 'footer', and multiple text lines
  */
-function theme_notifications_digest_body($text, $list) {
+function theme_notifications_digest_short_body($text, $list) {
   $body['header'] = $text['header'];
   foreach ($list as $type => $objects) {
-    foreach ($objects as $oid => $data) {
-      $body[] = $data['name'];
+    foreach ($objects as $oid => $data) {      
+      $body['content'][] = $data['group']['title'];
       foreach ($data['line'] as $line) {
-        $body[] = '- '. $line;
+        $body['content'][] = theme('notifications_digest_short_line', $line, $data['group']);
       }
+      $body['content'][] = $data['group']['footer'];
     }
   }
   $body['footer'] = $text['footer'];
   return $body;
 }
+
+/**
+ * Single line of text
+ */
+function theme_notifications_digest_short_line($line, $group) {
+  return '- ' . $line;
+}
+
+/**
+ * Build the message body for long digests. 
+ * 
+ * Actually we do nothing here, but it will be themeable.
+ */
+function theme_notifications_digest_long_body($header, $content, $footer) {
+  return array('header' => $header, 'content' => $content, 'footer' => $footer);
+}
+

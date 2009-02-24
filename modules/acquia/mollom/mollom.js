@@ -1,4 +1,4 @@
-// $Id: mollom.js,v 1.2.2.3 2008/08/19 15:42:30 dries Exp $
+// $Id: mollom.js,v 1.2.2.4 2008/12/31 14:45:05 dries Exp $
 
 Drupal.behaviors.mollom = function() {
   // Add onclick.event handlers for CAPTCHA links:
@@ -8,7 +8,7 @@ Drupal.behaviors.mollom = function() {
 
 function getAudioCaptcha() {
   // Extract the Mollom session ID from the form:
-  var mollomSessionId = $("input#edit-session-id").val();
+  var mollomSessionId = $("input#edit-mollom-session-id").val();
 
   // Retrieve an audio CAPTCHA:
   var data = $.get(Drupal.settings.basePath + 'mollom/captcha/audio/' + mollomSessionId,
@@ -25,7 +25,7 @@ function getAudioCaptcha() {
 
 function getImageCaptcha() {
   // Extract the Mollom session ID from the form:
-  var mollomSessionId = $('input#edit-session-id').val();
+  var mollomSessionId = $('input#edit-mollom-session-id').val();
 
   // Retrieve an image CAPTCHA:
   var data = $.get(Drupal.settings.basePath + 'mollom/captcha/image/' + mollomSessionId,

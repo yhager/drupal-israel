@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_tags.module,v 1.1.2.5.2.4 2008/08/09 19:40:23 jareyero Exp $
+// $Id: notifications_tags.module,v 1.1.2.5.2.6 2009/01/29 23:43:45 jareyero Exp $
 /**
  * @file
  * Subscriptions to taxonomy terms
@@ -49,38 +49,23 @@ function notifications_tags_notifications($op, &$arg0, $arg1 = NULL, $arg2 = NUL
         'access' => 'subscribe to taxonomy terms',
         'fields' => array('tid'),
       );
-      return $types;    
+      return $types;
+    case 'subscription fields':
+      // Information about available fields for subscriptions
+      $fields['tid'] = array(
+        'name' => t('Taxonomy term'),
+        'field' => 'tid',
+        'type' => 'int',
+      );
+      return $fields;
     case 'query':
       if ($arg0 == 'event' && $arg1 == 'node' && ($node = $arg2->node) || $arg0 == 'user' && $arg1 == 'node' && ($node = $arg2)) {
-        $params[] = array(
-          'join' => "LEFT JOIN {term_node} t ON f.field = 'tid' AND f.value = CAST(t.tid AS CHAR)",
-          'where' => 't.nid = %d',
-          'args' => array($node->nid),
-        );
-        return $params;
+        if ($tids = notifications_tags_node_get_terms($node->nid)) {
+          $query[]['fields']['tid'] = $tids;
+          return $query;
+        }
       }
       break;
-    /* We cannot add these options for every taxonomy term, will be too much
-    case 'node options':
-        $account = &$arg0;
-        $node = &$arg1;
-        $options = array();        
-        $vocabularies = notifications_tags_vocabularies();
-        foreach ($node->taxonomy as $tid => $term) {
-          if (isset($vocabularies[$term->vid])) {
-            // Taxonomy term
-            $options['taxonomy']['tid'][] = array(
-              'name' => t('Subscribe to posts in %term.', array('%term' => $term->name)),
-              'fields' => array('tid' => $tid),
-            );
-            $options['taxonomy']['tid_author'][] = array(
-              'name' => t('Subscribe to posts in %term by %name', array('%term' => $term->name, '%name' => $node->name)),
-              'fields' => array('tid' => $tid, 'author' => $node->uid),
-            );
-          }
-        }
-        return $options;
-    */
   }
 }
 
@@ -220,17 +205,16 @@ function notifications_tags_user_form($form_state, $account) {
  *   If empty the whole vocalubary object will be returned.
  */
 function notifications_tags_vocabularies($field = NULL) {
- 
-  $allvocab = taxonomy_get_vocabularies();
-
   if ($allowed = variable_get('notifications_tags_vocabularies', array())) {
+    $allvocab = taxonomy_get_vocabularies();
     $vocabularies = array();
     foreach (array_filter($allowed) as $vid) {
       $vocabularies[$vid] = $allvocab[$vid];
     } 
   }
   else {
-    $vocabularies = $allvocab;
+    // They're disallowed by default
+    $vocabularies = array();
   }
   if ($field) {
     $list = array();
@@ -242,4 +226,23 @@ function notifications_tags_vocabularies($field = NULL) {
   else {
     return $vocabularies;
   }
+}
+
+/**
+ * Helper function to get latest node terms.
+ * 
+ * We cannot use the one from taxonomy module because it has static caching and we'll be sending
+ * notifications right after the node has been updated
+ */
+function notifications_tags_node_get_terms($nid) {
+  static $terms;
+
+  if (!isset($terms[$nid])) {
+    $result = db_query('SELECT tid FROM {term_node} WHERE nid = %d', $nid);
+    $terms[$nid] = array();
+    while ($term = db_fetch_object($result)) {
+      $terms[$nid][] = $term->tid;
+    }
+  }
+  return $terms[$nid];
 }

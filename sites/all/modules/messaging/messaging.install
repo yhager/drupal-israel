@@ -1,11 +1,12 @@
 <?php
-// $Id: messaging.install,v 1.2.2.4.2.3 2008/07/29 16:19:40 jareyero Exp $
+// $Id: messaging.install,v 1.2.2.4.2.10 2009/01/27 15:50:30 jareyero Exp $
 
 /**
 * Implementation of hook_schema().
 */
 function messaging_schema() {
   $schema['messaging_store'] = array(
+    'description' => 'Stores sent messages',
     'fields' => array(
       'mqid'    => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
       'uid'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
@@ -14,7 +15,7 @@ function messaging_schema() {
       'destination' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
       'subject' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
       'body' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big'),
-      'params' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big'),
+      'params' => array('type' => 'text', 'not null' => TRUE, 'size' => 'big', 'serialize' => TRUE),
       'created' => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
       'sent' => array('type' => 'int', 'not null' => TRUE, 'default' => 0),  
       'cron' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
@@ -22,8 +23,25 @@ function messaging_schema() {
       'log' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
     ),    
     'primary key' => array('mqid'),
+    'indexes' => array(
+      'cron' => array('cron'),
+      'queue' => array('queue'),
+      'log' => array('log'),
+    ),
   );
-
+ 
+  /*
+  $schema['messaging_user'] = array(
+    'description' => 'User variables for messaging',
+    'fields' => array(
+      'uid'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'name' => array('type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'default' => ''),
+      'value'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'text' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+    ),
+    'primary key' => array('uid', 'name')
+  );
+  */
   $schema['messaging_message_parts'] = array(
     'fields' => array(
       'type'    => array('type' => 'varchar', 'length' => 100, 'not null' => TRUE, 'default' => ''),
@@ -70,6 +88,69 @@ function _messaging_install_create_filter() {
 function messaging_uninstall() {
   // Remove tables.
   drupal_uninstall_schema('messaging');
+  // Remove the default filter, plain text added in install
+  if ($format = variable_get('messaging_default_filter', 0)) {
+    db_query('DELETE FROM {filters} WHERE format = %d', $format);
+    db_query('DELETE FROM {filter_formats} WHERE format = %d', $format);
+  }
+  // Remove variables
+  variable_del('messaging_debug');
+  variable_del('messaging_default_filter');
+  variable_del('messaging_default_method');
+  variable_del('messaging_log');
+  variable_del('messaging_log_expire');
+  variable_del('messaging_process_limit');
+  db_query("DELETE FROM {variable} WHERE name LIKE 'messaging_method_%'");
+}
+
+/**
+ * Disable a sending method and return an alternative one
+ */
+function messaging_update_method_disable($method, $replace) {
+  // Check that we are not getting rid of the default method
+  if ($method == messaging_method_default()) {
+    variable_set('messaging_default_method', $replace);   
+  }
+  messaging_update_method_update($method, $replace);
+  
+  return $replace;
+}
+
+/**
+ * Find a suitable replacement for a sending method
+ */
+function messaging_update_method_replace($method) {
+  // Find an alternative one within the same group, i.e. 'mail'
+  if ($method_group = messaging_method_info($method, 'group')) {
+    foreach (messaging_method_info(NULL, 'group') as $index => $group) {
+      if ($group == $method_group && $method != $index) {
+        $replace = $index;
+        break;
+      }
+    }
+  }
+  // If still not replacement, go for the default
+  if (empty($replace)) {
+    if ($method == messaging_method_default()) {
+      $info = messaging_method_info();
+      unset($info[$method]);
+      $replace = key($info);
+    } else {
+      $replace = messaging_method_default();
+    }    
+  }
+  return $replace;
+}
+
+/**
+ * Udate sending method, change for a new one
+ */
+function messaging_update_method_update($old, $new) {
+  // Replace some variables
+  if ($old ==  variable_get('messaging_default_method', NULL)) {
+    variable_set('messaging_default_method', $new);
+  }
+  module_invoke_all('messaging', 'method update', $old, $new);
 }
 
 /**
@@ -81,8 +162,9 @@ function messaging_update_1() {
     foreach ($settings as $key => $info){
       $info['subject_filter'] = $info['filter'];
       variable_set('messaging_method_'. $key, $info);
-    }
-    drupal_set_message('Your messaging settings have been updated. Please review them.');
+      $ret[] = array();
+    }    
+    drupal_set_message('Your messaging methods have been updated. Please review the messaging settings.');
   }
   return $ret;
 }
@@ -105,4 +187,49 @@ function messaging_update_6001() {
   return $ret;
 }
 
+/**
+ * Update sending methods names
+ */
+function messaging_update_6002() {
+  $ret = array();
+  module_load_all();
+  if (module_exists('messaging_phpmailer')) {
+    $replace['html_mail'] = 'phpmailer';
+  }
+  if (module_exists('messaging_mime_mail') && !module_exists('messaging_mail')) {
+    $replace['mail'] = 'mimemail'; 
+  }
+  if (!empty($replace)) {
+    foreach ($replace as $old => $new) {
+      if ($settings = variable_get('messaging_method_'. $old, NULL)) {
+        variable_set('messaging_method_' . $new, $settings);
+        variable_del('messaging_method_' . $old);
+      }
+      messaging_update_method_update($old, $new);
+      $ret[] = array('success' => TRUE, 'query' => "Replaced sending method $old by $new");
+    }
+    drupal_set_message('Please, check all your messaging settings for sending methods.');
+  }
+  return $ret;
+}
 
+/**
+ * Update schema field
+ */
+function messaging_update_6003() {
+  $ret = array();
+  db_change_field($ret, 'messaging_store', 'params', 'params', array('type' => 'text', 'not null' => TRUE, 'size' => 'big', 'serialize' => TRUE));
+  return $ret;
+}
+
+/**
+ * update messaging store to add in indexes
+ */
+function messaging_update_6004() {
+  $ret = array();
+  db_add_index($ret, 'messaging_store', 'cron', array('cron'));
+  db_add_index($ret, 'messaging_store', 'queue', array('queue'));
+  db_add_index($ret, 'messaging_store', 'log', array('log'));
+  
+  return $ret;
+}

@@ -1,5 +1,10 @@
 <?php
-// $Id: textfield.inc,v 1.12.2.6 2008/10/14 18:20:01 quicksketch Exp $
+// $Id: textfield.inc,v 1.12.2.9 2009/01/11 03:01:47 quicksketch Exp $
+
+/**
+ * @file
+ *   Webform module textfield component.
+ */
 
 /**
  * Create a default textfield component.
@@ -38,7 +43,7 @@ function _webform_edit_textfield($currfield) {
   $edit_fields = array();
   $edit_fields['value'] = array(
     '#type' => 'textfield',
-    '#title' => t("Default value"),
+    '#title' => t('Default value'),
     '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') . theme('webform_token_help'),
     '#size' => 60,
@@ -47,7 +52,7 @@ function _webform_edit_textfield($currfield) {
   );
   $edit_fields['extra']['width'] = array(
     '#type' => 'textfield',
-    '#title' => t("Width"),
+    '#title' => t('Width'),
     '#default_value' => $currfield['extra']['width'],
     '#description' => t('Width of the textfield.') .' '. t('Leaving blank will use the default size.'),
     '#size' => 5,
@@ -56,7 +61,7 @@ function _webform_edit_textfield($currfield) {
   );
   $edit_fields['extra']['maxlength'] = array(
     '#type' => 'textfield',
-    '#title' => t("Maxlength"),
+    '#title' => t('Maxlength'),
     '#default_value' => $currfield['extra']['maxlength'],
     '#description' => t('Maxlength of the textfield.'),
     '#size' => 5,
@@ -65,7 +70,7 @@ function _webform_edit_textfield($currfield) {
   );
   $edit_fields['extra']['field_prefix'] = array(
     '#type' => 'textfield',
-    '#title' => t("Label placed to the left of the textfield"),
+    '#title' => t('Label placed to the left of the textfield'),
     '#default_value' => $currfield['extra']['field_prefix'],
     '#description' => t('Examples: $, #, -.'),
     '#size' => 20,
@@ -74,7 +79,7 @@ function _webform_edit_textfield($currfield) {
   );
   $edit_fields['extra']['field_suffix'] = array(
     '#type' => 'textfield',
-    '#title' => t("Label placed to the right of the textfield"),
+    '#title' => t('Label placed to the right of the textfield'),
     '#default_value' => $currfield['extra']['field_suffix'],
     '#description' => t('Examples: lb, kg, %.'),
     '#size' => 20,
@@ -83,7 +88,7 @@ function _webform_edit_textfield($currfield) {
   );
   $edit_fields['extra']['disabled'] = array(
     '#type' => 'checkbox',
-    '#title' => t("Disabled"),
+    '#title' => t('Disabled'),
     '#return_value' => 1,
     '#description' => t('Make this field non-editable. Useful for setting an unchangeable default value.'),
     '#weight' => 3,
@@ -111,10 +116,14 @@ function _webform_render_textfield($component) {
     '#field_suffix'  => empty($component['extra']['field_suffix']) ? NULL : $component['extra']['field_suffix'],
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
-    '#disabled'      => $component['extra']['disabled'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
     '#suffix'        => '</div>',
   );
+
+  if ($component['extra']['disabled']) {
+    $form_item['#attributes']['readonly'] = 'readonly';
+  }
+
   // Change the 'width' option to the correct 'size' option.
   if ($component['extra']['width'] > 0) {
     $form_item['#size'] = $component['extra']['width'];
@@ -135,13 +144,17 @@ function _webform_render_textfield($component) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_textfield($data, $component, $enabled = false) {
+function _webform_submission_display_textfield($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_textfield($component);
   $form_item['#default_value'] = $data['value']['0'];
-  $form_item['#disabled'] = !$enabled;
+  if (!$enabled) {
+    $form_item['#attributes']['readonly'] = 'readonly';
+  }
   return $form_item;
 }
 
@@ -159,7 +172,7 @@ function _webform_submission_display_textfield($data, $component, $enabled = fal
  */
 function theme_webform_mail_textfield($data, $component) {
   $value = $data == '' ? '' : ' '. $component['extra']['field_prefix'] . $data . $component['extra']['field_suffix'];
-  return $component['name'] .":". $value;
+  return $component['name'] .':'. $value;
 }
 
 /**
@@ -174,12 +187,12 @@ function _webform_theme_textfield() {
 }
 
 /**
- * Module specific instance of hook_help
+ * Module specific instance of hook_help().
  */
 function _webform_help_textfield($section) {
   switch ($section) {
     case 'admin/settings/webform#textfield_description':
-      return t("Basic textfield type.");
+      return t('Basic textfield type.');
   }
 }
 
@@ -205,7 +218,7 @@ function _webform_analysis_rows_textfield($component) {
 
   $result = db_query($query, $component['nid'], $component['cid']);
   while ($data = db_fetch_array($result)) {
-    if ( strlen(trim($data['data'])) > 0 ) {
+    if (drupal_strlen(trim($data['data'])) > 0) {
       $nonblanks++;
       $wordcount += str_word_count(trim($data['data']));
     }
@@ -228,7 +241,7 @@ function _webform_analysis_rows_textfield($component) {
  *   Textual output formatted for human reading.
  */
 function _webform_table_data_textfield($data) {
-  return check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
+  return check_plain(empty($data['value']['0']) ? '' : $data['value']['0']);
 }
 
 
@@ -262,5 +275,5 @@ function _webform_csv_headers_textfield($component) {
  *   commas.
  */
 function _webform_csv_data_textfield($data) {
-  return !isset($data['value']['0']) ? "" : $data['value']['0'];
+  return !isset($data['value']['0']) ? '' : $data['value']['0'];
 }

@@ -1,7 +1,8 @@
 <?php
-// $Id: webform_report.inc,v 1.17.2.9 2008/10/08 19:51:40 quicksketch Exp $
+// $Id: webform_report.inc,v 1.17.2.12 2009/01/10 01:55:02 quicksketch Exp $
 
 /**
+ * @file
  * This file includes helper functions for creating reports for webform.module
  *
  * @author Nathan Haug <nate@lullabot.com>
@@ -15,18 +16,69 @@ module_load_include('inc', 'webform', 'webform_submissions');
 /**
  * Retrieve lists of submissions for a given webform.
  */
-function webform_results_submissions($node, $user_filter = FALSE) {
+function webform_results_submissions($node, $user_filter, $pager_count) {
   global $user;
+
+  if (isset($_GET['results']) && is_numeric($_GET['results'])) {
+    $pager_count = $_GET['results'];
+  }
 
   $header = theme('webform_results_submissions_header', $node);
   if ($user_filter) {
     drupal_set_title(t('Submissions for %user', array('%user' => $user->name)));
-    $submissions = webform_get_submissions($node->nid, $header, $user->uid);
+    $submissions = webform_get_submissions($node->nid, $header, $user->uid, $pager_count);
+    $count = webform_get_submission_count($node->nid, $user->uid);
   }
   else {
-    $submissions = webform_get_submissions($node->nid, $header);
+    $submissions = webform_get_submissions($node->nid, $header, NULL, $pager_count);
+    $count = webform_get_submission_count($node->nid);
   }
-  return theme('webform_results_submissions', $node, $submissions);
+  return theme('webform_results_submissions', $node, $submissions, $count, $pager_count);
+}
+
+/**
+ * Theme the list of links for selecting the number of results per page.
+ *
+ * @param $total_count
+ *   The total number of results available.
+ * @param $pager_count
+ *   The current number of results displayed per page.
+ */
+function theme_webform_results_per_page($total_count, $pager_count) {
+  $output = '';
+
+  // Create a list of results-per-page options.
+  $counts = array(
+    '20' => '20',
+    '50' => '50',
+    '100' => '100',
+    '200' => '200',
+    '500' => '500',
+    '1000' => '1000',
+    '0' => t('All'),
+  );
+
+  $count_links = array();
+
+  foreach ($counts as $number => $text) {
+    if ($number < $total_count) {
+      $count_links[] = l($text, $_GET['q'], array('query' => 'results='. $number, 'attributes' => array('class' => $pager_count == $number ? 'selected' : '')));
+    }
+  }
+
+  $output .= '<div class="webform-results-per-page">';
+  if (count($count_links) > 1) {
+    $output .= t('Show !count results per page.', array('!count' => implode(' | ', $count_links)));
+  }
+  else {
+    $output .= t('Showing all results.');
+  }
+  if ($total_count > 1) {
+    $output .= ' '. t('@total results total.', array('@total' => $total_count));
+  }
+  $output .= '</div>';
+
+  return $output;
 }
 
 /**
@@ -40,7 +92,7 @@ function theme_webform_results_submissions_header($node) {
     array('data' => t('#'), 'field' => 'sid', 'sort' => 'asc'),
     array('data' => t('Submitted'), 'field' => 'submitted'),
   );
-  if (user_access("access webform results")) {
+  if (user_access('access webform results')) {
     $columns[] = array('data' => t('User'), 'field' => 'name');
     $columns[] = array('data' => t('IP Address'), 'field' => 'remote_addr');
   }
@@ -56,10 +108,17 @@ function theme_webform_results_submissions_header($node) {
  *   The node whose results are being displayed.
  * @param $submissions
  *   An array of all submissions for this webform.
+ * @param $total_count
+ *   The total number of submissions to this webform.
+ * @param $pager_count
+ *   The number of results to be shown per page.
  */
-function theme_webform_results_submissions($node, $submissions) {
+function theme_webform_results_submissions($node, $submissions, $total_count = 0, $pager_count = 0) {
   global $user;
-  // This header has to be generated seperately so we can add the SQL necessary
+
+  drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css');
+
+  // This header has to be generated separately so we can add the SQL necessary
   // to sort the results.
   $header = theme('webform_results_submissions_header', $node);
 
@@ -74,7 +133,7 @@ function theme_webform_results_submissions($node, $submissions) {
       $row[] = $submission->remote_addr;
     }
     $row[] = l(t('View'), "node/$node->nid/submission/$sid");
-    if ((user_access("edit own webform submissions") && ($user->uid == $submission->uid)) || user_access("edit webform submissions")) {
+    if ((user_access('edit own webform submissions') && ($user->uid == $submission->uid)) || user_access('edit webform submissions')) {
       $row[] = l(t('Edit'), "node/$node->nid/submission/$sid/edit");
       $row[] = l(t('Delete'), "node/$node->nid/submission/$sid/delete", array('query' => drupal_get_destination()));
     }
@@ -88,9 +147,14 @@ function theme_webform_results_submissions($node, $submissions) {
     $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 7));
   }
 
-  $output = theme('table', $header, $rows);
+  $output = '';
+  $output .= theme('webform_results_per_page', $total_count, $pager_count);
+  $output .= theme('table', $header, $rows);
   if (arg(2) == 'submissions') {
     $output .= theme('links', array('webform' => array('title' => t('Go back to the form'), 'href' => 'node/'. $node->nid)));
+  }
+  if ($pager_count) {
+    $output .= theme('pager', NULL, $pager_count, 0);
   }
   return $output;
 }
@@ -98,15 +162,24 @@ function theme_webform_results_submissions($node, $submissions) {
 /**
  * Create a table containing all submitted values for a webform node.
  */
-function webform_results_table($node) {
+function webform_results_table($node, $pager_count = 0) {
   // Load Components.
   webform_load_components();
 
+  if (isset($_GET['results']) && is_numeric($_GET['results'])) {
+    $pager_count = $_GET['results'];
+  }
+
   // Get all the submissions for the node.
   $header = theme('webform_results_table_header', $node);
-  $submissions = webform_get_submissions($node->nid, $header);
+  $submissions = webform_get_submissions($node->nid, $header, NULL, $pager_count);
+  $total_count = webform_get_submission_count($node->nid);
 
-  return theme('webform_results_table', $node, $node->webform['components'], $submissions);
+  $output = theme('webform_results_table', $node, $node->webform['components'], $submissions, $total_count, $pager_count);
+  if ($pager_count) {
+    $output .= theme('pager', NULL, $pager_count, 0);
+  }
+  return $output;
 }
 
 function theme_webform_results_table_header($node) {
@@ -127,8 +200,14 @@ function theme_webform_results_table_header($node) {
  *   An associative array of the components for this webform.
  * @param $submissions
  *   An array of all submissions for this webform.
+ * @param $total_count
+ *   The total number of submissions to this webform.
+ * @param $pager_count
+ *   The number of results to be shown per page.
  */
-function theme_webform_results_table($node, $components, $submissions) {
+function theme_webform_results_table($node, $components, $submissions, $total_count, $pager_count) {
+  drupal_add_css(drupal_get_path('module', 'webform') .'/webform.css');
+
   $header = array();
   $rows = array();
   $cell = array();
@@ -140,16 +219,17 @@ function theme_webform_results_table($node, $components, $submissions) {
   // Generate a row for each submission.
   foreach ($submissions as $sid => $submission) {
     $cell[] = l($sid, 'node/'. $node->nid .'/submission/'. $sid);
-    $cell[] = format_date($submission->submitted, "small");
+    $cell[] = format_date($submission->submitted, 'small');
     $cell[] = theme('username', $submission);
     $cell[] = $submission->remote_addr;
     $component_headers = array();
 
     // Generate a cell for each component.
     foreach ($node->webform['components'] as $component) {
-      $table_function = "_webform_table_data_". $component['type'];
+      $table_function = '_webform_table_data_'. $component['type'];
       if (function_exists($table_function)) {
-        $submission_output = $table_function($submission->data[$component['cid']], $component);
+        $data = isset($submission->data[$component['cid']]) ? $submission->data[$component['cid']] : NULL;
+        $submission_output = $table_function($data, $component);
         if ($submission_output !== NULL) {
           $component_headers[] = $component['name'];
           $cell[] = $submission_output;
@@ -168,7 +248,11 @@ function theme_webform_results_table($node, $components, $submissions) {
     $rows[] = array(array('data' => t('There are no submissions for this form. <a href="!url">View this form</a>.', array('!url' => url('node/'. $node->nid))), 'colspan' => 4));
   }
 
-  return theme('table', $header, $rows);
+
+  $output = '';
+  $output .= theme('webform_results_per_page', $total_count, $pager_count);
+  $output .= theme('table', $header, $rows);
+  return $output;
 }
 
 /**
@@ -192,11 +276,11 @@ function webform_results_clear($nid) {
  *   ID of node for which to clear submissions.
  */
 function webform_results_clear_form($form_state, $node) {
-  drupal_set_title(t("Clear Form Submissions"));
+  drupal_set_title(t('Clear Form Submissions'));
 
   $form = array();
   $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
-  $question = t("Are you sure you want to delete all submissions for this form?");
+  $question = t('Are you sure you want to delete all submissions for this form?');
 
   return confirm_form($form, $question, 'node/'. $node->nid .'/webform-results', NULL, t('Clear'), t('Cancel'));
 }
@@ -208,7 +292,7 @@ function webform_results_clear_form_submit($form, &$form_state) {
 
   $message = t('Webform %title entries cleared.', array('%title' => $title));
   drupal_set_message($message);
-  watchdog('webform', $message, WATCHDOG_NOTICE);
+  watchdog('webform', $message);
   $form_state['redirect'] = 'node/'. $form_state['values']['nid'] .'/webform-results';
 }
 
@@ -310,13 +394,13 @@ function webform_results_download($node, $format = 'delimiter', $options = array
   $exporter->bof($handle);
 
   $header[0] = array($node->title, '', '', '', '', '');
-  $header[1] = array(t("Submission Details"), '', '', '', '', '');
+  $header[1] = array(t('Submission Details'), '', '', '', '', '');
   $header[2] = array(t('Serial'), t('SID'), t('Time'), t('IP Address'), t('UID'), t('Username'));
 
   // Compile header information.
   webform_load_components(); // Load all components.
   foreach ($node->webform['components'] as $cid => $component) {
-    $csv_header_function = "_webform_csv_headers_". $component['type'];
+    $csv_header_function = '_webform_csv_headers_'. $component['type'];
     if (function_exists($csv_header_function)) {
       // Let each component determine its headers.
       $component_header = $csv_header_function($component);
@@ -345,7 +429,7 @@ function webform_results_download($node, $format = 'delimiter', $options = array
     $row[] = $submission->uid;
     $row[] = $submission->name;
     foreach ($node->webform['components'] as $cid => $component) {
-      $csv_data_function   = "_webform_csv_data_". $component['type'];
+      $csv_data_function   = '_webform_csv_data_'. $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
         $data = $csv_data_function($submission->data[$cid], $component);
@@ -391,7 +475,7 @@ function webform_results_analysis($node) {
     $question_number++;
 
     // Do component specific call.
-    $analysis_function = "_webform_analysis_rows_". $component['type'];
+    $analysis_function = '_webform_analysis_rows_'. $component['type'];
     if (function_exists($analysis_function)) {
       $crows = $analysis_function($component);
       if (is_array($crows)) {

@@ -1,0 +1,18 @@
+@charset "utf-8";
+/*$Id: ie.css,v 1.2.2.2.2.5 2009/01/24 18:31:51 tombigel Exp $*/
+/**
+ * Tendu Drupal - A CSS Theme For Developers
+ * Incremental CSS overrides for IE (all variants)
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ */
+
+/** 
+ * "break-word" causes IE to break long text with no white-spaces,
+ * otherwise, because of it's non-standard block sizing behavior it
+ * breakes the layout - especially when RTL is involved.
+ * It's actually a very useful decleration.
+ */
+body{word-wrap: break-word;}
+
+/* Fix IE7 collapsed fieldsets (The defitition in system.css don't apply on IE7, TODO: Check why) */
+html.js fieldset.collapsed legend{display:inline}

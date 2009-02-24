@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.4 2009/01/05 11:27:24 jwolf Exp $
+ * $Id: style.css,v 1.1.2.12 2008/12/21 23:17:44 jwolf Exp $
  * Acquia Marina 
  */
 
@@ -131,12 +131,12 @@ ol {
 }
 
 ol li, ul li {
-  margin: 0.4em 0 0.4em .5em;    /* LTR */
+  margin: 0.4em 0 0.4em .5em;
 }
 
 ul.menu li,
 .item-list ul li {
-  margin: 0.15em 0 0.15em 0.5em;    /* LTR */
+  margin: 0.15em 0 0.15em 0.5em;
 }
 
 ul.menu ul, .item-list ul ul {
@@ -149,21 +149,21 @@ ul.menu li,
 .item-list ul li,
 li.leaf {
   margin: 0.15em 0 0.15em 0;
-  padding: 0.2em 0 0 1.333em;    /* LTR */
+  padding: 0.2em 0 0 1.333em;
 }
 
 ul li,
 ul.menu li,
 .item-list ul li,
 li.leaf {
-  background: url('images/raquo.png') no-repeat left 0.833em;    /* LTR */
+  background: url('images/raquo.png') no-repeat left 0.833em;
   list-style-image: none;
   list-style-type: none;
 }
 
 ol li {
   padding: 0 0 .3em;
-  margin-left: 2em;    /* LTR */
+  margin-left: 2em;
 }
 
 div.block ul {
@@ -187,8 +187,8 @@ html.js #user-login-form li.openid-processed,
 html.js #user-login li.openid-processed {
   font-weight: bold;
   list-style-type: none;
-  margin: 10px 0 0 -6px;    /* LTR */
-  padding-left: 20px;    /* LTR */
+  margin: 10px 0 0 -6px;
+  padding-left: 20px;
   padding-top: 0.2em
 }
 
@@ -196,7 +196,7 @@ html.js #user-login li.openid-processed {
   background: url('images/green-checkmark.png') no-repeat 0 0.222em;
   list-style-image: none;
   list-style-type: none;
-  padding: 1em 0 0 2.222em;    /* LTR */
+  padding: 1em 0 0 2.222em;
 }
 
 #preface-wrapper div.block ol li {
@@ -209,10 +209,10 @@ body.layout-main-last #sidebar-last ul.menu li,
 body.layout-main-last #sidebar-last .item-list ul li,
 #content-content .node ul li,
 #content-bottom  ul li {
-  background: url('images/green-bullet.png') no-repeat left 0.50em;    /* LTR */
+  background: url('images/green-bullet.png') no-repeat left 0.50em;
   list-style-image: none;
   list-style-type: none;
-  padding-left: 1.666em;    /* LTR */
+  padding-left: 1.666em;
 }
 
 /********/
@@ -235,7 +235,7 @@ div.content th img {
 
 #first-time ol {
   list-style-position: outside;
-  margin-left: 2em;    /* LTR */
+  margin-left: 2em;
 }
 
 
@@ -249,7 +249,7 @@ div.content th img {
 
 #header {
   background-color: #fff;
-  padding-left: 15px;    /* LTR */
+  padding-left: 15px;
 }
 
 #header-wrapper {
@@ -262,7 +262,7 @@ div.content th img {
 #search-box {
   background-color: #E1E1E1;
   border: 1px solid #CCCCCC;
-  float: right;    /* LTR */
+  float: right;
   padding: 8px;
   position: relative;
   top: 0;
@@ -300,14 +300,14 @@ div.content th img {
 }
 
 #header-first {
-  float: left;    /* LTR */
+  float: left;
   font-family: Myriad Pro, Myriad Web Pro Regular, Lucida Grande, Geneva, Trebuchet MS, sans-serif;
   margin: 12px 30px 0 0;
   width: 380px;
 }
 
 #header-first #logo {                            /* logo postion.  default image replaced if you upload your own */
-  float: left;    /* LTR */
+  float: left;
   margin: 0 14px 0 0;
 }
 
@@ -329,12 +329,12 @@ div.content th img {
 
 #header-middle {
   float: left;
-  margin: 10px 20px 0 0;    /* LTR */
+  margin: 10px 20px 0 0;
   width: 230px;
 }
 
 #header-last {
-  float: right;    /* LTR */
+  float: right;
   margin: 10px 0 0;
   width: 300px;
 }
@@ -354,7 +354,7 @@ div.content th img {
 #preface {
   background: #144A6E url('images/preface-wrapper-bg.png') repeat-x top;
   min-height: 24px;
-  padding-left: 15px;    /* LTR */
+  padding-left: 15px;
 }
 
 #preface-wrapper {
@@ -381,20 +381,20 @@ div.content th img {
 }
 
 #preface-wrapper.prefaces-1 div.column {
-  float: left;    /* LTR */
+  float: left;
   width: 100%;
 }
   
 #preface-wrapper.prefaces-2 div.column {
   display: inline;
-  float: left;    /* LTR */
+  float: left;
   margin: 0 14px;
   width: 47%;
 }
   
 #preface-wrapper.prefaces-3 div.column {
   display: inline;
-  float: left;    /* LTR */
+  float: left;
   margin: 0 14px;
   width: 30%;
 } 
@@ -425,7 +425,7 @@ div.content > a:link img {
 
 #main {
   background: transparent url('images/content-gradient.png') repeat-x 0 1px;
-  padding-left: 15px;    /* LTR */
+  padding-left: 15px;
 }
 
 #main-wrapper {
@@ -443,13 +443,13 @@ div.content > a:link img {
 /*******************/
 
 #sidebar-first {
-  float: left;    /* LTR */
+  float: left;
 }
 
 #sidebar-last {
   background: transparent;
-  float: right;    /* LTR */
-  margin: 0 0 0 10px;    /* LTR */
+  float: right;
+  margin: 0 0 0 10px;
 }
 
 
@@ -458,7 +458,7 @@ div.content > a:link img {
 /*******************/
 
 #content-wrapper {
-  float: left;    /* LTR */
+  float: left;
 }
 
 #content-top {
@@ -489,29 +489,29 @@ div.content > a:link img {
 }
 
 #postscript-wrapper #postscript-first {
-  padding-left: 0;    /* LTR */
+  padding-left: 0;
 }
 
 #postscript-wrapper #postscript-middle {
 }
 
 #postscript-wrapper #postscript-last {
-  padding-right: 0;    /* LTR */
+  padding-right: 0;
 }
 
 #postscript-wrapper.postscripts-1 div.column {
-  float: left;    /* LTR */
+  float: left;
   width: 100%;
 }
 
 #postscript-wrapper.postscripts-2 div.column {
-  float: left;    /* LTR */
-  margin: 0 10px 0 8px;    /* LTR */
+  float: left;
+  margin: 0 10px 0 8px;
   width: 48%;
 }
 
 #postscript-wrapper.postscripts-3 div.column {
-  float: left;    /* LTR */
+  float: left;
   padding: 0 8px;
   width: 32%;
 } 
@@ -537,14 +537,14 @@ div.content > a:link img {
 #footer ul {
   display: inline;
   margin: 0;
-  padding: 0 0 0 9px;    /* LTR */
+  padding: 0 0 0 9px;
 }
 
 #footer ul li {
   background: transparent none repeat;
-  border-left: 1px solid #CCC;    /* LTR */
+  border-left: 1px solid #CCC;
   display: inline;
-  padding: 0 5px 0 9px;    /* LTR */
+  padding: 0 5px 0 9px;
 }
 
 #footer ul li.first {
@@ -580,7 +580,7 @@ div.content > a:link img {
 /************************/
 
 body.layout-main #content-wrapper {
-  margin: 24px 0 0 0;    /* LTR */
+  margin: 24px 0 0 0;
   width: 960px;
 }
 
@@ -596,7 +596,7 @@ body.layout-first-main #sidebar-first {
 }
 
 body.layout-first-main #content-wrapper {
-  margin: 34px 0 0 0;    /* LTR */
+  margin: 34px 0 0 0;
   width: 706px;
 }
 
@@ -626,7 +626,7 @@ body.layout-main-last #sidebar-last {
 /**********************************/
 
 body.layout-first-main-last #sidebar-first {
-  margin: 40px 20px 0 0;    /* LTR */
+  margin: 40px 20px 0 0;
   width: 240px;
 }
 
@@ -641,7 +641,7 @@ body.layout-first-main-last #content-wrapper #content-inner {
 body.layout-first-main-last #content-wrapper #sidebar-last {
   background-color: #F4F7E7;
   margin: 0;
-  padding: 0 0 0 20px;    /* LTR */
+  padding: 0 0 0 20px;
   width: 280px;
 }
 
@@ -687,7 +687,7 @@ body.full-node.layout-first-main-last #sidebar-last {
 
 h1.title {                                        /* page titles */
   border-bottom: 1px solid #D6DDB9;
-  clear: left;    /* LTR */
+  clear: left;
   font-family: Myriad Pro, Myriad Web Pro Regular, Lucida Grande, Geneva, Trebuchet MS, sans-serif;
   font-size: 1.833em;
   font-weight: 600;
@@ -730,7 +730,7 @@ div.node {
 #content-content .node .links a {
   background: transparent;
   margin: 0;
-  padding: 0 14px 0 0;    /* LTR */
+  padding: 0 14px 0 0;
 }
 
 div.node .read-more a,
@@ -742,7 +742,7 @@ div.node .links a {
 }  
 
 #content-content .node ul.links li.comment_forbidden a {
-  padding-right: 4px;    /* LTR */
+  padding-right: 4px;
 }
 
 .submitted,
@@ -768,7 +768,7 @@ div.node .links a {
 #content-content .terms ul.taxonomy li.vocab-term {
   background: transparent;
   display: inline;
-  padding: 0 0 0 2px;    /* LTR */
+  padding: 0 0 0 2px;
 }
 
 .submitted a:link {
@@ -788,8 +788,8 @@ div.node.full-node div.content {
 }
 
 .picture {
-  float: right;    /* LTR */
-  margin: 0 0 2px 4px;    /* LTR */
+  float: right;
+  margin: 0 0 2px 4px;
   padding: 2px;
 }
 
@@ -837,7 +837,7 @@ div.block div.content {
 #user-login-form .item-list ul li,
 div.terms ul li {
   list-style-type: none;
-  margin: 2px 0 0 16px;    /* LTR */
+  margin: 2px 0 0 16px;
 }
 
 
@@ -920,7 +920,7 @@ body.layout-main-last #sidebar-last h2.block-title {
   background-color: transparent;
   color: #666;
   padding: 0;
-  text-align: left;    /* LTR */
+  text-align: left;
   text-shadow: none;
   width: 400px;
 }
@@ -1088,7 +1088,7 @@ div.rounded-inside {
 #primary-menu ul.menu li {                        /* top item layout */
   background: transparent url('images/tab-left.png') no-repeat left 0;
   display: block;
-  float: left;    /* LTR */
+  float: left;
   margin: 0 4px 0 0;
   padding: 0 0 0 0.833em;    /* 0 0 0 10px */
   position: relative;
@@ -1170,14 +1170,14 @@ div.rounded-inside {
 
 #primary-menu ul.menu li ul li ul.menu {
   left: -999em;
-  margin: 0 0 0 -14px;    /* LTR */
+  margin: 0 0 0 -14px;
   padding: 6px 0 4px;
 }
 
 #primary-menu ul.menu li ul li:hover ul.menu,
 #primary-menu ul.menu li ul li.hover ul.menu {
   display: block;
-  left: 154px;    /* LTR */
+  left: 154px;
   top: -6px;
 }
 
@@ -1209,14 +1209,14 @@ div.rounded-inside {
 #breadcrumb {
   font-size: 1em;
   line-height: 100%;
-  left: 21.654em;    /* LTR */
+  left: 21.654em;
   position: relative;
   top: 1.333em;
   width: 700px;
 }
 
 body.layout-main-last #breadcrumb {
-  left: 0;    /* LTR */
+  left: 0;
 }
 
 .breadcrumb {
@@ -1231,7 +1231,7 @@ body.layout-main-last #breadcrumb {
 /* styling for node tabs (e.g., View, Edit) */
 #content-tabs {
   background-color: transparent;
-  float: left;    /* LTR */
+  float: left;
   margin: 0 0 20px 0;
   padding: 0;
 }
@@ -1239,8 +1239,8 @@ body.layout-main-last #breadcrumb {
 #content-tabs ul.primary,
 #content-tabs ul.secondary {
   border-bottom: 1px solid #bbb;
-  clear: left;    /* LTR */
-  float: left;    /* LTR */
+  clear: left;
+  float: left;
   margin: 0;
   padding: 0 10px;
   text-transform: uppercase;
@@ -1257,7 +1257,7 @@ body.layout-main-last #breadcrumb {
   background: transparent;
   border-style: none;
   display: inline;
-  float: left;    /* LTR */
+  float: left;
   list-style: none;
   margin: 0 10px;
   padding: 0;
@@ -1270,7 +1270,7 @@ body.layout-main-last #breadcrumb {
   background-color: transparent;
   border: none;
   color: #27638C;
-  float: left;    /* LTR */
+  float: left;
   font-size: 1.1em;
   line-height: 1.2em;
   font-weight: bold;
@@ -1382,7 +1382,7 @@ form#system-theme-settings input.form-text {
 }
 
 #user-login-form {
-  text-align: left;    /* LTR */
+  text-align: left;
 }
 
 div.form-item label {
@@ -1390,7 +1390,7 @@ div.form-item label {
 }
 
 html.js input.form-autocomplete {
-  background-position: 100% 5px;    /* LTR */
+  background-position: 100% 5px;
 }
 
 /**********/
@@ -1465,7 +1465,7 @@ table {
 }
 
 th {
-  text-align: left;    /* LTR */
+  text-align: left;
   padding-right: 1em;
   border-bottom: 3px solid #CCC;
 }
@@ -1505,7 +1505,7 @@ tbody th {
 }
 
 thead th {
-  text-align: left;    /* LTR */
+  text-align: left;
   padding-right: 1em;
   border-bottom: 3px solid #CCC;
 }
@@ -1580,7 +1580,7 @@ div.error {
 
 .book-navigation .menu {
   border-top: 1px solid #CCC;
-  padding: 1em 0 0 3em;    /* LTR */
+  padding: 1em 0 0 3em;
 }
 .book-navigation .page-links {
   border-top: 1px solid #CCC;
@@ -1607,7 +1607,7 @@ div.error {
   font-family: Myriad Pro, Myriad Web Pro Regular, Lucida Grande, Geneva, Trebuchet MS, sans-serif;
   font-size: 1.333em;
   font-weight: 600;
-  padding: 6px 14px 6px 52px;    /* LTR */
+  padding: 6px 14px 6px 52px;
   text-shadow: #545454 1px 1px;
   text-transform: uppercase;
   -moz-border-radius-topleft: 3px;
@@ -1648,7 +1648,7 @@ div.error {
 
 .comment .links a {
   font-size: 0.9em;
-  text-align: right;    /* LTR */
+  text-align: right;
 }
 
 #comments .odd {
@@ -1665,13 +1665,13 @@ div.error {
 }
 
 .comment ul.links {
-  text-align: right;    /* LTR */
+  text-align: right;
   clear: right;
 }
 
 #content-content .comment ul.links li {
   background: transparent;
-  margin: 0 10px 0 0;    /* LTR */
+  margin: 0 10px 0 0;
   padding: 0;
 }
 
@@ -1690,14 +1690,14 @@ div.error {
 }
 
 blockquote {
-  background: url('images/close-quote.gif') no-repeat right bottom;    /* LTR */
+  background: url('images/close-quote.gif') no-repeat right bottom;
   color: #5A6A78;
   margin: 10px 0;
 }
 
 blockquote :first-child {
-  background: url('images/open-quote.gif') no-repeat left top;    /* LTR */
-  padding: 10px 0 0 20px;    /* LTR */
+  background: url('images/open-quote.gif') no-repeat left top;
+  padding: 10px 0 0 20px;
 }
 
 blockquote * > :first-child {
@@ -1736,7 +1736,7 @@ blockquote a:link {
 }
 
 .forum-topic-navigation {
-  padding: 1em 0 0 3em;    /* LTR */
+  padding: 1em 0 0 3em;
   border-top: 1px solid #888;
   border-bottom: 1px solid #888;
   text-align: center;
@@ -1744,14 +1744,14 @@ blockquote a:link {
 }
 
 .forum-topic-navigation .topic-previous {
-  text-align: right;    /* LTR */
-  float: left;    /* LTR */
+  text-align: right;
+  float: left;
   width: 46%;
 }
 
 .forum-topic-navigation .topic-next {
-  text-align: left;    /* LTR */
-  float: right;    /* LTR */
+  text-align: left;
+  float: right;
   width: 46%;
 }
 
@@ -1876,15 +1876,15 @@ blockquote a:link {
 }
 
 .profile dt {
-  float: left;    /* LTR */
+  float: left;
   margin-bottom: -10px;
   padding: 0 5px;
-  text-align: left;    /* LTR */
+  text-align: left;
   width: 185px;
 }
 
 .layout-first-main-last .profile dd {
-  margin: 15px 5px 0 120px;    /* LTR */
+  margin: 15px 5px 0 120px;
 }
 
 .layout-first-main-last .profile dt {

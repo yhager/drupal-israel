@@ -1,67 +1,74 @@
 @charset "utf-8";
+/*$Id: style.css,v 1.3.2.8.2.15 2009/01/25 01:30:44 tombigel Exp $*/
 /**
-  * Tendu Drupal 5.x Theme For Developers CSS
-  * Updated: May 24, 2008 
-  * Author: Tom Bigelajzen - http://tombigel.com
-  */
+ * Tendu Drupal - A CSS Theme For Developers
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ * 
+ * Please follow the instructions in the comments.
+ * Lines that end with LTR comments are referenced in styl-rtl.css according to Drupal Coding Guidelines
+ * Lines that end with IE, IE6 etc. comments are referenced in ie.css, ie6.css and so on.
+ */
 
 /* Basic CSS Reset */
-body, div,  dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, p, a,
+body, div,  dl, dt, dd, h1, h2, h3, h4, h5, h6, p, a,
 pre, code, form, fieldset, legend, input, textarea, p, blockquote, table, th, td {margin:0;padding:0;}
 img, fieldset, legend, table, tr, td, th {border:none;}
-ol, ul, li {list-style-type:none;}
-table, td{vertical-align:top;text-align:left;}
-th{vertical-align:middle;text-align:left;}
-fieldset{padding:0;margin:0;}
-body{word-wrap: break-word;}/* The one and only propriaty IE style I use */
+table, td{vertical-align:top;text-align:left;}/*LTR*/
+th{vertical-align:middle;text-align:left;}/*LTR*/
+/* Reduced lists reset to margins only, all list styles and paddings remain system/drupal defaults */
+ul, ol{margin:0;}
 
-/* Drupal Defaults reset 
- * Notes:
- * - This section is optional (I like to have total control over all the styles in my designs), I've put it up here for sematic reasons.
- */
-ul.menu{padding:0 0 0 1em;}
-ul.menu li{margin:0 0 0 .5em;}
-.item-list ul li{list-style-image:none;list-style-type:none;padding:0;margin:0;}
-li.leaf{list-style-image:none;list-style-type:none;}
+/* Drupal CSS Defaults reset */
 .profile,
 .node-form .standard{clear:none;}
+.sidebar-region .item-list ul li{list-style-image:none;list-style-type:none;padding:0;margin:0;}
+li.leaf{list-style-image:none;list-style-type:disc}
+button,input.form-submit{cursor:pointer;}
 
- /* Page layout:
-  *****************************************************
-  * In this section the only changes you need to do are:
-  * 1. Comment/Uncomment the lines that relate to full viewport height
-  * 2. Comment/Uncomment the lines that relate to fixed width or fluid width layout
-  * 3. Set the widths of the page, the content area and the sidebars.
-  * 
-  * For readability reasons some selectors has multiple style declerations.
-  * Keep this section clean, add your design CSS in the next section.  
-  */
- 
-/* Full viewport height 
- * Notes: 
- * - Remove these lines if you don't need that the hight of the #page element to allways be 100% of the viewport
- * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector
+/**
+ * The only changes you need to do here are:
+ * 1. Comment/Uncomment the lines that relate to full viewport height
+ * 2. Comment/Uncomment the lines that relate to fixed width or fluid width layout
+ * 3. Set the widths of the page, the content area and the sidebars.
+ *
+ * For readability reasons some selectors has multiple style declerations.
+ * Keep this section clean, add your design CSS in subthemes.
+ */
+
+/**
+ * Full viewport height
+ * Notes:
+ * Remove these lines if you don't need the hight of the #page element to span 100% of the viewport height.
  */
 html, body{height:100%;}
 #page{height:auto !important;height:100%;min-height:100%;position:relative;}
 
-/* Stick footer to bottom of the page 
+/** 
+ * Stick footer to bottom of the page
  * Notes:
- * - Requires the above "Full viewport height"
- * - The height of #footer and the padding-bottom of #main must be set concordingly, so the footer will not overlay the content of the page.
- *   Set the padding and the height according to your design.
+ * - Requires the above "Full viewport height", otherwise it can be removed.
+ * - "#footer" height must be an absolute value for this to work right.
+ *   The height of #footer and padding-bottom of ".footer-spacer" must be set concordingly,
+ *   so the footer will not overlay the content of the page.   
+ * - Set the padding and the height according to your design.
+ * - In some edge cases on some browsers the footer will refuse to stick to the bottom,
+ *   one solution that works for me is to move the footer <div> in page.tpl.php
+ *   to be right under the header instead of the end of the page.
  */
-#main{padding-bottom:40px;}
-#footer{width:100%;position:absolute;bottom:0;height:30px;}
+.footer-spacer{padding-bottom:3em;}
+#footer{position:absolute;bottom:0;height:3em;width:100%;z-index:1;overflow:hidden;}
 
-/* Fonts
+/**
+ * Fonts
  * Notes:
  * - I'm using relative font sizes for 2 reasons:
- *  1. Accessibility - So users of IE6 will be able to resize fonts.
- *  2. If all font sizes are relative, the fonts of the entire design can be changes relatively with one change. 
+ *   1. Accessibility - So users of IE6 will be able to resize fonts.
+ *   2. Font sizes are easier to track this way, you change the size of a font in a parent element
+ *      and all the font sizes in child elements change with it.
  * - Note that "line-height" unlike "font-size" is relative to the current element and not to a global line height.
- * - Basic font size 12px, set as .75em of browsers default 16px size
- * - Font sizes (when base size is .75em):
+ * - Basic font size 12px, set as .75em of browsers default 16px size.
+ * - For 14px font size change .75em to .85em, note that then the following numbers do not apply.
+ * - Font sizes (when base size is .75em, calculated as desired font size devided by 12):
  *	 10px = .83em
  *	 11px = .916em
  *	 12px = 1em
@@ -72,129 +79,102 @@ html, body{height:100%;}
  *	 20px = 1.666em
  *   etc...
  */
-body{font-family:Arial, Helvetica, sans-serif;font-size:100%;}
+body{font-family:Arial, Helvetica, sans-serif;font-size:100%;}/*LTR*/ /*IE*/
 #page{font-size:.75em;line-height:1.333em;}
+/* In Firefox (All versions) there is an inconsistant bug with relative font size in tables, this line fixes that. */
+table{font-size:1em}
 
 /* Main Layout: */
 
-/* Page width: For fixed width Layout */
-/*#page{width:980px;margin:0 auto;position:relative;}*/
+/**
+ * Page width: Fixed width layout.
+ * For fixed width Layout comment the "Fluid width" line and uncomment the following line
+ */
 
-/* Page width: For Fluid width Layout 
-  * Notes: 
-  * - min and max widths must be set on #content too, calculated according to sidebars widths.
-  * - As a thumb rule I don't deal with non-standard IE hacks so this design degrades to a fixed width in IE6
-  * - To have a full page width in IE6, remove the "width" declerations from #page and #content, apply "height:1%" to trigger "hasLayout" 
-  * - (For fluid width in IE6 you can use the "width:expression()" hack. But you really shouldn't.)
-  * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector
-  */
+/* 
+#page{width:980px;margin:0 auto;position:relative;}
+*/
+
+/**
+ * Page width: Fluid width layout
+ * Notes:
+ * - As a thumb rule I don't deal with non-standard IE hacks so this design degrades to a fixed width in IE6
+ * - For fluid width in IE6 you can use the "width:expression()" hack. But you really shouldn't.
+ * - To have a full page width in IE6, use the following structure:
+ */
+
+/*
+#page{min-width:760px;max-width:1220px;height:1%;margin:0 auto;}
+*/
+
 #page{min-width:760px;max-width:1220px;width:auto !important;width:980px;margin:0 auto;}
 
-#header{width:100%;overflow:hidden;}
-#main{width:100%;overflow:hidden;}
-
-
-.no-sidebars #content{width:100%;}
-
-/* Content width: For fixed width Layout 
- * - width calculated from: page width - (sidebar-left  width + sidebar-right width + [sidebars padding + sidebars margin]) 
+/**
+ * Sidebars widths
+ * NOTES:
+ * - When using this method, the design 'suffers' from the 3 pixel gap in IE6, 
+ *   meaning that in IE6 there will be an extra margin of 3 pixels from both
+ *   sides of "#content".
+ *   There are several ways to deal with it, 
+ *   I added a decleration in ie6.css, do not forget to change it there if you change the values here.
+ *   
+ *   TODO: find a consistent way to do it without the padding.  
  */
-/*.one-sidebar #content{width:790px}
-  .two-sidebars #content{width:600px;}*/
- 
-/* Content width: For Fluid width Layout  
- * Notes: 
- * - min and max width calculated from: page width - (sidebar-left  width + sidebar-right width + [sidebars padding + sidebars margin]) 
- * - As a thumb rule I don't deal with non-standard IE hacks so this design degrades to a fixed  width in IE6
- * - To have a full page width in IE6, remove the "width" declerations from #page and #content, apply "height:1%" to trigger "hasLayout" 
- * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector
- */
-.one-sidebar #content{min-width:570px;max-width:1030px;width:auto !important;width:790px}
-.two-sidebars #content{min-width:380px;max-width:840px;width:auto !important;width:600px;}
+#sidebar-first{float:left;width:170px;}/*LTR*/ 
+#sidebar-second{float:right;width:170px;}/*LTR*/ 
 
-/* Sidebars widths 
- * - To gracefully overcome IE6 "3px float gap" bug without hacks I set the paddings on the sidebars to be 3px narrower then in other browsers.
- * - I'm Using the fact IE6 ignores the !important decleration if the same attribute appears twice for a selector 
- */
-#sidebar-left{float:left;width:170px;}
-#sidebar-right{float:right;width:170px;}
+.with-sidebar-first #content{margin-left:170px;padding-left:10px}/*LTR*//*IE6*/
+.with-sidebar-second #content{margin-right:170px;padding-right:10px}/*LTR*//*IE6*/
 
-.with-sidebar-left #content{margin-left:170px;padding-left:20px !important;padding-left:17px;}
-.with-sidebar-right #content{margin-right:170px;padding-right:20px !important;padding-right:17px;}
 
-/* Set hasLayout in IE for content areas
- * Notes:
- * - Add "overflow:hidden" here if you are experiencing float clearing problems 
+/** 
+ * Most likely you have no reason to change the following lines, but read the comments to be sure.      
  */
+
+
+/**
+ * Set hasLayout for IE and clear floats on all main areas
+ * What is "hasLayout"? Read here: http://www.satzansatz.de/cssd/onhavinglayout.html
+ */
+#header, 
+#main-nav,
+#before-content,
+#after-content,
 #content-header,
 #content-top,
 #content-area,
-#content-bottom{width:100%;}
+#content-bottom,
+#main,
+#footer{width:100%;}
 
-/* End of Layout section
- *****************************************************
+/**
+ * The following must not have a width in Tendu. Using height instead. 
+ * Note:
+ * - If for any reason you are going to set a fixed height on one of these elements' container it
+ *   will set the elemen's visual height to 1% (at least in IE) and you'll have to use a different approach.
  */
+#header-content,
+#default-content,
+#content{height:1%;}
+/* Collapsed fieldsets use JS that requires it's parent to have layout in IE */
+.node-form{height:1%;}
 
-/* Page Design
- *****************************************************
+/**
+ * hasLayout clears floats for IE.
+ * for standatd browsers we use the "selector:after{content:value}" technique (http://www.positioniseverything.net/easyclearing.html)
  */
+#header:after, 
+#header-content:after,
+#main-nav:after,
+#before-content:after,
+#after-content:after,
+#main:after,
+#content:after,
+#default-content:after,
+#footer:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
 
-/* General Tags */
-body{color:#535d66;background:#fff;}
-h1{font-size:1.833em;line-height:1.333em;font-weight:bold;}
-h2{font-size:1.5em;line-height:1.333em;font-weight:bold;}
-h3{font-size:1.333em;line-height:1.333em;font-weight:bold;}
-h4{font-size:1em;line-height:1.333em;font-weight:bold;}
-p{padding-bottom:.5em;}
-
-/* Form Elements  */
-input, select, textarea{font-family:Arial, Helvetica, sans-serif;font-weight:normal;line-height:1em;font-size:1em;}
-textarea{line-height:1.2em;}
-button{font-family:Arial, Helvetica, sans-serif;font-weight:bold;line-height:1em;font-size:13px}
-button{cursor:pointer;}
-
-/* Links */
-a{color:#5297dd;text-decoration:none;}
-a:visited{}
-a:hover, a:focus{text-decoration:underline;}
-
-/* Header and Navagation */
-#header{background:#f0f1f3;}
-	#header-blocks{float:right;padding:5px;font-size:.916em;color:#444;}
-	#header-blocks a{color:#444;font-weight:bold;}
-	#site-details{float:left;padding:15px;}
-	#site-logo{float:left;padding:15px;}
-	#site-name{}
-	#site-slogan{font-size:1.5em;line-height:1.333em;}
-	#main-nav{clear:both;width:100%;overflow:hidden;}
-	#main-nav ul{}
-	#main-nav li{float:left;padding:2px;margin-left:1em;}
-
-/* Views, Blocks and Nodes*/
-#sidebar-left .block,
-#sidebar-right .block{margin:10px 0;padding:6px;background:#f5f6f8;}
-#sidebar-left .block li,
-#sidebar-right .block li{border-top:1px dotted #ddd;padding:3px 0;}
-.content-title .title{padding:10px;}
-#content{margin-top:10px;}
-#content .block,
-#content .node,
-#content .view,
-#content .profile{padding:12px;background:#f8f6f5;margin-bottom:10px;}
-#content .view .block, 
-#content .node .block, 
-.block .block{padding:0;background:0;}
-#mission{padding:12px;background:#f6f8f5;font-size:1.166em;margin-bottom:10px;}
-.messages{padding:12px;background:#f0fdf0;border:1px solid #e0ede0;margin-bottom:10px;}
-#nav a{font-weight:bold;font-size:1.083em;}
-
-/* Footer */
-#footer{text-align:center;font-size:.916em;color:#888;line-height:30px;background:#f0f1f3;}
-#footer p{padding:0;}
-
-/*Tweaks for Admin pannels */
-#blocks .block{padding:0;margin:0;}
-
-/* End of Page Design section
- *****************************************************
- */
+/*We cannot use "clear:both" on these elements (It breaks the layout) so we use overflow:hidden instead.*/
+#content-header,
+#content-top,
+#content-area,
+#content-bottom{overflow:hidden;}

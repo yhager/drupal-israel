@@ -1,0 +1,52 @@
+@charset "utf-8";
+/*$Id: style-rtl.css,v 1.3.2.7.2.9 2009/01/25 18:34:06 tombigel Exp $*/
+/**
+ * Tendu Drupal - A CSS Theme For Developers
+ * Incremental CSS overrides for RTL sites
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ */
+
+/* Drupal Elements */ 
+/*This decleration is missing in system-rtl.css (TODO: should be fixed in core CSS files)*/
+.block ul{padding:0pt 1em 0.25em 0}
+/*Table headers*/
+thead th {padding-right:0;padding-left:1em;text-align:right;}
+/* Flexible text area grip area, set by the module via JS (TODO: Check if this applies everywhere) */
+.grippie{margin-right:0 !important;margin-left:-6px;}
+/* Fix OpenID icon placement (TODO: Remove when the RTL fix enters the core CSS files) */
+#user-login-form li.openid-link, 
+#user-login li.openid-link{padding-left:0;padding-right:1.5em;background-position: 99% 0.35em;text-align:right;}
+/* Fix some admin screens */
+/* TODO: Check how this affects other parts of the site (Remove when RTL fixes enter the core CSS files) */
+#node-admin-buttons {clear:left;float:right;margin-right:0.5em;}
+dl.multiselect dt, dl.multiselect dd {float:right;margin:0pt 0 0pt 1em;}
+
+/* Main Layout */
+
+/* Set text direction */
+body {direction:rtl}
+table, td, th{text-align:right;}
+/*PRE is Used mostly for dev and code in english. keeping it LTR*/
+pre{text-align:left;direction:ltr;}
+/* Flip sidebars */
+#sidebar-first{float:right;}
+#sidebar-second{float:left;}
+/* Reset LTR paddings and margins for one sidebar designs */
+.one-sidebar #content{padding-left:0 ;padding-right:0 ;margin-left:0;margin-right:0}
+/**
+ * Set RTL paddings and margins on sidebars 
+ * Note that if you set the margins/paddings in ie6.css, you have to override them in ie6-rtl.css too
+ */
+.with-sidebar-first #content{margin-right:170px;padding-right:10px}/*IE6-RTL*/
+.with-sidebar-second #content{margin-left:170px;padding-left:10px}/*IE6-RTL*/
+
+/**
+ * Fix Horizontal scroll bug in FF2
+ * Uncomment this part if support for Firefox 2.x + RTL is important to you.
+ *   
+ * In FF2 horizontal scrolling of the page is broken in RTL sites For some reason, adding padding to #page partialy fixes this bug.
+ * Note that if you add padding to #page in style.css this part is redundent. 
+ */
+/* 
+#page{padding:0 1px;}
+ */

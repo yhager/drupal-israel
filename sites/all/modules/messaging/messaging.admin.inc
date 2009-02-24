@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.admin.inc,v 1.1.2.6 2008/08/02 19:44:04 jareyero Exp $
+// $Id: messaging.admin.inc,v 1.1.2.11 2009/01/12 14:14:28 jareyero Exp $
 /**
  * @file
  * Messaging Framework - Admin UI
@@ -16,10 +16,15 @@ function messaging_admin_template() {
   $output = '';
   // List message groups
   $groups = module_invoke_all('messaging', 'message groups');
+  $rows = array();
   foreach ($groups as $group => $group_info) {
-    $list[] = l($group_info['name'], 'admin/messaging/template/edit/'.$group);
+    $rows[] = array(
+    l($group_info['name'], 'admin/messaging/template/edit/'.$group),
+    !empty($group_info['description']) ? $group_info['description'] : '',
+    );
   }
-  $output .= theme('box', t('Message groups'), theme('item_list', $list));
+  $output .= theme('box', t('Message groups'), theme('table', NULL, $rows));
+
   // List sending methods
   $rows = array();
   messaging_method_list();
@@ -65,11 +70,15 @@ function messaging_admin_message_form($form_state, $group, $group_info) {
       '#collapsed' => TRUE,
     );
     foreach ($send_methods as $method => $methodname) {
+      $text = messaging_message_part($group, $key, $method, FALSE);
       $form['messages'][$key][$method] = array(
         '#title' => $methodname,
         '#type' => 'textarea',
-        '#default_value' => messaging_message_part($group, $key, $method, FALSE),
+        '#default_value' => $text,
+        // Adjust size to actual number of lines
+        '#rows' => count(explode("\n", $text)),        
       );
+      
     }
   }
   // Tokens for text replacement
@@ -111,11 +120,19 @@ function messaging_admin_message_form($form_state, $group, $group_info) {
 function messaging_tokens_get_list($group) {
   // First compile token types for this message group
   $type_list = module_invoke_all('messaging', 'tokens', $group);
+  // Add known global tokens, will be always available
+  $type_list[] = 'global';
 
   // Now get token list from token module for each type
   $return = array();
   foreach ($type_list as $type) {
-    if ($list = token_get_list($type)) {
+    // This is a shortcut for single tokens for digests, with the form (token, description)
+    if (is_array($type)) {
+      list($type, $token) = $type;
+      $list = token_get_list($type);
+      $return[$token] = $list[$type][$token];
+    }
+    elseif ($list = token_get_list($type)) {
       foreach ($list as $category => $tokens) {
         foreach ($tokens as $token => $description) {
           $return[$token] = $description;
@@ -123,9 +140,9 @@ function messaging_tokens_get_list($group) {
       }
     }
   }
-
   return $return;
 }
+
 /**
  * Process and save message parts
  */
@@ -193,9 +210,16 @@ function messaging_admin_settings() {
       // This will preserve settings for disabled modules
       $form['messaging_methods'][$key] = array(
         '#type' => 'fieldset',
-        '#title' => t('!name settings', array('!name' => $options['name'])),
+        '#title' => t('!name settings', array('!name' => $options['title'])),
         '#tree' => TRUE,
       );
+      // Display name
+      $form['messaging_methods'][$key]['name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Name'),
+        '#default_value' => $options['name'],
+        '#description' => t('Name for display.'),
+      );      
       // Output filter applied to message body
       $form['messaging_methods'][$key]['filter'] = array(
         '#type' => 'select',
@@ -238,4 +262,3 @@ function messaging_admin_settings() {
   );
   return system_settings_form($form);
 }
-

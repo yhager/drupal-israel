@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php,v 1.2 2009/01/05 09:17:15 jwolf Exp $
+// $Id: template.php,v 1.1.2.7 2008/12/09 03:47:12 jwolf Exp $
 
 /**
  * Force refresh of theme registry.

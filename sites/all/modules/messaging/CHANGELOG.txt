@@ -1,10 +1,47 @@
-// $Id: CHANGELOG.txt,v 1.1.2.8.2.7 2008/08/05 16:55:04 jareyero Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.8.2.22 2009/01/30 18:57:32 jareyero Exp $
 
-TO DO
-------
-* Ability to receive the same message through more than one channel. It should be possible to implement some ‘abstract’ sending method that pipes messages through two or more other channels.
-* Sending messages to potential users, with a reserved user id. It seems we are already good for that with latest hooks introduced in notifications module.
+6.x-1.1 to ....
+--------------------------
+- Fixed: Update SMS sending method for new SMS Framework, by diggersf, #337518
+- Fixed: PHPmailer, Handle rfc2822 formatted "From:" field, by rcourtna, #349224
+- Fixed: PHP notices, by sun, #366391
+- Fixed: Messaging_notify not adding uid to notifications event, by Scott Reynolds, #364466
+- Performance: added indexes to messaging_store table, by Scott Reynolds, #364590
+- Fixed: messaging_update_replace not finding the right replacement method
+- Fixed: wrong module description for messaging_phpmailer, #340685
+- Fixed: messaging_notify - wrong notification type and missing perm(), by Scott Reynolds, #361758
+- Fixed: No messages in watchdog with debug send method, #358667
+- Fixed: messaging_phpmailer does not use passed headers (fails with mail2web module), by jmcclelland, #363001
+- Fixed: error when params are unpacked for stored messages, by mcdruid, #364334
+- Fixed: Incomplete uninstall, by jaydub, #295444 
+- Fixed: Number of messages sent' value is ignored, #339422
+- Added twitter plug-in by Will White
+- Added messaging_text_replace() for tokens and token_support
+- Fixed issues with cron processing and queue storage, added tests
+- Added query builder helper for messaging and notifications
+- Improved messaging store, multiple destinations are now serialized and message stored only once
+- Implemented callbacks chain for message processing, callbacks defined on sending method.
+- Reworked message processing, using objects now instead of array
 
+6.x-1.0-rc3 to 6.x-1.1
+--------------------------
+- Fixed Cannot use object of type PHPMailer as array, #321212
+- Added some debug tools and some basic support for incoming messages
+- Formatting improvements and help texts for message templates admin page
+- Implemented handling for disabling send methods, notify other modules
+- Renamed some sending methods, better naming and avoid name clashes (phpmailer, mimemail)
+- Added configurable names for sending methods, some changes in admin pages
+
+6.x-1.0-rc2 to 6.x-1.0-rc3
+--------------------------
+- Upgraded messaging_phpmailer info file, by darren.ferguson, #309945
+- Upgraded messaging_sms module, by darren.ferguson, #314896
+- Updated unit tests to simpletest 6.x-2.x
+- Fixed minor issues with modules and documentation
+- Added German translation, by rastatt, #294378
+- Fixed wrong delta in filter system, by the greenman, #305593
+- Fixed namespace collisions with other hooks, #301715 and #294322
+ 
 6.x-1.0-rc1 to 6.x-1.0-rc2
 ----------------------------
 - Some clean up, moved documentation to the handbook, http://drupal.org/node/252582

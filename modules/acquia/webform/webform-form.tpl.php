@@ -1,8 +1,8 @@
 <?php
-// $Id: webform-form.tpl.php,v 1.1.2.2 2008/10/08 19:51:40 quicksketch Exp $
+// $Id: webform-form.tpl.php,v 1.1.2.4 2009/01/11 23:09:35 quicksketch Exp $
 
 /**
- * @file webform-form.tpl.php
+ * @file
  * Customize the display of a complete webform.
  *
  * This file may be renamed "webform-form-[nid].tpl.php" to target a specific
@@ -19,6 +19,12 @@
  */
 ?>
 <?php
+  // If editing or viewing submissions, display the navigation at the top.
+  if (isset($form['submission_info']) || isset($form['navigation'])) {
+    print drupal_render($form['navigation']);
+    print drupal_render($form['submission_info']);
+  }
+
   // Print out the main part of the form.
   // Feel free to break this up and move the pieces within the array.
   print drupal_render($form['submitted']);
@@ -26,4 +32,9 @@
   // Always print out the entire $form. This renders the remaining pieces of the
   // form that haven't yet been rendered above.
   print drupal_render($form);
-?>
+
+  // Print out the navigation again at the bottom.
+  if (isset($form['submission_info']) || isset($form['navigation'])) {
+    unset($form['navigation']['#printed']);
+    print drupal_render($form['navigation']);
+  }

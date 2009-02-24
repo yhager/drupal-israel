@@ -1,8 +1,8 @@
 <?php
-// $Id: webform-confirmation.tpl.php,v 1.1.2.2 2008/10/08 19:51:40 quicksketch Exp $
+// $Id: webform-confirmation.tpl.php,v 1.1.2.3 2009/01/09 08:31:06 quicksketch Exp $
 
 /**
- * @file webform-confirmation.tpl.php
+ * @file
  * Customize confirmation screen after successful submission.
  *
  * This file may be renamed "webform-confirmation-[nid].tpl.php" to target a

@@ -1,5 +1,5 @@
 <?php
-// $Id: filefield_widget.inc,v 1.44 2008/11/16 08:25:13 dopry Exp $
+// $Id: filefield_widget.inc,v 1.49 2009/01/31 17:51:12 dopry Exp $
 /**
  * @file
  * FileField: Defines a CCK file field type.
@@ -182,6 +182,8 @@ function filefield_widget_value($element, $edit = FALSE) {
 }
 
 function filefield_widget_process($element, $edit, &$form_state, $form) {
+  // The widget is being presented, so apply the JavaScript.
+  drupal_add_js(drupal_get_path('module', 'filefield') .'/filefield.js');
 
   $item = $element['#value'];
   $field_name = $element['#field_name'];
@@ -192,7 +194,7 @@ function filefield_widget_process($element, $edit, &$form_state, $form) {
   // check remove buttons...
   $remove_name = $element['#field_name'] .'_'. $element['#delta'] .'_remove_btn';
   if (isset($form_state['clicked_button']) && $form_state['clicked_button']['#name'] == $remove_name) {
-    $item = _filefield_default_value($field);
+    $item = array('fid' => 0, 'list' => $field['list_default'], 'data' => array('description' => ''));
   }
 
   // figute out our fid...
@@ -250,7 +252,9 @@ function filefield_widget_process($element, $edit, &$form_state, $form) {
     $element['upload']['#title'] = t('Replace');
   }
 
-  $element['#prefix'] = '<div id="'. $element['#id'] .'-ahah-wrapper" class="filefield-ahah-wrapper">';
+  $element['#attributes']['id'] = $element['#id'] .'-ahah-wrapper';
+  $element['#attributes']['class'] = (isset($element['#attributes']['class']) ? $element['#attributes']['class'] : '') .' filefield-ahah-wrapper';
+  $element['#prefix'] = '<div '. drupal_attributes($element['#attributes']) .'>';
   $element['#suffix'] = '</div>';
   $element['upload_btn'] = array(
     '#type' => 'submit',

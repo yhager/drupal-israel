@@ -1,4 +1,4 @@
-/* $Id: webform.css,v 1.4.2.1 2008/06/30 00:19:36 quicksketch Exp $ */
+/* $Id: webform.css,v 1.4.2.2 2009/01/10 01:55:02 quicksketch Exp $ */
 
 .webform-submission-navigation {
   text-align: right;
@@ -13,6 +13,10 @@
 .webform-default-value {
   color: #999;
 }
+.webform-results-per-page a.selected {
+  font-weight: bold;
+}
+
 tr.webform-add-form .tabledrag-changed {
   display: none;
 }

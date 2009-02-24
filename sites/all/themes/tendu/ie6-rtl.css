@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* $Id: ie6-rtl.css,v 1.2.2.3.2.6 2009/01/24 18:31:51 tombigel Exp $ */
+/**
+ * Tendu Drupal - A CSS Theme For Developers
+ * Incremental CSS overrides for IE 6 only and for RTL sites
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ */
+
+/* Fix 3px gap on sidebars */
+.one-sidebar #content{padding-left:0;padding-right:0;}
+.with-sidebar-first #content{padding-right:7px}
+.with-sidebar-second #content{padding-left:7px}

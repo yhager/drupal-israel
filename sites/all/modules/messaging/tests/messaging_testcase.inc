@@ -1,11 +1,11 @@
 <?php
-// $Id: messaging_testcase.inc,v 1.1.2.1.2.1 2008/04/12 18:40:14 jareyero Exp $ 
+// $Id: messaging_testcase.inc,v 1.1.2.1.2.3 2008/12/16 15:00:29 jareyero Exp $ 
 /*
  * Base class for Messaging testing
  *  * Created on Mar 18, 2008
  */
 
-class MessagingTestCase extends DrupalTestCase {
+class MessagingTestCase extends DrupalWebTestCase {
   var $_messaging_status;
   // Store current status for clean up
   function messagingStartTest() {
@@ -24,6 +24,17 @@ class MessagingTestCase extends DrupalTestCase {
         'footer' => $this->randomName(100, 'Test body footer ')
     );
     $message['params'] = array(1, 2);
-    return $message;
+    return (object)$message;
   }
 }
+
+/**
+ * Foo callback functions for testing
+ */
+function messaging_test_foo_message_callback($message, $info) {
+  return $message;
+}
+function messaging_test_foo_getargs_callback() {  
+  return func_get_args();
+}
+

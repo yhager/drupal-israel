@@ -1,0 +1,80 @@
+@charset "utf-8";
+/*$Id: print.css,v 1.1.2.5 2009/01/24 18:31:51 tombigel Exp $*/
+/**
+ * Tendu Drupal - A CSS Theme For Developers
+ * A simple print layout.
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ * This css will print the sitename, content regions and footer message and will clean font colors etc.
+ * It is loaded after all theme and sub-themes css files.
+ */
+
+/*Reset 100% height;*/
+body{height:auto;font-family:'Times New Roman',Times,serif;color:#000}
+#page{height:auto;}
+#footer{position:static;height:auto;}
+
+/*Reset link colors and underline them*/
+a, a:link, a:visited{text-decoration:underline;color:#000;}
+
+/*Remove backgrounds from regions and set them to full width*/
+body,
+#page,
+#header,
+#above-content,
+#main,
+#content,
+.with-sidebar-first #content,
+.with-sidebar-second #content,
+#content-header,
+#content-info,
+#content-title,
+#content-top,
+#content-area,
+#content-bottom,
+#below-content,
+#footer,
+fieldset,
+table{background:none;height:auto;width:auto;padding:0;margin:0;border:none;clear:none !important;position:static !important;overflow:visible;}
+
+.block, 
+.node,
+.view{padding:0;margin:0 !important;background:none !important;}
+
+div.messages{border:1px solid #888;background:none;padding:.5em;margin:0 0 .5em 0;}
+
+/*Devide between content regions*/
+#header,
+#mission,
+#above-content,
+#content-top,
+#content-area,
+#content-bottom,
+#below-content{margin:0 0 .5em 0;padding:0 0 .5em 0;border:1px dotted #888;border-width:0 0 1px 0;}
+
+/*Remove sidebars*/
+#sidebar-first,
+#sidebar-second{display:none;}
+
+/*Remove navagation, tabs, breadcrumbs, header region (like language switcher etc.) and footer region*/
+#main-nav,
+#header-blocks,
+.tabs,
+.breadcrumb,
+#footer-blocks{display:none;}
+
+/*Hide specific blocks (search, syndicate)*/
+.block-search,
+#block-node-0{display:none;}
+
+/*Iconify site logo and make name and slogan smaller*/
+#site-logo,
+#site-logo img{width:auto;height:2em;}
+#site-name{font-size:1.333em;}
+#site-name a{text-decoration:none;}
+#site-slogan{font-size:1.25em;font-weight:normal;}
+
+/*Reset tables*/
+table{border:1px dotted #888;margin:0 auto .5em;background:none;height:auto;width:95%;padding:0;}
+thead, tfoot,
+tr, td, tr.odd td, th{background:none;height:auto;width:auto;padding:0;margin:0;border:none;}
+tr.even td{background:#eee;border-bottom:1px dotted #ddd;}

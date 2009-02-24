@@ -33,6 +33,163 @@ function messaging_debug_access($account) {
 }
 
 /**
+ * Implementation of hook_block()
+ */
+function messaging_debug_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $blocks[0]['info'] = t('Debug: Post message');
+      // Only when incoming messages are enabled
+      if (module_exists('messaging_processor')) {      
+        $blocks[1]['info'] = t('Debug: Incoming message');
+        $blocks[2]['info'] = t('Debug: Message log');
+      }
+      return $blocks;
+    case 'view':
+      switch ($delta) {
+        case 0:
+          $block['subject'] = t('Post message');
+          $block['content'] = drupal_get_form('messaging_debug_post_form');
+          return $block;
+        case 1:
+          // Only when incoming messages are enabled
+          if (module_exists('messaging_processor')) {
+            $block['subject'] = t('Incoming message');
+            $block['content'] = drupal_get_form('messaging_debug_incoming_form');
+            return $block;
+          }
+          break;
+        case 2:
+          if (!empty($_SESSION['messaging_debug_store'])) {
+            $block['subject'] = t('Message log');
+            foreach ($_SESSION['messaging_debug_store'] as $index => $message) {
+              list($text, $variables) = _messaging_debug_log_text($message);
+              $description = t($text, $variables);
+              $form[$index]= array('#type' => 'fieldset', 
+                '#title' => truncate_utf8($description, 20),
+                '#description' => $description,
+                '#collapsible' => TRUE, '#collapsed' => TRUE);
+              $form[$index][] = array('#type' => 'item', '#title' => t('Subject'), '#value' => check_plain($message->subject));
+              $form[$index][] = array('#type' => 'item', '#title' => t('Body'), '#value' => check_plain($message->body));
+            }
+            $block['content'] = drupal_render($form);
+            unset($_SESSION['messaging_debug_store']);
+            return $block;
+          }
+          break;
+      }
+      break; 
+  }
+}
+
+/**
+ * Incoming message form
+ */
+function messaging_debug_post_form() {
+  global $user;
+
+  // Availbable sending methods
+  $form['method'] = array(
+    '#title' => t('Send method'),
+    '#type' => 'select',
+    '#options' => messaging_method_list(),
+    '#default_value' => messaging_method_default(),
+  );
+  $form['to'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Destination'),
+    '#size' => 20,
+    '#autocomplete_path' => 'user/autocomplete',
+    '#default_value' => $user->name, 
+  );
+  $form['subject'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Subject'),
+      '#size' => 20,
+  );
+  $form['body'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Body'),    
+  );
+    
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Send'));
+  
+  return $form;
+}
+
+/**
+ * Post test message
+ */
+function messaging_debug_post_form_submit($form, $form_state) {
+  global $user;  
+  
+  // Convert body in array of lines
+  $body = split("\n", $form_state['values']['body']);
+  $body = array_map('trim', $body);
+  
+  $message = (object)array(
+    'type' => 'debug',
+    'subject' => $form_state['values']['subject'],
+    'body' => $body,  
+  );
+  
+  // Destination may be account or plain parameter/s
+  $destination = $form_state['values']['to'];
+  if ($account = user_load(array('name' => $destination))) {
+    $result = messaging_message_send_user($account, $message, $form_state['values']['method']);
+  } else {
+    $result = messaging_message_send(array($destination), $message, $form_state['values']['method']);
+  }
+  drupal_set_message(t('Sent message with result: %result', array('%result' => $result ? 'OK' : 'Error'))); 
+}
+
+
+/**
+ * Incoming message form
+ */
+function messaging_debug_incoming_form() {
+  $form = array();
+  // Compile a list of channels
+  if ($method_list = module_invoke('messaging_incoming', 'method_info')) {
+    $channels = $options = array();
+    foreach ($method_list as $method => $method_info) {
+      foreach (messaging_incoming_method_info($method, 'channels') as $id => $channel) {
+        $key = $method . ':' . $id;
+        $info[$key] = array('method' => $method, 'channel' => $id);
+        $options[$key] = $method_info['name'] . ': ' . $channel['name'];
+      }
+    }
+    $form['info'] = array('#type' => 'value', '#value' => $info);
+    $form['channel'] = array(
+      '#type' => 'select',
+      '#title' => t('Channel'),
+      '#options' => $options,
+      '#default_value' => 'debug:form', // This block's channel
+    );
+    $form['subject'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Subject'),
+      '#size' => 15,
+    );
+    $form['body'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Body'),    
+    );
+    $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+  }
+  return $form;
+}
+
+function messaging_debug_incoming_form_submit($form, $form_state) {
+  // Work out method and channel
+  $info = $form_state['values']['info'][$form_state['values']['channel']];
+  $message['subject'] = $form_state['values']['subject'];
+  $message['body'] = $form_state['values']['body'];
+  $result = messaging_message_in($info['method'], $info['channel'], $message);
+  drupal_set_message(t('Processed incoming message with result: %result', array('%result' => $result ? t('OK') : t('None'))));
+}
+
+/**
  * Implementation of hook_form_alter()
  */
 function messaging_debug_form_alter(&$form, $form_state, $form_id) {
@@ -63,7 +220,7 @@ function messaging_debug_user_page($account) {
     $header = array(t('Method'), t('Subject'), t('Body'));
     foreach ($messages as $message) {
       // Check plain everything so we can actually see the mark up if any
-      $rows[] = array($message['method'], check_plain($message['subject']), check_plain($message['body']));
+      $rows[] = array($message->method, check_plain($message->subject), check_plain($message->body));
     }
     $output .= theme('table', $header, $rows);
     $output .= theme('pager', array(), MESSAGING_DEBUG_PAGER); 
@@ -76,31 +233,134 @@ function messaging_debug_user_page($account) {
 /**
  * Implementation of hook_messaging
  */
-function messaging_debug_messaging($op = 'info') {
+function messaging_debug_messaging($op = 'info', $type = NULL) {
   switch($op) {
     case 'send methods':
       $info['debug'] = array(
+        'title' => t('Debug'),
         'name' => t('Debug'),
         'destination' => 'name',
-        'send' => 'messaging_debug_send',
-        'send_user' => 'messaging_debug_send_user',
-        'type' => MESSAGING_TYPE_PULL,
+        'type' => MESSAGING_TYPE_PUSH,
         'glue' => '<br />',
-        'description' => t('The messages will be just logged to watchdog.'),
+        'description' => t('The messages will be just logged (And printed on page if Devel module enabled).'),
+        'send callback' => 'messaging_debug_send_msg',
       );
-      return $info;  
+      return $info;
+    case 'in methods':
+      $info['debug'] = array(
+        'name' => t('Debug'),
+        'description' => t('Messages posted through the debug interface.'),
+      );
+      return $info;
+    case 'channels':
+      if ($type == 'incoming') {
+        $info[] = array(
+          'method' => 'debug',
+          'channel' => 'form',
+          'name' => t('Debug form'),
+        );
+        return $info;
+      }
+      break;
+  }        
+}
+
+/**
+ * Implementation of hook_action_info().
+ */
+function messaging_debug_action_info() {
+  return array(
+    'messaging_debug_watchdog_msg' => array(
+      'type' => 'messaging',
+      'description' => t('Log message to watchdog'),
+      'configurable' => FALSE,
+      'hooks' => array(
+        'messaging' => array('incoming', 'outgoing'),
+      ),
+    ),
+    'messaging_debug_devlog_msg' => array(
+      'description' => t('Log message through devel module'),
+      'type' => 'messaging',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'messaging' => array('incoming', 'outgoing'),
+      )
+    ),
+    'messaging_debug_block_msg' => array(
+      'description' => t('Display message in block'),
+      'type' => 'messaging',
+      'configurable' => FALSE,
+      'hooks' => array(
+        'messaging' => array('incoming', 'outgoing'),
+      )
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_messaging_methods_alter()
+ */
+function messaging_debug_messaging_methods_alter(&$info) {
+  // If debug enabled, replace all send callbacks
+  if (variable_get('messaging_debug', 0)) {
+    foreach (array_keys($info) as $method) {
+      $info[$method]['send callback'] = _messaging_callback('messaging_debug_send_msg');
+      //$info[$method]['user callback'] = _messaging_callback('messaging_debug_send_user');
+    }
   }
 }
 
 /**
- * Just show message title to the user. 
- * 
- * This is a pull method though, so this is mainly intended for testing options
+ * Messaging processor
  */
-function messaging_debug_send_user($account, $message, $method = 'debug') {
-  $info = messaging_method_info('debug');
-  $destination = array($account);
-  return messaging_message_send($destination, $message, $method);
+function messaging_debug_watchdog_msg($message, $context) {
+  list($text, $variables) = _messaging_debug_log_text($message);
+  watchdog('messaging', $text, $variables);
+
+  // Return message without changes for further processing
+  return $message;
+}
+
+/**
+ * Message processor, just log incoming messages
+ */
+function messaging_debug_devlog_msg($message, $context) {
+  if (module_exists('devel')) {
+    list($text, $variables) = _messaging_debug_log_text($message);
+    dsm($message, t($text, $variables));
+  }
+
+  // Return message without changes for further processing
+  return $message;
+}
+
+/**
+ * Message processor, store for display in a block
+ */
+function messaging_debug_block_msg($message, $context) {
+  $_SESSION['messaging_debug_store'][] = $message;
+  return $message;
+}
+
+/**
+ * Format message as loggable text
+ */
+function _messaging_debug_log_text($message) {
+  $source = $message->source;
+  $variables = array(
+    '%subject' => $message->subject,
+  );
+  if ($source['type'] == 'incoming') {
+    $text = 'Incoming message, method %method, channel %channel: %subject';
+    $variables +=  array('%method' => $source['method'], '%channel' => $source['channel']);  
+  } elseif ($source['type'] == 'outgoing') {
+    $text = 'Outgoing message, method %method: %subject';
+    $variables += array('%method' => $message->method);  
+  } else {
+    $text = 'Unknown message type, full dump: %message';
+    $variables['%message'] = print_r($message, TRUE);
+  }
+  return array($text, $variables);
 }
 
 /**
@@ -108,32 +368,27 @@ function messaging_debug_send_user($account, $message, $method = 'debug') {
  * 
  * This is a pull method though, so this is mainly intended for testing options
  */
-function messaging_debug_send($destination, $message) {
-  // Just logs everything.
+function messaging_debug_send_msg($destination, &$message) {
+  // Just logs everything and mark the message for logging too.
+  $message->log = 1;
   $text = '';
-  $count = 0;
   $watchdog = array();
-  $text  = t('Message %key for %name: %subject', array('%name' => $destination->name, '%key' => $message['type'], '%subject' => $message['subject']));
+  $text  = t('Message %key for %name: %subject', array('%name' => $destination, '%key' => $message->type, '%subject' => $message->subject));
   messaging_log($text);
   // Just log message body at the end
-  watchdog('messaging', 'Message %key for %name: %subject <br /> Message body: <br /><pre>!body</pre>', array('%name' => $destination->name, '%key' => $message['type'], '%subject' => $message['subject'], '!body' => $message['body']));
+  watchdog('messaging', 'Message %key for %name: %subject <br /> Message body: <br /><pre>!body</pre>', array('%name' => $destination, '%key' => $message->type, '%subject' => $message->subject, '!body' => $message->body));
   return TRUE;
 }
 
 /**
  * Implementation of hook_footer()
  * 
- * Only debugging functionality for administrators
+ * Only debugging functionality for administrators, uses devel module facility
  */
 function messaging_debug_footer() {
-  if (user_access('administer messaging') && ($logs = messaging_log())) {
-    $output .= '<div class="messaging-debug">';
-    $lines = array();
+  if (user_access('administer messaging') && ($logs = messaging_log()) && function_exists('dsm')) {
     foreach ($logs as $log) {
-      $lines[] = is_string($log) ? $log : '<pre>'.print_r($log, TRUE).'</pre>';
+      dsm($log);
     }
-    $output .= implode('<br/>', $lines);
-    $output .= '</div>';
-    return $output;
   }
 }

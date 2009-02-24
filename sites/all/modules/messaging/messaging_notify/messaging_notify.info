@@ -1,0 +1,13 @@
+; $Id: messaging_notify.info,v 1.1.2.1 2008/12/19 21:02:51 jareyero Exp $
+name = Message notifications
+description = Get notifications about received messages by a different channel
+package = "Messaging"
+dependencies[] = messaging
+dependencies[] = notifications
+core = 6.x
+; Information added by drupal.org packaging script on 2009-02-01
+version = "6.x-1.1"
+core = "6.x"
+project = "messaging"
+datestamp = "1233503431"
+

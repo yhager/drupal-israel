@@ -1,0 +1,10 @@
+@charset "utf-8";
+/*$Id: ie_subtheme.css,v 1.1.2.2 2009/01/24 18:31:51 tombigel Exp $*/
+/**
+ * Tendu Default: A sub-theme of Tendu - A CSS theme for developers
+ * Incremental CSS overrides for IE (all variants)
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ */
+
+/* Remove background from fieldsets */
+fieldset{background:none;border-color:#dddff0;}

@@ -11,11 +11,12 @@
 function messaging_phpmailer_messaging($op = 'info') {
   switch($op) {
     case 'send methods':
-      $info['html_mail'] = array(
+      $info['phpmailer'] = array(
+        'title' => 'PHPMailer',
         'name' => t('HTML Mail'),
         'group' => 'mail',
         'destination' => 'mail',
-        'send' => 'messaging_phpmailer_send',
+        'send callback' => 'messaging_phpmailer_send_msg',
         'type' => MESSAGING_TYPE_PUSH,
         'glue' => "<br>", // don't use <br/> nor <br /> for maximum HTML email client compatibility
         'footer' => "<br><br>--",
@@ -26,6 +27,17 @@ function messaging_phpmailer_messaging($op = 'info') {
 }
 
 /**
+ * Implementation of hook_theme()
+ */
+function messaging_phpmailer_theme() {
+  return array(
+    'messaging_phpmailer' => array(
+      'arguments' => array('mail' => NULL),
+    ),
+  );
+}
+
+/**
  * Send mail message to user account. Supports bulk sending
  *
  * @param $destination
@@ -33,11 +45,10 @@ function messaging_phpmailer_messaging($op = 'info') {
  * @param $message
  *   Message array
  */
-function messaging_phpmailer_send($destination, $message, $params = array()) {
+function messaging_phpmailer_send_msg($destination, $message, $params = array()) {
+  $mail = messaging_mail_prepare($destination, $message, $params);
   
-  $params = messaging_mail_params($message, $params);
-
-  return messaging_phpmailer_drupal_mail($params['mailkey'], $destination, $message['subject'], $message['body'], $params['from'], $params['headers']);
+  return messaging_phpmailer_drupal_mail($mail);
 }
 
 /**
@@ -45,7 +56,7 @@ function messaging_phpmailer_send($destination, $message, $params = array()) {
  * This function mimics drupal_mail. We do not use drupal_mail instead because we want
  * to be able to send mail with both PHPMailer and MIMEMail.
  */
-function messaging_phpmailer_drupal_mail($mailkey, $to, $subject, $body, $from = NULL, $headers = array()) {
+function messaging_phpmailer_drupal_mail($message) {
   include_once './'. drupal_get_path('module', 'messaging_phpmailer') .'/PHPMailer/class.phpmailer.php';
   $mail = new PHPMailer();
   $mail->IsSMTP(); // telling the class to use SMTP
@@ -63,31 +74,23 @@ function messaging_phpmailer_drupal_mail($mailkey, $to, $subject, $body, $from =
   }
 
   // Theme the mail message
-  list($subject, $body) = theme('messaging_phpmailer', $subject, $body, $from, $mailkey);
+  list($subject, $body) = theme('messaging_phpmailer', $message);
 
-  // To prevent e-mail from looking like spam, the addresses in the Sender and
-  // Return-Path headers should have a domain authorized to use the originating
-  // SMTP server.  Errors-To is redundant, but shouldn't hurt.
-  $default_from = variable_get('site_mail', ini_get('sendmail_from'));
-  if ($default_from) {
-    $defaults['From'] = $defaults['Reply-To'] = $defaults['Sender'] = $defaults['Return-Path'] = $defaults['Errors-To'] = $default_from;
-  }
-  if ($from) {
-    $defaults['From'] = $defaults['Reply-To'] = $from;
-  }
-  $headers = array_merge($defaults, $headers);
-  // Custom hook traversal to allow pass by reference
-  foreach (module_implements('mail_alter') as $module) {
-    $function = $module .'_mail_alter';
-    $function($mailkey, $to, $subject, $body, $from, $headers);
-  }
+  // Add some headers. Look for rfc2822 "From" formatting (ex: "name" <foo@bar.com>)
+  $from = array();
+  preg_match('/["\']?(?<name>.*)["\']? <(?<email>.*)>/', $message['headers']['From'], $from);
+  $mail->From = !empty($from['email']) ? $from['email'] : $message['headers']['From'];
+  $mail->FromName = !empty($from['name']) ? $from['name'] : '';
+  $mail->AddAddress($message['to']);
 
-  $mail->From = $defaults['From'];
-  $mail->FromName = $defaults['From'];
-  $mail->AddAddress($to);
-
+  if(!empty($message['headers']['Message-ID'])) {
+    $mail->AddCustomHeader('Message-ID: ' . $message['headers']['Message-ID']);
+  }
+  if(!empty($message['headers']['Reply-To'])) {
+    $mail->AddReplyTo($message['headers']['Reply-To']);
+  }
   // Strip HTML out of $body for plaintext equivalent of HTML email.
-  $mail->AltBody = messaging_html_to_text($body);
+  $mail->AltBody = drupal_html_to_text($body);
 
   // The subject has been already filtered by messaging module
   $mail->Subject = $subject;
@@ -96,8 +99,8 @@ function messaging_phpmailer_drupal_mail($mailkey, $to, $subject, $body, $from =
 }
 
 /**
- * default theme messaging_phpmailer
+ * Default theme messaging_phpmailer
  */
-function theme_messaging_phpmailer($subject, $body, $from, $mailkey) {
-  return array($subject, $body);
+function theme_messaging_phpmailer($mail) {
+  return array($mail['subject'], $mail['body']);
 }

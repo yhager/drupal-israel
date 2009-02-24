@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.1.4.1 2008/04/12 18:40:14 jareyero Exp $
+// $Id: README.txt,v 1.1.4.2 2008/09/15 15:09:52 jareyero Exp $
 
 README.txt - Drupal Module - Messaging
 ======================================
@@ -11,7 +11,8 @@ It will provide a common API for sending while allowing plugins for multiple cha
 This Messaging Framework has been primarily developed to be used by the Notifications Framework.
 See Drupal notifications module for an usage usage example implementing the full messaging capabilities.
 
-See DEVELOPER.txt for technical and developers documentation. 
+Online documentation, includes end user and development handbooks: http://drupal.org/node/252582
+
 
 Features:
 ---------
@@ -25,6 +26,12 @@ Plug-ins provided in this package:
 - messaging_mail: Integration with Drupal core mail API
 - messaging_private: Integration with Privatemsg
 - messaging_simple: Provides a simple UI for viewing pending messages for a user
+- messaging_mime_mail: Mime mail integration
+- messaging_phpmailer: HTML mails through PHPMailer
+- messaging_debug: Debugging tools for developers
+...
+
+Note: some of the plug-ins depend on other packages and may not be available yet for Drupal 6
 
 Developers:
 -----------

@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications_lite.module,v 1.1.4.3 2008/08/03 00:12:47 jareyero Exp $
+// $Id: notifications_lite.module,v 1.1.4.5 2008/12/26 17:19:36 jareyero Exp $
 /**
  * @file
  *   Simple notifications API
@@ -33,11 +33,16 @@
  *   Optional notification body
  * @param $action
  *   Optional action name, so other modules can define specific message parts for their actions
+ * @param $params
+ *   Optional array of additional parameters to be stored with the event. For example, one could store the sender
+ *   of a message, as otherwise this information might not be easily retrievable during message sending on cron.
+ *   Only available when the full notification system is used and not just the messaging module.
+ *   
  */
-function notifications_lite_send($uid, $subject, $body = '', $action = 'default') {
+function notifications_lite_send($uid, $subject, $body = '', $action = 'default', $params = array()) {
   if (module_exists('notifications')) {
     // So we have the full Notifications system enabled  
-    return notifications_lite_add_to_queue($uid, $subject, $body, $action);
+    return notifications_lite_add_to_queue($uid, $subject, $body, $action, $params);
   }
   elseif (module_exists('messaging')) {
     // We just have the Messaging system, that's something
@@ -46,6 +51,7 @@ function notifications_lite_send($uid, $subject, $body = '', $action = 'default'
       'type' => 'notifications-lite',
       'subject' => $subject,
       'body' => empty($body) ? $subject : $body,
+      'language' => user_preferred_language($account),
     );
     return messaging_message_send_user($account, $message);
   }
@@ -74,7 +80,7 @@ function notifications_lite_send($uid, $subject, $body = '', $action = 'default'
  * @param $action
  *   Optional action name, so other modules can define specific message parts for their actions
  */
-function notifications_lite_add_to_queue($uid, $subject, $body = '', $action = 'default') {
+function notifications_lite_add_to_queue($uid, $subject, $body = '', $action = 'default', $params = array()) {
   // Build and store simple event
   $event = array(
     'module' => 'notifications',
@@ -84,6 +90,7 @@ function notifications_lite_add_to_queue($uid, $subject, $body = '', $action = '
     'action' => $action,
     'params' => array('for-uid' => $uid, 'subject' => $subject, 'body' => $body),      
   );  
+  $event['params'] = array_merge($event['params'], $params);
   $event  = notifications_event($event);
 }
 
@@ -112,12 +119,10 @@ function notifications_lite_notifications($op, &$arg0, $arg1 = NULL, $arg2 = NUL
         }
         if (!empty($event->params['body'])) {
           $event->text['main'] = $event->params['body'];
-        } else {
-          $event->text['main'] = '';
-        }
+        } 
       }
       break;
-    // By queueing the event here we gain access to some features, like inmediate sending
+    // By queueing the event here we gain access to some features, like immediate sending
     case 'event queued': // $event is arg0
       $event = &$arg0;
       if ($event->type == 'lite') {

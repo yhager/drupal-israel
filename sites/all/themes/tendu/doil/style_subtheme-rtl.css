@@ -1,0 +1,39 @@
+@charset "utf-8";
+/**
+ * Doil: A sub-theme of Tendu - A CSS theme for developers
+ * Made for Drupal.org.il
+ * Incremental CSS overrides for RTL sites
+ * $Id: style_subtheme-rtl.css,v 1.1.2.3 2009/01/19 13:11:09 tombigel Exp $
+ * Author: Tom Bigelajzen - http://tombigel.com
+ */
+
+/*Flip sidebars*/
+.one-sidebar #content{margin-left:0;margin-right:0;}
+.with-sidebar-first #content{margin-right:150px;}
+.with-sidebar-second #content{margin-left:315px;}
+
+/*Lists*/
+ul, ol{padding-left:0;padding-right:1em;}
+ul li, ol li{margin-left:0;margin-right:1.5em;}
+
+/*Header Blocks*/
+#header-blocks{float:left;}
+/*Theme Language Switcher in header blocks*/
+#header-blocks #language-switcher ul{text-align:left;padding-right:0;}
+
+/*Mission*/
+#mission{clear:right;margin-right:0;margin-left:395px;padding:0 24px 12px 12px;}
+
+/*Navagation (Primary links)*/
+#main-nav ul.menu{width:100%;}/*For IE6*/
+#main-nav ul.menu li{float:right;margin-left:0;margin-right:1em;}
+#main-nav ul.menu a{float:left}/*Keep links floated left for IE6, else they disappear*/
+
+/*Tabs*/
+ul.primary li a{margin-right:0;margin-left:.5em;}
+
+/*Border Radiuses*/
+.front #header-content{-moz-border-radius-topleft:8px;-webkit-border-top-left-radius:8px;border-top-left-radius:8px;}
+ul.secondary{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px;}
+.front #header-content,
+ul.secondary{-moz-border-radius-topright:0;-webkit-border-top-right-radius:0;border-top-right-radius:0;}

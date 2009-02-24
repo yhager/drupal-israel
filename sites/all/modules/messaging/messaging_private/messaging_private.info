@@ -1,11 +1,13 @@
-; $Id: messaging_private.info,v 1.1 2008/01/21 22:33:31 jareyero Exp $
-name = Privatemsg
-description = Sending Method: Integration with Privatemsg
+; $Id: messaging_private.info,v 1.1.4.1 2008/11/01 16:39:51 jareyero Exp $
+name = Messaging Privatemsg
+description = Sending Method: Integration with Privatemsg (Beta)
 package = "Messaging"
-dependencies = messaging privatemsg
-; Information added by drupal.org packaging script on 2008-08-05
-version = "6.x-1.0-rc2"
+dependencies[] = messaging
+dependencies[] = privatemsg
+core = 6.x
+; Information added by drupal.org packaging script on 2008-11-14
+version = "6.x-1.0"
 core = "6.x"
 project = "messaging"
-datestamp = "1217958318"
+datestamp = "1226661918"
 

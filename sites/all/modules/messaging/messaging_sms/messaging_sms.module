@@ -11,14 +11,15 @@ function messaging_sms_messaging($op = 'info') {
   switch($op) {
     case 'send methods':
       $info['sms'] = array(
+        'title' => 'SMS Framework',
         'name' => t('SMS'),
         'group' => 'sms', // Class of send method
-        'send' => 'messaging_sms_send',
-        'send_user' => 'messaging_sms_send_user',
         'type' => MESSAGING_TYPE_PUSH,
-        'render' => 'messaging_sms_render',
         'glue' => '',
         'description' => t('Send SMS using SMS Framework.'),
+        'render callback' => 'messaging_sms_render',
+        'send callback' => 'messaging_sms_send_msg',
+        'destination callback' => 'messaging_sms_user_destination',
       );
       return $info;  
   }
@@ -29,26 +30,23 @@ function messaging_sms_messaging($op = 'info') {
  */
 function messaging_sms_render($message, $info) {
   // We need to apply filtering first or run through the render function
-    $message = messaging_message_render($message, $info);
-    // We can assume that we'll get max 110 characters for subject + body
+  $message = messaging_message_render($message, $info);
+  // We can assume that we'll get max 110 characters for subject + body
   // Because from and data take up about 50 characters and total character limit
   // subject + from + date + body < 160
-  $message['subject'] = messaging_sms_truncate($message['subject'], 40);
-  $message['body'] = '--' . messaging_sms_truncate("Learn More: " . $GLOBALS['base_url'],(110 - strlen($message['subject'])));
+  $message->subject = messaging_sms_truncate($message->subject, 40);
+  $message->body = '--' . messaging_sms_truncate("Learn More: " . $GLOBALS['base_url'], (110 - strlen($message->subject)));
   return $message;
 }
 
 /**
  * Send mail message to user account
  */
-function messaging_sms_send_user($account, $message) {
-  if ($account->sms_user['status'] == 2) {
-  $destination->number = $account->sms_user['number'];
-  foreach ($account->sms_user['gateway'] as $key => $field) {
-    $destination->$key = $field;
-  }
-    $destinations[] = $destination;
-    return messaging_message_send($destinations, $message, 'sms');
+function messaging_sms_user_destination($account, $message) {
+  // Check for active mobile infomation. Simply return it so that the send
+  // callback has a destination array and access everything.
+  if (!empty($account->sms_user) && $account->sms_user[0]['status'] == 2) {
+    return $account->sms_user[0];
   }
 }
 
@@ -57,23 +55,26 @@ function messaging_sms_send_user($account, $message) {
  * 
  * This is just a wrapper for sms_send()
  */
-function messaging_sms_send($destination, $message, $params = array()) {
-  // This function takes an array of destinations so 
-  return sms_send(array($destination), $message['subject'].$message['body']);
+function messaging_sms_send_msg($destination, $message, $params = array()) {
+  if (!empty($destination['number']) && !empty($destination['gateway'])) {
+    return sms_send($destination['number'], $message->subject.$message->body, $destination['gateway']);
+  } else {
+    return FALSE;
+  }
 }
  
 /**
  * Truncate messages to 160 Characters.  Adapted from node_teaser() in node.module
  */
-function messaging_sms_truncate($message,$length = 160) {
+function messaging_sms_truncate($text, $length = 160) {
 
   // If we have a short message, return the message
-  if (strlen($message) < $length) {
-    return $message;
+  if (strlen($text) < $length) {
+    return $text;
   }
 
   // Initial slice.
-  $teaser = truncate_utf8($message, $length);
+  $teaser = truncate_utf8($text, $length);
   $position = 0;
   // Cache the reverse of the message.
   $reversed = strrev($teaser);
@@ -101,4 +102,11 @@ function messaging_sms_truncate($message,$length = 160) {
     }
   }
   return ($position == 0) ? $teaser : substr($teaser, 0, $position);
+}
+
+/**
+ * Implementation of hook_disable()
+ */
+function messaging_sms_disable() {
+  messaging_method_disable('sms');
 }

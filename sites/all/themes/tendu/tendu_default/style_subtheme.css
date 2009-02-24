@@ -1,0 +1,189 @@
+@charset "utf-8";
+/*$Id: style_subtheme.css,v 1.1.2.1.2.17 2009/01/25 21:22:40 tombigel Exp $*/
+/**
+ * Tendu Default: A sub-theme of Tendu - A CSS theme for developers
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ */
+body{color:#535d66;background:#fff;}
+
+/*Basic Typography*/
+h1{font-size:1.833em;line-height:1.333em;font-weight:bold;}
+h2{font-size:1.5em;line-height:1.333em;font-weight:bold;}
+h3{font-size:1.333em;line-height:1.333em;font-weight:bold;}
+h4{font-size:1.166em;line-height:1.333em;font-weight:bold;}
+h5{font-size:1.083em;line-height:1.333em;font-weight:bold;}
+h6{font-size:1em;line-height:1.333em;font-weight:bold;}
+p{padding-bottom:.5em;}
+.meta{font-size:.83em;padding-bottom:.5em;}
+
+/*Tables*/
+table{margin-top:10px;}
+tr.even{background:#fcfdfe;}
+td,
+th{padding:.2em .5em;}
+
+/*Lists*/
+dt{font-style:italic;}
+dd{padding:.5em;}
+ul,
+ol{padding-left:1em;}/*LTR*/
+ul li{margin-left:1.5em;list-style:disc;line-height:1.5em;}/*LTR*/
+ol li{margin-left:1.5em;list-style:decimal;line-height:1.5em;}/*LTR*/
+.item-list ul li{padding:3px 0;}
+
+/* Form Elements  */
+fieldset{padding:.5em .8em;margin:0 0 1em;border:1px solid #f0f0f0;background:#fdfeff;}
+html.js fieldset.collapsed{border-top-color:#dddff0;background:none;}
+legend{font-weight:bold;font-size:1.166em;padding:0 .3em}
+input, select, textarea{font-family:Arial, Helvetica, sans-serif;font-weight:normal;line-height:1em;font-size:1em;}
+textarea{line-height:1.2em;}
+button{font-family:Arial, Helvetica, sans-serif;font-weight:bold;line-height:1em;font-size:13px}
+button{cursor:pointer;}
+.form-radio,
+.form-checkbox{vertical-align:middle;}/* TODO: Check if this works page wide */
+
+/* Links */
+a{color:#5297dd;text-decoration:none;}
+a:visited{color:#6a9dd0;}
+a:hover, a:focus{text-decoration:underline;}
+
+/* Header and Navagation */
+#header{background:#e8e8e8;margin-bottom:10px;}
+#header-content{background:#f0f1f3;}
+#header-blocks{float:right;padding:12px;color:#444;}/*LTR*/
+/*Theme Site details*/
+#site-details{float:left;padding:12px 0;}/*LTR*/
+#site-logo{float:left;padding:12px;}/*LTR*/ /*IE6 commented*/
+#site-name{font-size:2.5em;line-height:1.333em;font-weight:bold;}
+#site-slogan{font-size:1.5em;line-height:1.333em;}
+/*Theme Language Switcher*/
+#header-blocks #language-switcher{margin-bottom:10px;}
+#header-blocks #language-switcher ul{text-align:right;padding:0;overflow:hidden;height:1%;font-size:.916em;}/*LTR*/
+#header-blocks #language-switcher li{margin:0;list-style:none;display:inline;}
+#header-blocks #language-switcher li:after{content:'|';}
+#header-blocks #language-switcher li.last:after{content:'';}
+#header-blocks #language-switcher a{font-weight:bold;padding:0 .5em;}
+/*Theme Search Box*/
+#header-blocks #search-box{margin-bottom:10px;}
+#header-blocks #search-box form{text-align:right;}/*LTR*/
+#header-blocks #search-box input{vertical-align:middle}
+#header-blocks #search-box .container-inline{white-space:nowrap;}
+/*Theme main navagation*/
+#main-nav .primary-links a{font-size:1.166em;}
+#main-nav ul.menu{overflow:hidden;padding:0;width:100%;}
+#main-nav ul.menu li{float:left;padding:2px;margin-left:1em;list-style:none;}/*LTR*/
+
+/* Page info */
+.breadcrumb{padding:0;}
+#content-title{padding:12px;background:#f5f6f8;margin-bottom:10px;margin-top:0;}
+#content-info{padding:6px 12px;background:#f6f6f6;margin-bottom:10px;}
+#mission{padding:12px;background:#f6f8f5;font-size:1.166em;margin-bottom:10px;}
+div.messages{padding:12px;margin-bottom:10px;}
+.status{background:#f0fdf0;border:1px solid #e0ede0;}
+
+/* Blocks in sidebars */
+.sidebar-region .block{margin-bottom:10px;padding:6px;background:#f5f6f8;}
+.sidebar-region #nav a{font-weight:bold;font-size:1.083em;}
+
+/* Blocks nodes and views in content areas. */
+.extra-region .block,
+.content-region div.block,/* Using "div.block" because /admin/build/blocks uses td.block */
+.content-region .node,
+.content-region .node-form,
+.content-region .view,
+.content-region .profile,
+.content-region .node-type-list,
+.page-admin #default-content{padding:12px;background:#f5f6f8;margin-bottom:10px;margin-top:0;}
+
+/* Remove redundent styling from blocks in blocks, nodes and views */
+.content-region .view div.block,
+.content-region .node div.block,
+div.block div.block{padding:0;background:0;}
+
+/* Forums */
+#forum table{width:95%;}
+
+/* Tabs */
+div.tabs{background:#eee;color:#333;border:none;padding:.5em 1em;margin-bottom:10px}
+ul.primary {border:none;margin:6px 0;}
+ul.primary li{margin:0;line-height:normal;white-space:nowrap;}
+ul.primary li a,
+ul.primary li a:visited {background:none;border:none;padding:6px .6em;font-weight:bold;font-size:1.083em;}
+ul.primary li a:hover {text-decoration:underline;background:none;}
+ul.primary li.active a,
+ul.primary li.active a:hover,
+ul.primary li.active a:visited{text-decoration:none;font-weight:bold;color:#222;background:#fff;border:none;}
+
+ul.secondary {border:none;padding:.5em 0;background:#fff;margin:-4px 0 0 0;}
+ul.secondary li{margin:0;line-height:normal;padding:0;border:none;white-space:nowrap;}
+ul.secondary li a,
+ul.secondary li a:visited {background:none;border:none;padding:0 .6em;color:#0073bb}
+ul.secondary li a:hover {text-decoration:underline;background:none;}
+ul.secondary li.active a,
+ul.secondary li.active a:hover,
+ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#206291;background:none;border:none;}
+
+/* Footer */
+#footer{text-align:center;font-size:.916em;color:#888;background:#f0f1f3;}
+#footer-message,
+#footet-blocks{padding:6px 12px}
+#footer p{padding:0;}
+
+/* Tweak Admin panel */
+div.admin .right,
+div.admin .left{margin:0;}
+
+/*Add scroll to hiddent tables in narrow pages*/
+.admin #default-content{overflow:auto;}
+
+/* Tweak Views Admin panel */
+a.views-button-remove{top:0;}
+#edit-views-apply{margin-top:1.3em;}
+
+/* Tweak Blocks Admin panel */
+table#blocks{width:100%;}
+#blocks td{vertical-align:middle;}
+#blocks .block{padding:0;margin:0;}
+
+/*Tweak Update Admin panel*/
+.version-status .icon img{vertical-align:middle}
+
+/**
+ * Some fun with rounded corners.
+ * Mozilla and Webkit support the CSS3 "border-radius" property, so why not take advantage of it?
+ * I commented these lines because this code won't validate, uncomment them to use it.
+ * 
+ * "-moz-border-radius" is for Mozilla browsers
+ * "-webkit-border-radius" is for Webkit browsers
+ * "border-radius" is for a time where this property will get into the standard imlementation (Has no effect in current versions)
+ */
+/*
+#main-nav,
+.block .content,
+.sticky ul.links,
+#header-content,
+#header{-moz-border-radius:0 0 8px 8px;-webkit-border-bottom-left-radius: 8px;-webkit-border-bottom-right-radius: 8px;border-radius:0 0 8px 8px;}
+
+#footer{-moz-border-radius:8px 8px 0 0;-webkit-border-top-left-radius: 8px;-webkit-border-top-right-radius: 8px;border-radius:8px 8px 0 0;}
+
+div.tabs,
+ul.secondary,
+ul.primary li.active a,
+div.messages,
+fieldset{-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+
+.sticky,
+#content-area,
+#content-title,
+#content-info,
+#default-content,
+#mission,
+div.block,
+.content-region .node,
+.content-region .node-form,
+.content-region .view,
+.content-region .profile,
+.content-region .node-type-list{-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;}
+
+#blocks .block{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0;background:none;}
+*/

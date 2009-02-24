@@ -1,5 +1,5 @@
 <?php
-// $Id: notifications.install,v 1.4.2.5.2.2 2008/09/17 18:25:04 jareyero Exp $
+// $Id: notifications.install,v 1.4.2.5.2.5 2009/01/27 00:54:44 jareyero Exp $
 
 /**
  * Implementation of hook_schema()
@@ -16,7 +16,8 @@ function notifications_schema() {
        'send_method' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE),
        'cron' => array('type' => 'int', 'unsigned' => TRUE, 'size' => 'tiny', 'not null' => TRUE, 'default' => 0, 'disp-width' => '3'),
        'module' => array('type' => 'varchar', 'length' => '255', 'not null' => FALSE),
-       'status' => array('type' => 'int', 'not null' => TRUE, 'default' => 1, 'disp-width' => '11')
+       'status' => array('type' => 'int', 'not null' => TRUE, 'default' => 1, 'disp-width' => '11'),
+       'destination' => array('type' => 'varchar', 'length' => '255', 'not null' => FALSE),
     ),
     'primary key' => array('sid'),
   );
@@ -24,7 +25,8 @@ function notifications_schema() {
     'fields' => array(
       'sid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => '10'),
       'field' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE),
-      'value' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE)
+      'value' => array('type' => 'varchar', 'length' => '255', 'not null' => TRUE),
+      'intval' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'),
     ),
     'primary key' => array('sid', 'field'),
   );
@@ -38,7 +40,8 @@ function notifications_schema() {
        'language' => array('type' => 'varchar', 'length' => '255', 'not null' => FALSE),
        'uid' => array('type' => 'int', 'not null' => FALSE, 'disp-width' => '11'),
        'params' => array('type' => 'text', 'not null' => FALSE),
-       'created' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11')
+       'created' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'),
+       'counter' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'),
     ),
     'primary key' => array('eid'),
   );
@@ -56,7 +59,8 @@ function notifications_schema() {
        'created' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
        'cron' => array('type' => 'int', 'unsigned' => TRUE, 'size' => 'tiny', 'not null' => TRUE, 'default' => 0, 'disp-width' => '3'),
        'conditions' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '10'),
-       'module' => array('type' => 'varchar', 'length' => '255', 'not null' => FALSE)
+       'module' => array('type' => 'varchar', 'length' => '255', 'not null' => FALSE),
+       'destination' => array('type' => 'varchar', 'length' => '255', 'not null' => FALSE),
     ),
     'primary key' => array('sqid'),
   );
@@ -84,7 +88,7 @@ function notifications_install() {
  */
 function notifications_uninstall() {
   drupal_uninstall_schema('notifications');
-  foreach (array('events', 'send_intervals', 'sender', 'sendself', 'send_inmediate') as $name) {
+  foreach (array('events', 'send_intervals', 'sender', 'sendself', 'send_immediate') as $name) {
     variable_del("notifications_$name");
   }
 }
@@ -180,6 +184,49 @@ function notifications_update_6() {
     if ($option && !is_array($option)) {
       variable_set('notifications_node_ui_'. $type, array($option));
     }
+  }
+  return $ret;
+}
+
+/**
+ * Multiple fixes
+ */
+function notifications_update_6001() {
+  $ret = array();
+  // Fixed typo with variable name
+  variable_set('notifications_send_immediate', variable_get('notifications_send_inmediate', 0));
+  variable_del('notifications_send_inmediate');
+  return $ret;  
+}
+
+/**
+ * Add some fields
+ */
+function notifications_update_6002() {
+  $ret = array();
+  db_add_field($ret, 'notifications_event', 'counter', array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'));
+  db_add_field($ret, 'notifications', 'destination', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE));
+  db_add_field($ret, 'notifications_queue', 'destination', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE));  
+  // Update event counter, this may take a while
+  $ret[] = update_sql("UPDATE {notifications_event} e SET counter = (SELECT COUNT(*) FROM {notifications_queue} q WHERE q.eid = e.eid)");
+  return $ret;
+}
+
+/**
+ * Add integer value to fields table
+ */
+function notifications_update_6003() {
+  $ret = array();
+  db_add_field($ret, 'notifications_fields', 'intval', array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'disp-width' => '11'));
+  // Populate intval, this should depend on db type. Is there any way that works for all?
+  switch ($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      $ret[] = update_sql("UPDATE {notifications_fields} SET intval = CAST(value AS UNSIGNED)");
+      break;
+    case 'pgsql':
+      $ret[] = update_sql("UPDATE {notifications_fields} SET intval = CAST(value AS INTEGER)");
+      break;
   }
   return $ret;
 }

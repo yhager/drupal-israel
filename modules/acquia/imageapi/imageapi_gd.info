@@ -5,8 +5,8 @@ package = ImageCache
 core = 6.x
 
 ; Information added by Acquia.com packaging script
+version = "6.x-1.3"
+core = "6.x"
 project = "imageapi"
-version = "6.x-1.x-dev"
-datestamp = "1229710613"
 acquia = "1"
 

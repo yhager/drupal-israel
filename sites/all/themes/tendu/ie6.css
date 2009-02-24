@@ -1,11 +1,27 @@
 @charset "utf-8";
+/*$Id: ie6.css,v 1.2.2.4.2.6 2009/01/24 18:31:51 tombigel Exp $*/
 /**
-  * Tendu Drupal 5.x Theme For Developers CSS
-  * Updated: May 24, 2008 
-  * Author: Tom Bigelajzen - http://tombigel.com
+ * Tendu Drupal - A CSS Theme For Developers
+ * Incremental CSS overrides for IE6 only
+ * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
+ */
+
+/* png transparencies
+ * Notes:
+ * This is an example for using this file to show PNG images with alpha.
+ *
+ * Note that the path of the files in "AlphaImageLoader" is relative to the HTML
+ * and not the CSS.
+ * If your theme path is different then "/sites/all/themes/tendu/" change the
+ * path in the filter below, else the image will not show.
+ *
+ * #site-logo{height:1%;padding:0;margin:8px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/sites/all/themes/tendu/logo.png', sizingMethod='crop');}
+ * #site-logo img {visibility:hidden;}
+ */
+
+ /**
+  * Fix 3px gap on sidebars.
+  * These values need to change according to the value in style.css
   */
-
-/* Incremental CSS overrides for IE6 only style declerations */
-
-/* png transparencies */
-#logo img {background-image: none;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);}
+.with-sidebar-first #content{padding-left:7px}/*LTR*/
+.with-sidebar-second #content{padding-right:7px}/*LTR*/

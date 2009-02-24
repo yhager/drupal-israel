@@ -1,5 +1,5 @@
 <?php
-// $Id: pdir.module,v 1.1.2.3 2008/12/07 08:58:39 zstolar Exp $
+// $Id: pdir.module,v 1.1.2.5 2008/12/09 21:41:34 zstolar Exp $
 
 /**
  * @file
@@ -27,14 +27,15 @@ function pdir_filter($op, $delta = 0, $format = -1, $text = '') {
 function pdir_pdir($text) {
   # find first text within a paragraph (ignore html inside paragraphs)
   $chunks = preg_split('@(</?[^>]*>)@i', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
-  # Find paragraphs, and check the next chunk
+  # Find block level elements, and check the next chunk
+  $block_elements = array('<p>', '<ol>', '<ul>', '<li>', '<div>');
   $i = 0;
   while ($i <= count($chunks)) {
-    if ($chunks[$i] == '<p>') {
+    if (in_array($chunks[$i], $block_elements)) {
       $text_chunk = pdir_text_chuck($chunks, $i+1);
       if ($text_chunk) {
         $dir = pdir_determine_dir($chunks[$text_chunk]);
-        $chunks[$i] .= '<p style="direction:' . $dir . '">';
+        $chunks[$i] = '<' . trim($chunks[$i], '<>')  . ' style="direction:' . $dir . '">';
         $output .= $chunks[$i];
       }
     }

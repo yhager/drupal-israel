@@ -1,5 +1,5 @@
 <?php
-// $Id: theme-settings.php,v 1.2 2009/01/05 09:17:15 jwolf Exp $
+// $Id: theme-settings.php,v 1.1.2.1 2008/10/07 03:48:51 jwolf Exp $
 
 /**
 * Implementation of THEMEHOOK_settings() function.

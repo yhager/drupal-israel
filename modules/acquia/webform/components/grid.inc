@@ -1,5 +1,10 @@
 <?php
-// $Id: grid.inc,v 1.3.2.12 2008/10/08 19:51:39 quicksketch Exp $
+// $Id: grid.inc,v 1.3.2.17 2009/01/11 02:51:47 quicksketch Exp $
+
+/**
+ * @file
+ *   Webform module grid component.
+ */
 
 /**
  * Create a default grid component.
@@ -29,12 +34,12 @@ function _webform_defaults_grid() {
  * are not necessary to specify here (although they may be overridden if desired).
  * @return
  *   An array of form items to be displayed on the edit component page
- **/
+ */
 function _webform_edit_grid($currfield) {
   $edit_fields = array();
   $edit_fields['extra']['options'] = array(
     '#type' => 'textarea',
-    '#title' => t("Options"),
+    '#title' => t('Options'),
     '#default_value' => $currfield['extra']['options'],
     '#description' => t('Options to select across the top. One option per line. Key-value pairs may be entered seperated by pipes. i.e. safe_key|Some readable option') . theme('webform_token_help'),
     '#cols' => 60,
@@ -44,7 +49,7 @@ function _webform_edit_grid($currfield) {
   );
   $edit_fields['extra']['questions'] = array(
     '#type' => 'textarea',
-    '#title' => t("Questions"),
+    '#title' => t('Questions'),
     '#default_value' => $currfield['extra']['questions'],
     '#description' => t('Questions list down the left side. One question per line.') . theme('webform_token_help'),
     '#cols' => 60,
@@ -69,10 +74,10 @@ function _webform_edit_grid($currfield) {
 
 function _webform_edit_validate_grid($form_values) {
   // Currently no validation for selects.
-  return true;
+  return TRUE;
 }
 
-function _webform_render_grid($component, $random = true) {
+function _webform_render_grid($component, $random = TRUE) {
   $form_item = array(
     '#title' => $component['name'],
     '#required' => $component['mandatory'],
@@ -90,7 +95,7 @@ function _webform_render_grid($component, $random = true) {
     $aux = array();
     $keys = array_keys($options);
     shuffle($keys);
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
       $aux[$key] = $options[$key];
       unset($options[$key]);
     }
@@ -100,7 +105,7 @@ function _webform_render_grid($component, $random = true) {
     $aux = array();
     $keys = array_keys($questions);
     shuffle($keys);
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
       $aux[$key] = $questions[$key];
       unset($questions[$key]);
     }
@@ -108,7 +113,8 @@ function _webform_render_grid($component, $random = true) {
   }
   foreach ($questions as $question) {
     if ($question != '') {
-      $form_item[$question] = array(
+      // Remove quotes from keys to prevent HTML breakage.
+      $form_item[str_replace(array('"', "'"), '', $question)] = array(
         '#title'         => $question,
         '#required'      => $component['mandatory'],
         '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
@@ -131,9 +137,11 @@ function _webform_render_grid($component, $random = true) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
- **/
+ */
 function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_grid($component, FALSE);
   $cid = 0;
@@ -155,28 +163,39 @@ function _webform_submission_display_grid($data, $component, $enabled = FALSE) {
  *   the webform_component database schema
  * @return
  *   Nothing
- **/
+ */
 function _webform_submit_grid(&$data, $component) {
-  $options = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['options'])));
-  $questions = drupal_map_assoc(array_flip(_webform_select_options($component['extra']['questions'])));
+  $options = drupal_map_assoc(array_flip(_webform_grid_options($component['extra']['options'])));
+
+  // Questions are a bit more tricky, since quotes were removed from them in
+  // _webform_render_grid(). Build a list of no_quotes => with_qoutes questions.
+  $questions = array();
+  foreach (_webform_grid_options($component['extra']['questions']) as $key => $question) {
+    $safe_question = str_replace(array('"', "'"), '', $question);
+    $questions[$safe_question] = $question;
+  }
 
   if (is_array($data)) {
     foreach ($data as $key => $value) {
-      if ($value) {
+      if ($value !== '') {
         $data[$key] = $options[$value];
       }
     }
   }
-  elseif (!empty($data)) {
+  elseif ($data !== '') {
     $data = $options[$data];
   }
 
   // Put the form in the original option order before saving.
-  $order = $questions;
-  foreach ($data as $key => $value) {
-    $order[$key] = $value;
+  // Return the final data with the quotes back in place.
+  $ordered_data = array();
+  foreach ($questions as $safe_question => $question) {
+    if (isset($data[$safe_question])) {
+      $ordered_data[$question] = $data[$safe_question];
+    }
   }
-  $data = $order;
+
+  $data = $ordered_data;
 }
 /**
  * Format the output of emailed data for this component.
@@ -200,12 +219,12 @@ function theme_webform_mail_grid($data, $component) {
 
 /**
  * function _webform_help_select
- * Module specific instance of hook_help
- **/
+ * Module specific instance of hook_help().
+ */
 function _webform_help_grid($section) {
   switch ($section) {
     case 'admin/settings/webform#grid_description':
-      return t("Allows creation of grid questions, denoted by radio buttons.");
+      return t('Allows creation of grid questions, denoted by radio buttons.');
   }
 }
 
@@ -234,7 +253,7 @@ function _webform_theme_grid() {
  * @return
  *   An array of data rows, each containing a statistic for this component's
  *   submissions.
- **/
+ */
 function _webform_analysis_rows_grid($component) {
   // Generate the list of options and questions.
   $options = _webform_grid_options($component['extra']['options']);
@@ -245,7 +264,7 @@ function _webform_analysis_rows_grid($component) {
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
     ' AND cid = %d '.
-    " AND data != '0' AND data != '' ".
+    " AND data != '' ".
     ' GROUP BY no, data';
   $result = db_query($query, $component['nid'], $component['cid']);
   $counts = array();
@@ -255,7 +274,14 @@ function _webform_analysis_rows_grid($component) {
 
   // Create an entire table to be put into the returned row.
   $rows = array();
-  $header = array('') + $options;
+  $header = array('');
+
+  // Add options as a header row.
+  foreach ($options as $option) {
+    $header[] = $option;
+  }
+
+  // Add questions as each row.
   foreach ($questions as $qkey => $question) {
     $row = array($question);
     foreach ($options as $okey => $option) {
@@ -273,19 +299,20 @@ function _webform_analysis_rows_grid($component) {
  * Return the result of this component's submission for display in a table. The output of this function will be displayed under the "results" tab then "table"
  * @param $data An array of information containing the submission result, directly correlating to the webform_submitted_data database schema
  * @returns Textual output formatted for human reading.
- **/
+ */
 function _webform_table_data_grid($data, $component) {
   $questions = array_values(_webform_grid_options($component['extra']['questions']));
+  $output = '';
   // Set the value as a single string.
   if (is_array($data['value'])) {
     foreach ($data['value'] as $item => $value) {
-      if ($value !== '0') {
-        $output .= $questions[$item] .': '. check_plain($value) ."<br />";
+      if ($value !== '') {
+        $output .= $questions[$item] .': '. check_plain($value) .'<br />';
       }
     }
   }
   else {
-    $output = check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
+    $output = check_plain(!isset($data['value']['0']) ? '' : $data['value']['0']);
   }
   return $output;
 }
@@ -301,7 +328,7 @@ function _webform_table_data_grid($data, $component) {
  * @return
  *   An array of data to be displayed in the first three rows of a CSV file, not
  *   including either prefixed or trailing commas.
- **/
+ */
 function _webform_csv_headers_grid($component) {
   $header = array();
   $header[0] = array('');
@@ -332,7 +359,7 @@ function _webform_csv_headers_grid($component) {
  * @return
  *   Textual output formatted for CSV, not including either prefixed or trailing
  *   commas.
- **/
+ */
 function _webform_csv_data_grid($data, $component) {
   $questions = array_keys(_webform_grid_options($component['extra']['questions']));
   $return = array();
@@ -358,7 +385,7 @@ function theme_webform_grid(&$grid_element) {
     }
 
     // Create a row with the question title.
-    $row = array($question_element['#title']);
+    $row = array(check_plain($question_element['#title']));
 
     // Render each radio button in the row.
     $radios = expand_radios($question_element);
@@ -373,7 +400,7 @@ function theme_webform_grid(&$grid_element) {
 }
 
 /**
- * Utility function to split user-entered values from new-line seperated
+ * Utility function to split user-entered values from new-line separated
  * text into an array of options.
  */
 function _webform_grid_options($text) {

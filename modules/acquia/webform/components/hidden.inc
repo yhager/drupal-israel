@@ -1,8 +1,13 @@
 <?php
-// $Id: hidden.inc,v 1.12.2.8 2008/09/06 20:51:40 quicksketch Exp $
+// $Id: hidden.inc,v 1.12.2.10 2009/01/09 08:31:06 quicksketch Exp $
 
 /**
- * Create a default markup component.
+ * @file
+ *   Webform module hidden component.
+ */
+
+/**
+ * Create a default hidden component.
  */
 function _webform_defaults_hidden() {
   return array(
@@ -30,7 +35,7 @@ function _webform_edit_hidden($currfield) {
   $edit_fields = array();
   $edit_fields['value'] = array(
     '#type' => 'textarea',
-    '#title' => t("Default value"),
+    '#title' => t('Default value'),
     '#default_value' => $currfield['value'],
     '#description' => t('The default value of the field.') . theme('webform_token_help'),
     '#cols' => 60,
@@ -43,7 +48,7 @@ function _webform_edit_hidden($currfield) {
   );
   $edit_fields['extra']['email'] = array(
     '#type' => 'checkbox',
-    '#title' => t("E-mail a submission copy"),
+    '#title' => t('E-mail a submission copy'),
     '#return_value' => 1,
     '#default_value' => $currfield['extra']['email'],
     '#description' => t('Check this option if this component contains an e-mail address that should get a copy of the submission. Emails are sent individually so other emails will not be shown to the recipient.'),
@@ -79,10 +84,12 @@ function _webform_render_hidden($component) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $enabled
+ *   If enabled, the value may be changed. Otherwise it will set to readonly.
  * @return
  *   Textual output formatted for human reading.
  */
-function _webform_submission_display_hidden($data, $component, $enabled = false) {
+function _webform_submission_display_hidden($data, $component, $enabled = FALSE) {
   $form_item = _webform_render_hidden($component);
   // Only allow administrators that can view or edit all submissions to view or edit hidden fields.
   if (user_access('edit webform submissions') || user_access('access webform results')) {
@@ -90,18 +97,20 @@ function _webform_submission_display_hidden($data, $component, $enabled = false)
     $form_item['#default_value'] = $data['value']['0'];
     $form_item['#type'] = 'textfield';
     $form_item['#title'] = t('@name (hidden)', array('@name' => $component['name']));
-    $form_item['#disabled'] = !$enabled;
+    if (!$enabled) {
+      $form_item['#attributes']['readonly'] = 'readonly';
+    }
   }
   return $form_item;
 }
 
 /**
- * Module specific instance of hook_help
+ * Module specific instance of hook_help().
  */
 function _webform_help_hidden($section) {
   switch ($section) {
     case 'admin/settings/webform#hidden_description':
-      return t("A field which is not visible to the user, but is recorded with the submission.");
+      return t('A field which is not visible to the user, but is recorded with the submission.');
   }
 }
 
@@ -151,7 +160,7 @@ function _webform_analysis_rows_hidden($component) {
  *   Textual output formatted for human reading.
  */
 function _webform_table_data_hidden($data) {
-  return check_plain(empty($data['value']['0']) ? "" : $data['value']['0']);
+  return check_plain(empty($data['value']['0']) ? '' : $data['value']['0']);
 }
 
 
@@ -185,5 +194,5 @@ function _webform_csv_headers_hidden($component) {
  *   commas.
  */
 function _webform_csv_data_hidden($data) {
-  return empty($data['value']['0']) ? "" : $data['value']['0'];
+  return empty($data['value']['0']) ? '' : $data['value']['0'];
 }

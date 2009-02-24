@@ -8,8 +8,8 @@ dependencies[] = imageapi
 package = CCK
 
 ; Information added by Acquia.com packaging script
+version = "6.x-3.0-alpha4"
+core = "6.x"
 project = "imagefield"
-version = "6.x-3.x-dev"
-datestamp = "1229097680"
 acquia = "1"
 

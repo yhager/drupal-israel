@@ -1,17 +1,14 @@
-// $Id: webform.js,v 1.3 2008/02/24 20:34:45 quicksketch Exp $
+// $Id: webform.js,v 1.3.2.1 2008/11/19 22:24:39 quicksketch Exp $
 
 /**
  * Webform node form interface enhancments.
  */
 
-if (Drupal.jsEnabled) {
-  $(document).ready(function() {
-    var context = this; // Preparing for behaviors in Drupal 6.
-    // Apply special behaviors to fields with default values.
-    Drupal.webform.defaultValues(context);
-    // On click or change, make a parent radio button selected.
-    Drupal.webform.setActive(context);
-  });
+Drupal.behaviors.webform = function(context) {
+  // Apply special behaviors to fields with default values.
+  Drupal.webform.defaultValues(context);
+  // On click or change, make a parent radio button selected.
+  Drupal.webform.setActive(context);
 }
 
 Drupal.webform = new Object();
