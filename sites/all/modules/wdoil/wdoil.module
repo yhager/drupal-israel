@@ -30,7 +30,7 @@ function wdoil_block($op = 'list', $delta = 0) {
         
         if (!empty($user->picture)) {
           $picture = file_create_url($user->picture);
-          $alt = t("@user's picture", array('@user' => $account->name));
+          $alt = t("@user's picture", array('@user' => $user->name));
           $user_picture = theme('image', $picture, $alt, $alt, '', FALSE);
           $block['subject'] .= '<span id="doil-hello-visitor-picture>"'. $user_picture .'</span>';
         }
