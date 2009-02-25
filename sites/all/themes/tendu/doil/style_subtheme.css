@@ -179,9 +179,9 @@ div.block div.block{padding:0;background:0;}
 #forum table{width:95%;}
 
 /* Tabs */
-div.tabs{background:#1984c7 url(images/bg_header.gif) repeat-x 0 0;color:#fff;border:solid #0c71ae;border-width:1px;padding:.5em 1em;}
-ul.primary {border:none;margin:6px 0;padding:0;}
-ul.primary li{margin:0;line-height:normal}
+div.tabs{background:#1984c7 url(images/bg_header.gif) repeat-x 0 0;color:#fff;border:1px solid #0c71ae;padding:.5em 1em;}
+ul.primary {border:none;margin:6px 0;}
+ul.primary li{margin:0;line-height:normal;white-space:nowrap;}
 ul.primary li a,
 ul.primary li a:visited {background:none;border:none;padding:6px .6em;font-weight:bold;font-size:1.083em;color:#fff;}/*LTR*/
 ul.primary li a:hover {text-decoration:underline;background:none;}
@@ -190,7 +190,7 @@ ul.primary li.active a:hover,
 ul.primary li.active a:visited{text-decoration:none;font-weight:bold;color:#0c71ae;background:#fff;border:none;}
 
 ul.secondary {border:none;padding:.5em 0;background:#fff;margin:-4px 0 0 0;}
-ul.secondary li{margin:0;line-height:normal;padding:0;border:none;}
+ul.secondary li{margin:0;line-height:normal;padding:0;border:none;white-space:nowrap;}
 ul.secondary li a,
 ul.secondary li a:visited {background:none;border:none;padding:0 .6em;color:#0073bb}
 ul.secondary li a:hover {text-decoration:underline;background:none;}
@@ -203,7 +203,10 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 #footer-message,
 #footet-blocks{padding:6px 12px}
 #footer p{padding:0;}
+/*Doil Sprint*********************************************************************/
 
+
+/*********************************************************************************/
 /* Tweak Admin panel */
 div.admin .right,
 div.admin .left{margin:0;}
