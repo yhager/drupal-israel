@@ -12,10 +12,7 @@
 <?php endif; ?>
 <?php $counter = 0; ?>
 <?php foreach ($rows as $id => $row): ?>
-  <div class="<?php print $classes[$id]; ?>">
-    <?php if($counter == 0): ?>
-      <?php $row = preg_replace('/55/', '115', $row); ?>
-    <?php endif; ?>  
+  <div class="<?php print $classes[$id]; ?>">  
     <?php print $row; ?>
     <?php $counter++; ?>
   </div>

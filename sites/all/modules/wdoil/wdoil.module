@@ -20,6 +20,8 @@ function wdoil_block($op = 'list', $delta = 0) {
   global $user;
   if ($op == 'list') {
     $block[0]['info'] = t('doil - Hello visitor');
+    $block[0]['cache'] = BLOCK_NO_CACHE;
+    $block[1]['info'] = t('doil - facated-serach copy');
     return $block;
   }
   elseif ($op == 'view') {
@@ -49,7 +51,26 @@ function wdoil_block($op = 'list', $delta = 0) {
         $result = db_fetch_object(db_query($sql));
         $block['content'] .= t('!user is that latest member in the site.', array('!user' => theme('username', $result)));
       break;
+      case '1':
+      $block['subject'] = '';
+      $block['content'] = '';//drupal_get_form('doil_copy_facated_search');
     }
     return $block;
   }
+}
+/**
+ * Implementation of hook_forms().
+ */
+function wdoil_forms($form_id) {
+  $forms = array();
+  if ($form_id =='doil_copy_facated_search') {
+    $forms['doil_copy_facated_search']['callback'] = 'faceted_search_ui_form';
+  }
+  return $forms;
+}
+/**
+ * Implementation of hook_form_FORMID_alter().
+ */
+function wdoil_form_doil_copy_facated_search_alter(&$form, $form_state) {
+  $form['#submit'] = array('faceted_search_ui_form_submit');
 }

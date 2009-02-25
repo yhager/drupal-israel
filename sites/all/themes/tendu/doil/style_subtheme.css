@@ -206,9 +206,9 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 /*Doil Sprint*********************************************************************/
 /*Faceted search block*/
 .faceted-search-more{display:none;}
-#header-blocks #edit-keywords-wrapper .form-text { border:1px solid #7FAFCC; font-size:1.333em; padding:3px; width:290px; }
-#header-blocks #edit-keywords-wrapper input { vertical-align:middle; -moz-border-radius-bottomleft:4px; -moz-border-radius-bottomright:4px; -moz-border-radius-topleft:4px; -moz-border-radius-topright:4px; }
-#header-blocks #edit-keywords-wrapper .form-submit{font-size:1.2em;height:1.95em;width:69px;padding:3px 0;border:1px solid #495f6d;background:#afafaf url(images/bg_btn_search.gif) repeat-x 0 0;}
+#content-top #edit-keywords-wrapper .form-text { border:1px solid #7FAFCC; font-size:1.333em; padding:3px; width:290px; }
+#content-top #edit-keywords-wrapper input { vertical-align:middle; -moz-border-radius-bottomleft:4px; -moz-border-radius-bottomright:4px; -moz-border-radius-topleft:4px; -moz-border-radius-topright:4px; }
+#content-top #edit-keywords-wrapper .form-submit{font-size:1.2em;height:1.95em;width:69px;padding:3px 0;border:1px solid #495f6d;background:#afafaf url(images/bg_btn_search.gif) repeat-x 0 0;}
 
 /*Selected Sites*/
 #before-content{padding:10px 0 0;border-bottom:1px solid #999;}
