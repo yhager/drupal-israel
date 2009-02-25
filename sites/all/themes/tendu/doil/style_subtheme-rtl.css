@@ -18,6 +18,7 @@ ul li, ol li{margin-left:0;margin-right:1.5em;}
 
 /*Header Blocks*/
 #header-blocks ul{padding-right:0;}
+#header-blocks{float:left;}
 /*Language switcher*/
 #header-blocks #language-switcher ul{text-align:left;}
 /*Search box*/

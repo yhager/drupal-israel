@@ -47,7 +47,7 @@ a{color:#5297dd;text-decoration:none;}
 a:visited{color:#6a9dd0;}
 a:hover, a:focus{text-decoration:underline;}
 a:active,
-a.active,
+a.active:hover,
 a.active:visited{color:#264463;}
 
 /* Header and Navagation */

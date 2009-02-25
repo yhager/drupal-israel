@@ -34,12 +34,14 @@ p{padding-bottom:.5em;}
 /*Tables*/
 table{margin-top:10px;}
 tr.even{background:#fcfdfe;}
-td, th{padding:.2em .5em;}
+td,
+th{padding:.2em .5em;}
 
 /*Lists*/
 dt{font-style:italic;}
 dd{padding:.5em;}
-ul, ol{padding-left:1em;}/*LTR*/
+ul,
+ol{padding-left:1em;}/*LTR*/
 ul li{margin-left:1.5em;list-style:disc;line-height:1.5em;}/*LTR*/
 ol li{margin-left:1.5em;list-style:decimal;line-height:1.5em;}/*LTR*/
 .item-list ul li{padding:3px 0;}
@@ -51,7 +53,8 @@ html.js fieldset.collapsed{background:none;}
 legend{font-weight:bold;font-size:1.166em;padding:0 .3em}
 input, select, textarea{font-family:Arial, Helvetica, sans-serif;font-weight:normal;line-height:1em;font-size:1em;}
 textarea{line-height:1.2em;}
-button{font-family:Arial, Helvetica, sans-serif;font-weight:bold;line-height:1em;font-size:13px;cursor:pointer;}
+button{font-family:Arial, Helvetica, sans-serif;font-weight:bold;line-height:1em;font-size:13px}
+button{cursor:pointer;}
 .form-radio,
 .form-checkbox{vertical-align:middle;}/* TODO: Check how this works site wide */
 
@@ -59,6 +62,9 @@ button{font-family:Arial, Helvetica, sans-serif;font-weight:bold;line-height:1em
 a{color:#0073bb;text-decoration:none;}
 a:visited{color:#1f7bb3;}
 a:hover, a:focus{text-decoration:underline;}
+a:active,
+a.active:hover,
+a.active:visited{color:#264463;}
 
 /* Header and Navagation */
 #header{position:relative;}
