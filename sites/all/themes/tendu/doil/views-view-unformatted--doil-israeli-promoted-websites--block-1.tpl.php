@@ -14,10 +14,10 @@ foo
 <?php $counter = 0; ?>
 <?php foreach ($rows as $id => $row): ?>
   <div class="<?php print $classes[$id]; ?>">
-    <?php print $row; ?>
     <?php if($counter == 0): ?>
-      <?php dsm($row);?>
+      <?php $row = preg_replace('thumb_55x55', 'thumb_115x115', $row); ?>
     <?php endif; ?>
+    <?php print $row; ?>
     <?php $counter++; ?>
   </div>
 <?php endforeach; ?>
