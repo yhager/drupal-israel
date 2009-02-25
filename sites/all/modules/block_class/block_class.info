@@ -1,0 +1,11 @@
+name = Block Class
+description = Allows assigning CSS classes to blocks.
+core = 6.x
+
+
+; Information added by drupal.org packaging script on 2008-09-25
+version = "6.x-1.1"
+core = "6.x"
+project = "block_class"
+datestamp = "1222374606"
+
