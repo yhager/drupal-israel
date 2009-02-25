@@ -28,7 +28,7 @@ function wdoil_block($op = 'list', $delta = 0) {
         $block['subject'] = t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
         // Add links for anon or authenticated user.
         $user_links = $user->uid ? t('<a href="@user-profile">Edit profile</a>', array('@user-profile' => url('user/'. $user->uid. '/edit'))) : t('<a href="@login">Login</a> | <a href="@register">Register</a>', array('@login' => url('user'), '@register' => url('user/register')));
-        $block['subject'] .= '<span id="doil-hello-visitor>"'. $user_links .'</div>';
+        $block['subject'] .= '<span id="doil-hello-visitor>"'. $user_links .'</span>';
 
         // Get the connected users. Taken from user module.
         $connected = module_invoke('user', 'block', 'view', 3);
