@@ -4,9 +4,7 @@
  * @file
  * The Doil module.
  */
-
 function wdoil_link_alter(&$links, $node) {
-  dpm ($links);
   foreach ($links as $key => $value) {
     if (substr($key, 0, 14) == 'notifications_') {
       // Remove notificatinos links, so we can move them around
@@ -14,3 +12,28 @@ function wdoil_link_alter(&$links, $node) {
     }
   } 
 }
+
+/**
+ * Implementation of hook_block().
+ */
+function wdoil_block($op = 'list', $delta = 0) {
+  global $user;
+  if ($op == 'list') {
+    $block[0]['info'] = t('doil - Hello visitor');
+    return $block;
+  }
+  elseif ($op == 'view') {
+    switch($delta) {
+      case '0':        
+        $block['subject'] = t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
+        
+        // Get newset user.
+        $sql = "SELECT uid, name FROM {users} WHERE status != 0 AND access != 0 ORDER BY created DESC";
+        $result = db_fetch_object(db_query($sql));
+        $block['content'] .= t('!user is that latest member in the site', array('!user' => theme('username', $result)));
+      break;
+    }
+    return $block;
+  }
+}
+

@@ -1,5 +1,5 @@
 ; $Id:
-name = Doil
+name = wDoil
 description = Customized implementation of hook and helper functions for Doil
 core = 6.x
 package = Other
