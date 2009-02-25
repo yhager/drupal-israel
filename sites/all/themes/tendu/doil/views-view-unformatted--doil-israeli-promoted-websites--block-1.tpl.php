@@ -7,7 +7,6 @@
  * @ingroup views_templates
  */
 ?>
-foo
 <?php if (!empty($title)): ?>
   <h3><?php print $title; ?></h3>
 <?php endif; ?>
@@ -15,8 +14,8 @@ foo
 <?php foreach ($rows as $id => $row): ?>
   <div class="<?php print $classes[$id]; ?>">
     <?php if($counter == 0): ?>
-      <?php $row = preg_replace('thumb_55x55', 'thumb_115x115', $row); ?>
-    <?php endif; ?>
+      <?php $row = preg_replace('/thumb_55x55/', 'thumb_115x115', $row); ?>
+    <?php endif; ?>  
     <?php print $row; ?>
     <?php $counter++; ?>
   </div>
