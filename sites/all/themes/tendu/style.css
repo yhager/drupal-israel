@@ -1,5 +1,5 @@
 @charset "utf-8";
-/*$Id: style.css,v 1.3.2.8.2.15 2009/01/25 01:30:44 tombigel Exp $*/
+/*$Id: style.css,v 1.3.2.8.2.18 2009/01/26 23:49:06 tombigel Exp $*/
 /**
  * Tendu Drupal - A CSS Theme For Developers
  * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
@@ -24,6 +24,9 @@ ul, ol{margin:0;}
 .sidebar-region .item-list ul li{list-style-image:none;list-style-type:none;padding:0;margin:0;}
 li.leaf{list-style-image:none;list-style-type:disc}
 button,input.form-submit{cursor:pointer;}
+/* Fix OpenID icon placement */
+#user-login-form li.openid-link, 
+#user-login li.openid-link{padding-left:1.5em;}
 
 /**
  * The only changes you need to do here are:
@@ -55,8 +58,8 @@ html, body{height:100%;}
  *   one solution that works for me is to move the footer <div> in page.tpl.php
  *   to be right under the header instead of the end of the page.
  */
-.footer-spacer{padding-bottom:3em;}
-#footer{position:absolute;bottom:0;height:3em;width:100%;z-index:1;overflow:hidden;}
+.footer-spacer{padding-bottom:4em;}
+#footer{position:absolute;bottom:0;height:4em;width:100%;z-index:1;overflow:hidden;}
 
 /**
  * Fonts
@@ -178,3 +181,23 @@ table{font-size:1em}
 #content-top,
 #content-area,
 #content-bottom{overflow:hidden;}
+
+/**
+ * Accesibility:
+ */
+
+/* Style accessibility links (If enabled in "Theme Settings")
+ * The accessibility links lets users with screen readers and keyboard-only users to skip certain areas
+ * of the page so they won't have to go through all the menus and non-content areas on every page they browse.
+ */
+/* Hide the links in regular browsers, (Had to do it this complicated way because Safari focus works weird.) */
+.accessibility-link{background:none;font-weight:bold;display:block;overflow:hidden;position:absolute;z-index:1;left:12px;white-space:nowrap;height:1px;margin-top:-1px}/*LTR*/
+.accessibility-anchor{display:block;overflow:hidden;height:1px;margin-top:-1px}
+/* Show the links when navigating with the keyboard. (Note: IE does not support :focus)*/
+.accessibility-link:focus{background:#fff;height:auto;margin:0;}
+/* Hide titles from Language switcher, Primary links and Secondary links for CSS enabled browsers */
+#language-switcher h2,
+h2.primary-links-title,
+h2.secondary-links-title{overflow:hidden;height:1px;margin-top:-1px;}
+
+/*End of Tendu styles*/

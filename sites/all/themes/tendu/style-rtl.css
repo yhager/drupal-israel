@@ -1,5 +1,5 @@
 @charset "utf-8";
-/*$Id: style-rtl.css,v 1.3.2.7.2.9 2009/01/25 18:34:06 tombigel Exp $*/
+/*$Id: style-rtl.css,v 1.3.2.7.2.10 2009/01/26 21:36:34 tombigel Exp $*/
 /**
  * Tendu Drupal - A CSS Theme For Developers
  * Incremental CSS overrides for RTL sites
@@ -20,6 +20,8 @@ thead th {padding-right:0;padding-left:1em;text-align:right;}
 /* TODO: Check how this affects other parts of the site (Remove when RTL fixes enter the core CSS files) */
 #node-admin-buttons {clear:left;float:right;margin-right:0.5em;}
 dl.multiselect dt, dl.multiselect dd {float:right;margin:0pt 0 0pt 1em;}
+/* Hide the links in regular browsers, (Had to do it this complicated way because Safari focus works weird.) */
+.accessibility-link{left:auto;right:12px;}
 
 /* Main Layout */
 

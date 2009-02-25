@@ -1,4 +1,4 @@
-;$Id: tendu_default.info,v 1.1.2.1.2.4 2009/01/24 18:31:51 tombigel Exp $
+;$Id: tendu_default.info,v 1.1.2.1.2.5 2009/01/26 21:36:34 tombigel Exp $
 
 name = Tendu Default Design
 version = 2.1
@@ -8,7 +8,6 @@ engine = phptemplate
 base theme = tendu
 
 stylesheets[all][] = style_subtheme.css
-stylesheets[print][] = print_subtheme.css
 
 conditional-stylesheets[if IE][all][] = ie_subtheme.css
 
@@ -22,9 +21,9 @@ regions[content] = Main Content
 regions[content_bottom] = Bellow Main Content 
 regions[content_after] = After Content and Sidebars
 regions[footer] = Footer
-; Information added by drupal.org packaging script on 2009-01-25
-version = "6.x-2.1-beta3"
+; Information added by drupal.org packaging script on 2009-02-22
+version = "6.x-2.1-beta5"
 core = "6.x"
 project = "tendu"
-datestamp = "1232919341"
+datestamp = "1235344851"
 

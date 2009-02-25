@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php,v 1.2.2.6.2.9 2009/01/24 18:31:51 tombigel Exp $
+// $Id: template.php,v 1.2.2.6.2.12 2009/02/22 23:07:50 tombigel Exp $
 /**
  * Tendu Drupal - A CSS Theme For Developers
  * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
@@ -18,7 +18,7 @@
 /*
  * Initialize theme settings
  */
-if (is_null(theme_get_setting('toggle_language_switcher'))) { 
+if (is_null(theme_get_setting('toggle_accesibility_links'))) { 
   global $theme_key;
   /*
    * The default values for the theme variables. Make sure $defaults exactly
@@ -26,6 +26,7 @@ if (is_null(theme_get_setting('toggle_language_switcher'))) {
    */
   $defaults = array(            
     'toggle_language_switcher' => 1,
+    'toggle_accesibility_links' => 1,
   );
 
   // Get default theme settings.
@@ -48,7 +49,7 @@ if (is_null(theme_get_setting('toggle_language_switcher'))) {
 function set_language_switcher(){  
   //If there is more then one language defined, add language switcher to page.tpl (defined in theme settings)  
   $lang_switch =  module_invoke('locale', 'block', 'view');
-  return $lang_switch['content'];
+  return '<h2>'.$lang_switch['subject'].'</h2>'.$lang_switch['content'];
 }
 /**
  * Implement HOOK_theme
@@ -99,8 +100,9 @@ function tendu_theme(&$existing, $type, $theme, $path){
 
 function tendu_preprocess_page(&$vars) {  
   
-  //Set language switcher
-  $vars['language_switcher'] = (theme_get_settings('toggle_language_switcher'))? set_language_switcher() : '';
+  //Set Theme Settings dependent variables
+  $vars['language_switcher'] = (theme_get_setting('toggle_language_switcher'))? set_language_switcher() : '';
+  $vars['accesibility_links'] = (theme_get_setting('toggle_accesibility_links'))? true : false;
       
   // Add conditional stylesheets.
   if (!module_exists('conditional_styles')) {
