@@ -19,6 +19,8 @@ regions[content] = Main Content
 regions[content_bottom] = Bellow Main Content 
 regions[content_after] = After Content and Sidebars
 regions[footer] = Footer
+regions[user_blocks] = User Blocks
+
 ; Information added by drupal.org packaging script on 2009-02-22
 version = "6.x-2.1-beta5"
 core = "6.x"

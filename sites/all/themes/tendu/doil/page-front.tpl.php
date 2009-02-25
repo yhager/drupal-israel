@@ -70,6 +70,12 @@
             <?php endif; ?>
 
             <?php if (!empty($header)) print $header; ?>
+            
+            <?php if(!empty($user_blocks)): ?>
+            <div id="user-blocks">
+                <?php print $user_blocks; ?>
+            </div>
+            <?php endif; ?>
           
           </div>          
           <!-- /header-blocks -->             
@@ -125,16 +131,9 @@
          <!-- /sidebar-first -->
         <?php endif; ?>       
 
-        <?php if ($right && $user_blocks): ?>
+        <?php if ($right): ?>
         <div id="sidebar-second" class="sidebar-region">
-          
-          <?php if(!empty($user_blocks)): ?>
-            <div id="user-blocks">
-                <?php print $user_blocks; ?>
-            </div>
-          <?php endif; ?>
-            
-          <?php if (!empty($right)) print $right; ?>
+          <?php print $right; ?>
         </div>
         <!-- /sidebar-second -->
         <?php endif; ?>        
