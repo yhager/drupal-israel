@@ -1,5 +1,5 @@
 <?php
-// $Id: 
+// $Id:
 /**
  * @file
  * The Doil module.
@@ -10,7 +10,7 @@ function wdoil_link_alter(&$links, $node) {
       // Remove notificatinos links, so we can move them around
       unset ($links[$key]);
     }
-  } 
+  }
 }
 
 /**
@@ -24,16 +24,23 @@ function wdoil_block($op = 'list', $delta = 0) {
   }
   elseif ($op == 'view') {
     switch($delta) {
-      case '0':        
+      case '0':
         $block['subject'] = t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
-        
-        // Get newset user.
+        // Add links for anon or authenticated user.
+        $user_links = $user->uid ? t('<a href="@user-profile">Edit profile</a>', array('@user-profile' => url('user/'. $user->uid. '/edit'))) : t('<a href="@login">Login</a> | <a href="@register">Register</a>', array('@login' => url('user'), '@register' => url('user/register')));
+        $block['subject'] .= '<div id="doil-hello-visitor>"'. $user_links .'</div>';
+
+        // Get the connected users. Taken from user module.
+        $connected = module_invoke('user', 'block', 'view', 3);
+        // Remove the 'online user' h3 tag.
+        $block['content'] .= preg_replace('/\<h3(.*)h3\>/', '', $connected['content']);
+
+        // Get newset user. Taken from user module.
         $sql = "SELECT uid, name FROM {users} WHERE status != 0 AND access != 0 ORDER BY created DESC";
         $result = db_fetch_object(db_query($sql));
-        $block['content'] .= t('!user is that latest member in the site', array('!user' => theme('username', $result)));
+        $block['content'] .= t('!user is that latest member in the site.', array('!user' => theme('username', $result)));
       break;
     }
     return $block;
   }
 }
-
