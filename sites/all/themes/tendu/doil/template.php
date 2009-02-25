@@ -10,14 +10,3 @@
  * DEVELOPMENT USE ONLY - COMMENT OUT FOR PRODUCTION
  */
 //drupal_rebuild_theme_registry();
-
-/**
- * Put language block in page.tpl
- * 
- * @return 
- * @param $language_switcher: the contents of locale_block['content']
- */
-function doil_preprocess_page(&$vars) {
-    $lang_switch =  module_invoke('locale', 'block', 'view');
-    $vars['language_switcher'] = $lang_switch['content'];
-}
