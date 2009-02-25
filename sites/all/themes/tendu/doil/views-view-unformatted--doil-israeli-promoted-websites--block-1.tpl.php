@@ -14,7 +14,7 @@
 <?php foreach ($rows as $id => $row): ?>
   <div class="<?php print $classes[$id]; ?>">
     <?php if($counter == 0): ?>
-      <?php $row = preg_replace('/thumb_55x55/', 'thumb_115x115', $row); ?>
+      <?php $row = preg_replace('/55/', '115', $row); ?>
     <?php endif; ?>  
     <?php print $row; ?>
     <?php $counter++; ?>
