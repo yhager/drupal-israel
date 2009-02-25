@@ -215,7 +215,7 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 #before-content .block{padding:0}
 #before-content .view{padding:0 10px;}
 #before-content h2{padding:0 10px 8px;}
-#before-content .view-footer{text-align:left;width:100%;}
+#before-content .view-footer{text-align:left;width:100%;padding-top:8px;}
 #before-content .view-footer a{font-size:1.25em;}
 #before-content a{font-weight:bold}
 .block-promoted-israeli .views-field-field-screenshots-fid img,
