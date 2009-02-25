@@ -1,0 +1,5 @@
+; $Id$
+name = customizations
+description = customizations made for drupal.org.il
+core = 6.x
+dependencies[] = magic_tabs

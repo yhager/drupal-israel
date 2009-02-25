@@ -1,0 +1,116 @@
+$Id: README,v 1.1.2.4.2.1 2008/11/07 06:34:51 yhager Exp $
+
+= Installation =
+
+* Unpack the project files onto your modules directory (usually
+* 'sites/all/modules') Enable the module on the modules page
+* ('http://example.com/?q=admin/build/modules')
+
+= Overview =
+
+This module requires coding capabilities, and does not expose any
+UI. If you seek UI for creating the tabs, please take a look at
+similar projects, like quicktabs.
+
+= Usage =
+
+The tabs are loaded from the server only when the user selects the tab
+she wants to view. When the server is asked for the tabs content, it
+calls a callback function that you supply.  The callback fills in an
+array of tabs with title and content. Make sure to place the callback
+in a custom module, or in your theme's template.php file. The return
+value of the callback should be an array of tabs, each tab is an array
+with 'title' and 'content' keys. For example:
+
+<?php
+function magic_tabs_example_callback($active = 0) {
+  $tabs[] = array(
+    'title' => t('First magic tab'),
+    'content' => t('Content of first magic tab'),
+  );
+  $tabs[] = array(
+    'title' => t('Second magic tab'),
+    'content' => t('Content of second magic tab'),
+  );
+  $tabs[] = array(
+    'title' => t('Third and last magic tab'),
+    'content' => t('Content of third magic tab'),
+  );
+  return $tabs;
+}
+?>
+
+(such a function already exists in magic_tabs.module, you can use it for testing).
+
+Note that only the tab with the active content will be visible, so if you don't have to render the content of the other tabs (save processing). For example, you could have written the above function like this:
+<?php
+function magic_tabs_example_callback($active = 0) {
+  $tabs = array(
+    array('title' => t('First magic tab')),
+    array('title' => t('Second magic tab')),
+    array('title' => t('Third and last magic tab')),
+  );
+  $active = ($active + 3) % 3; // $active could be -1, which means last
+  $ordinals = array('first', 'second', 'third');
+  $tabs[$active]['content'] = 'This is the content of the '. $ordinals[$active] .' magic tab';
+  return $tabs;
+}
+?>
+
+When you want to present the magic tabs, all you have to do is:
+<?php print magic_tabs_get('magic_tabs_example_callback'); ?>
+
+You can display many tabs groups in a page.
+
+== Displaying a custom block ==
+
+The easiest way to display a custom block, is to find out the block id and add:
+<?php
+  $bid = 2;
+  $block = (object)module_invoke('block', 'block', 'view', $bid);
+  $block->module = 'block';
+  $block->delta = $bid;
+  $tabs[] = array(
+    'title' => t('Display a custom block'),
+    'content' => theme('block', $block),
+  );
+?>
+
+== Setting the default tab ==
+
+By default, the contents of the first tab will be displayed. 
+You can have different tab displayed by using the second parameter to magic_tabs_get() call.
+
+For example, to display the last tab:
+<?php
+  print magic_tabs_get('mycallback', 'last');
+?>
+
+You can use here 'first' (default), 'last' or a numeric value (first is 0).
+
+= Theming =
+
+* You can theme individual tab group by writing your own <yourtheme>_<yourcallback> function.
+* You can override the generic theming function by implementing <yourtheme>_magic_tabs.
+
+== Theming an indvidual tab group ==
+
+Assuming your callback is called 'mycallback', it will be themed by calling
+<?php theme('mycallback'); ?>, so you can override the theming using the 
+usual theme override mechanism in Drupal.
+For more info about theming see http://drupal.org/node/55126
+
+== Theming all magic tabs groups ==
+
+Just override theme('magic_tabs') as mentioned above.
+if you implement both specific and generic theming, the specific one is used first if it exists, otherwise, the generic one is used.
+
+= Questions? Problems? =
+
+Please use the issue queue from the project page at http://drupal.org/project/magic_tabs
+
+= Notes =
+* The original idea for the magic tabs was taken from http://drupal.org/nyobserver#comment-228682
+* The CSS for the tabs was taken from http://exploding-boy.com/images/cssmenus/menus.html
+
+Enjoy!

@@ -1,0 +1,37 @@
+<?php
+
+// $Id$
+
+function custom_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    $blocks[0] = array(
+      'info' => t('drupal.org.il toolbox'),
+      'cache' => BLOCK_CACHE_PER_USER,
+    );
+    return $blocks;
+  }
+
+  if ($op == 'view') {
+    $block = array(
+      'subject' => t('toolbox'),
+      'content' => magic_tabs_get('custom_toolbox_callback'),
+    );
+  }
+  return $block;
+}
+
+function custom_toolbox_callback($active = 0) {
+  $tabs[] = array(
+    'title' => t('Edit Content'),
+    'content' => 'Your updated content',
+  );
+  $tabs[] = array(
+    'title' => t('Developers'),
+    'content' => 'Developers content here',
+  );
+  $tabs[] = array(
+    'title' => t('Profile'),
+    'content' => 'Profile content here',
+  );
+  return $tabs;
+}
