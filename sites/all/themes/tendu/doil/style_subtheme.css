@@ -219,9 +219,9 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 .block-promoted-israeli{width:66%}
 .block-promoted-world{margin-right:66%}
 .block-promoted-israeli .views-row-odd,
-.block-promoted-israeli .views-row-even{width:49%;overflow:hidden;float:right;}
+.block-promoted-israeli .views-row-even{width:49%;overflow:hidden;}
 .block-promoted-world .views-row-odd,
-.block-promoted-world .views-row-even{width:100%;overflow:hidden;float:right;}
+.block-promoted-world .views-row-even{width:100%;overflow:hidden;}
 
 /*********************************************************************************/
 /* Tweak Admin panel */
