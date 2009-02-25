@@ -25,16 +25,16 @@ function wdoil_block($op = 'list', $delta = 0) {
   elseif ($op == 'view') {
     switch($delta) {
       case '0':
-        $block['subject'] = t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
+        $block['subject'] = '';
         // Add user image if it exists.
-        
         if (!empty($user->picture)) {
           $picture = file_create_url($user->picture);
           $alt = t("@user's picture", array('@user' => $user->name));
           $user_picture = theme('image', $picture, $alt, $alt, '', FALSE);
           $block['subject'] .= '<span id="doil-hello-visitor-picture>"'. $user_picture .'</span>';
         }
-        
+                
+        $block['subject'] .= t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
         // Add links for anon or authenticated user.
         $user_links = $user->uid ? t('<a href="@user-profile">Edit profile</a>', array('@user-profile' => url('user/'. $user->uid. '/edit'))) : t('<a href="@login">Login</a> | <a href="@register">Register</a>', array('@login' => url('user'), '@register' => url('user/register')));
         $block['subject'] .= '<span id="doil-hello-visitor>"'. $user_links .'</span>';
