@@ -2,6 +2,9 @@
 
 // $Id$
 
+/**
+ * Implementation of hook_block().
+ */
 function custom_block($op = 'list', $delta = 0, $edit = array()) {
   if ($op == 'list') {
     $blocks[0] = array(
@@ -20,10 +23,13 @@ function custom_block($op = 'list', $delta = 0, $edit = array()) {
   return $block;
 }
 
+/**
+ * Magic tabs callback
+ */
 function custom_toolbox_callback($active = 0) {
   $tabs[] = array(
     'title' => t('Edit Content'),
-    'content' => 'Your updated content',
+    'content' => views_embed_view('my_content', 'block_2') . drupal_get_form('custom_content_form'),
   );
   $tabs[] = array(
     'title' => t('Developers'),
@@ -34,4 +40,35 @@ function custom_toolbox_callback($active = 0) {
     'content' => 'Profile content here',
   );
   return $tabs;
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function custom_views_api() {
+  return array('api' => 2.0);
+}
+
+function custom_content_form() {
+  foreach (content_types() as $type) {
+    if (user_access('create ' . $type['type'] . ' content')) {
+      $types[$type['type']] = $type['name'];
+    }
+  }
+  
+  $form['type'] = array(
+    '#type' => 'select',
+    '#title' => t('Create new content'),
+    '#options' => $types,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create'),
+  );
+
+  return $form;
+}
+
+function custom_content_form_submit($form, $form_state) {
+  drupal_goto('node/add/'. $form_state['values']['type']);
 }
