@@ -31,9 +31,9 @@
           
           <div id="site-details">
             <?php if ($logo): ?>
-            <<?php ($is_front && !$site-name) ? print 'h1' : print 'div'; ?> id="site-logo">
+            <<?php ($is_front && !$site_name) ? print 'h1' : print 'div'; ?> id="site-logo">
               <a href="<?php print $front_page; ?>" name="home" title="<?php print t('Home'); ?>" rel="home"><img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" id="logo-image" /></a>
-            </<?php ($is_front && !$site-name) ? print 'h1' : print 'div'; ?>>
+            </<?php ($is_front && !$site_name) ? print 'h1' : print 'div'; ?>>
             <!-- /logo -->
             <?php endif; ?>
             
@@ -72,9 +72,8 @@
             <?php if (!empty($header)) print $header; ?>
           
           </div>          
-          <!-- /header-blocks -->  
+          <!-- /header-blocks -->             
           <?php endif; ?>
-          
         </div>        
         
         <?php if (!empty($primary_links) or !empty($secondary_links) or !empty($main_nav)): ?>   
