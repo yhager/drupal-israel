@@ -10,7 +10,7 @@ function wdoil_link_alter(&$links, $node) {
   foreach ($links as $key => $value) {
     if (substr($key, 0, 14) == 'notifications_') {
       // Remove notificatinos links, so we can move them around
-      unset ($links['$key']);
+      unset ($links[$key]);
     }
   } 
 }
