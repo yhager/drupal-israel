@@ -213,21 +213,22 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 /*Selected Sites*/
 #before-content{padding:10px 0 0;border-bottom:1px solid #999;}
 #before-content .block{padding:0}
-#before-content .view{padding:0 10px;}
+#before-content .view,
+#before-content h2{padding:0 10px;}
+#before-content .view-footer{text-align:left;width:100%;}
+#before-content .view-footer a{font-size:1.25em;}
+#before-content a{font-weight:bold}
 .block-promoted-israeli .views-field-field-screenshots-fid img,
 .block-promoted-world .views-field-field-screenshots-fid img{float:right;width:55px;height:55px;padding:1px;border:1px solid #666;margin-left:7px;}
 .block-promoted-israeli .views-row-first .views-field-field-screenshots-fid img{width:115px;height:115px;}
 .block-promoted-israeli{width:70%;float:right;}
 .block-promoted-world{margin-right:70%}
 .block-promoted-israeli .views-row-odd,
-.block-promoted-israeli .views-row-even{width:47%;overflow:hidden;margin-bottom:10px;padding:0 2% 0}
-.block-promoted-israeli .views-row-first{float:right;min-height:119px;}
+.block-promoted-israeli .views-row-even{margin-right:50%;overflow:hidden;margin-bottom:10px;min-height:59px;}
+.block-promoted-israeli .views-row-first{float:right;margin-right:0;width:50%;min-height:119px;font-size:1.166em;font-weight:bold}
 .block-promoted-world .views-row-odd,
-.block-promoted-world .views-row-even{width:100%;overflow:hidden;margin-bottom:10px;}
-.block-promoted-israeli .views-row-first{font-size:1.166em;font-weight:bold}
-#before-content .view-footer{text-align:left;width:100%;}
-#before-content a{font-weight:bold}
-#before-content .view-footer a{font-size:1.25em;}
+.block-promoted-world .views-row-even{width:100%;overflow:hidden;margin-bottom:10px;min-height:59px;}
+
 /*********************************************************************************/
 /* Tweak Admin panel */
 div.admin .right,
