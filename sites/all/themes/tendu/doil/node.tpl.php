@@ -58,12 +58,9 @@
 
   <div class="meta">
   <?php if ($submitted): ?>
-    <span class="submitted"><?php print $submitted ?></span>
+    <span class="submitted"><?php print $name ?>, <?php print $date?></span>
   <?php endif; ?>
 
-  <?php if ($terms): ?>
-    <div class="terms terms-inline"><?php print $terms ?></div>
-  <?php endif;?>
   </div>
 
   <div class="content">
@@ -73,4 +70,12 @@
   <div class="node-bottom">
       <?php print $links; ?>
   </div>
+  <?php if ($terms): ?>
+    <div class="terms terms-inline"><?php print '<strong>' . t('Tags') . ':</strong>' . $terms ?></div>
+  <?php endif;?>
+  <?php if ($notifications_links) {
+    foreach ($notifications_links as $link) {
+      print '<div class="notifications">' . $link . '</div>'; 
+    }
+  }?>
 </div>
