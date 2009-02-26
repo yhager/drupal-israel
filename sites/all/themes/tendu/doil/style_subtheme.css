@@ -239,7 +239,7 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 
 /*welcome block*/
 #block-block-23 h2{text-align:center;font-size:1.666em}
-#block-block-23 #drupal_download{display:block;width:161px;padding-right:35px;height:45px;line-height:42px;white-space:nowrap;font-size:1.25em;color:#fff;text-align:center;background:url(images/btn_download.gif) no-repeat  0 0;margin:0 auto;}
+#block-block-23 #drupal_download{display:block;width:171px;padding-right:25px;height:45px;line-height:43px;white-space:nowrap;font-size:1.25em;color:#fff;text-align:center;background:url(images/btn_download.gif) no-repeat  0 0;margin:0 auto;}
 #block-block-23 #more_drupal_versions{font-size:.83em;text-align:center;display:block;}
 /*********************************************************************************/
 /* Tweak Admin panel */
