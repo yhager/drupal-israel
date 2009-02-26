@@ -8,7 +8,7 @@
  * Force refresh of theme registry.
  * DEVELOPMENT USE ONLY - COMMENT OUT FOR PRODUCTION
  */
-//drupal_rebuild_theme_registry();
+drupal_rebuild_theme_registry();
 
 /**
  * Put language block in page.tpl
