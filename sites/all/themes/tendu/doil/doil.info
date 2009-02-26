@@ -9,6 +9,7 @@ base theme = tendu
 
 stylesheets[all][] = style_subtheme.css
 conditional-stylesheets[if IE][all][] = ie_subtheme.css
+conditional-stylesheets[if lt IE 7][all][] = ie6_subtheme.css
 
 regions[header] = Header
 regions[left] = First sidebar

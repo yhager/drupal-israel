@@ -1,0 +1,30 @@
+tendu 6.x-2.1-beta4
+ * Removed Doil subtheme, hopefully will be back in next beta (or rc)
+ * CHANGELOG.txt added
+ * LICENSE.txt with GPL 2.1 license added
+ * README.txt updated
+ * Accessibility - Added hidden links to content for screen readers and keyboard-only navagation
+ * Added a Theme Settings checkbox to select wheather accessibility links will be present.
+ * Restyled primary/secondary-links in Tendu Default Design
+ * Added <h2> hidden titles to "Language switcher", "Primary links" and "Secondary links" 
+   to comply with accesibility guidlines that require a header element before a list of links
+ * Fixed openid icon placement
+ * Restyled header in Tendu Default so long site slogans won't break the layout
+   - Also the search box label is now hidden (Accessibly)
+ * Cleaned up page.tpl, main-nav and header-blocks are now not created if empty.
+ 
+tendu 6.x-2.1-beta3
+ * Fixed a bad CVS merge in style_subtheme.css
+ * Added direction:ltr on PRE tag in style-rtl.css
+
+tendu 6.x-2.1-beta2
+ * Integrated Primary and Secondary links into page.tpl.
+ * Integrated Language Switcher and Search Box into page.tpl.
+ * Fixed a bug in conditional-styles RTL detection.
+ * Many CSS fixes.
+ * Many comment fixes.
+ * A README.txt file.
+ * theme-settings.php that adds "Language Switcher" to Theme Settings
+
+tendu 6.x-2.1-beta1
+ * Initial beta release of new Tendu version 2.x branch.

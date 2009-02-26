@@ -92,7 +92,7 @@ a.active:visited{color:#264463;}
 
 /*Site details*/
 #site-details{float:left;padding:12px}/*LTR*/
-#site-logo{float:left;padding:5px 10px 0 0}/*LTR*/ /*IE6 commented*/
+#site-logo{float:left;padding:5px 0 0 10px}/*LTR*/ /*IE6*/
 #site-name{font-size:2.5em;line-height:1.333em;font-weight:bold;}
 #site-slogan{font-size:1.5em;line-height:1.333em;}
 
@@ -116,7 +116,7 @@ a.active:visited{color:#264463;}
 .front #header-content{background-position:0 0;background-color:#2898da;border-width:1px;}
 .front #main-nav{position:absolute;top:.3em;padding-top:1px;}
 .front #main-nav ul li.first{margin:0;}
-.front #main-nav ul.menu li a{height:1.8em;padding-top:.2em;}
+.front #main-nav ul.menu li a{height:1.6em;padding-top:.2em;}
 .front #main-nav ul.menu li a.active,
 .front #main-nav ul.menu li a.active:visited{background:#1a85c8 url(images/bg_tab_home_active.gif) repeat-x 0 0;border-width:1px 1px 0 1px;}
 

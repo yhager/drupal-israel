@@ -1,0 +1,4 @@
+
+.fornt #site-logo{height:1%;padding:0;margin:5px 10px 0;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/sites/all/themes/tendu/doil/logo.png', sizingMethod='crop');}
+.front #site-logo{height:1%;padding:0;margin:5px 10px 0;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/sites/all/themes/tendu/doil/logo-inner.png', sizingMethod='crop');}
+#site-logo img {visibility:hidden;}

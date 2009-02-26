@@ -169,7 +169,7 @@
          <?php if ($title): ?>  
          <div id="content-title">
            <<?php ($is_front) ? print 'h2' : print 'h1'; ?> class="title">
-             <?php print $title; ?>
+             <?php print $title; ?><?php print $title; ?><?php if ($feed_icons): ?><span class="feed-icons"><?php print $feed_icons; ?></span><?php endif; ?>
            </<?php ($is_front) ? print 'h2' : print 'h1'; ?>>
          </div>
          <?php endif; ?>
@@ -188,10 +188,6 @@
            <?php print $content_bottom; ?>
          </div>
           <!-- /content-bottom -->
-         <?php endif; ?>
-         
-         <?php if ($feed_icons): ?>
-           <div class="feed-icons"><?php print $feed_icons; ?></div>
          <?php endif; ?>
         
         </div>

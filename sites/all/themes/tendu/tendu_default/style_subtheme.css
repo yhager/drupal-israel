@@ -1,5 +1,5 @@
 @charset "utf-8";
-/*$Id: style_subtheme.css,v 1.1.2.1.2.19 2009/01/26 23:49:05 tombigel Exp $*/
+/*$Id: style_subtheme.css,v 1.1.2.1.2.20 2009/02/26 08:53:18 tombigel Exp $*/
 /**
  * Tendu Default: A sub-theme of Tendu - A CSS theme for developers
  * Author: Tom Bigelajzen (http://drupal.org/user/173787) - http://tombigel.com
@@ -47,7 +47,7 @@ a{color:#5297dd;text-decoration:none;}
 a:visited{color:#6a9dd0;}
 a:hover, a:focus{text-decoration:underline;}
 a:active,
-a.active:hover,
+a.active,
 a.active:visited{color:#264463;}
 
 /* Header and Navagation */
@@ -86,7 +86,7 @@ a.active:visited{color:#264463;}
 
 /* Page info */
 .breadcrumb{padding:0;}
-#content-title{padding:12px;background:#f5f6f8;margin-bottom:10px;margin-top:0;}
+#content-title .title{padding:12px;background:#f5f6f8;margin-bottom:10px;margin-top:0;}
 #content-info{padding:6px 12px;background:#f6f6f6;margin-bottom:10px;}
 #mission{padding:12px;background:#f6f8f5;font-size:1.166em;margin-bottom:10px;}
 div.messages{padding:12px;margin-bottom:10px;}
@@ -107,9 +107,11 @@ div.messages{padding:12px;margin-bottom:10px;}
 .page-admin #default-content{padding:12px;background:#f5f6f8;margin-bottom:10px;margin-top:0;}
 
 /* Remove redundent styling from blocks in blocks, nodes and views */
-.content-region .view div.block,
-.content-region .node div.block,
-div.block div.block{padding:0;background:0;}
+.region .view div.block,
+.region .node div.block,
+.region div.block div.block,
+.region div.block .view,
+.region div.block .node{padding:0;background:0;}
 
 /* Forums */
 #forum table{width:95%;}
@@ -119,13 +121,13 @@ div.tabs{background:#eee;color:#333;border:none;padding:.5em 1em;margin-bottom:1
 ul.primary {border:none;margin:6px 0;}
 ul.primary li{margin:0;line-height:normal;white-space:nowrap;}
 ul.primary li a,
-ul.primary li a:visited {background:none;border:none;padding:6px .6em;font-weight:bold;font-size:1.083em;}
+ul.primary li a:visited {background:none;border:none;padding:6px .6em 8px;font-weight:bold;font-size:1.083em;}
 ul.primary li a:hover {text-decoration:underline;background:none;}
 ul.primary li.active a,
 ul.primary li.active a:hover,
 ul.primary li.active a:visited{text-decoration:none;font-weight:bold;color:#222;background:#fff;border:none;}
 
-ul.secondary {border:none;padding:.5em 0;background:#fff;margin:-4px 0 0 0;}
+ul.secondary {border:none;padding:.5em 0;background:#fff;margin:-5px 0 0 0;}
 ul.secondary li{margin:0;line-height:normal;padding:0;border:none;white-space:nowrap;}
 ul.secondary li a,
 ul.secondary li a:visited {background:none;border:none;padding:0 .6em;color:#0073bb}
@@ -144,7 +146,7 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 div.admin .right,
 div.admin .left{margin:0;}
 
-/*Add scroll to hiddent tables in narrow pages*/
+/*Add scroll to hidden tables in narrow pages*/
 .admin #default-content{overflow:auto;}
 
 /* Tweak Views Admin panel */
@@ -164,6 +166,7 @@ table#blocks{width:100%;}
  * Mozilla and Webkit support the CSS3 "border-radius" property, so why not take advantage of it?
  * I commented these lines because this code won't validate, uncomment them to use it.
  * 
+ * The implementation is a bit different in both browser engins:
  * "-moz-border-radius" is for Mozilla browsers
  * "-webkit-border-radius" is for Webkit browsers
  * "border-radius" is for a time where this property will get into the standard imlementation (Has no effect in current versions)

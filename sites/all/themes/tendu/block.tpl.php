@@ -1,5 +1,5 @@
 <?php
-// $Id: block.tpl.php,v 1.1.2.2.2.5 2009/01/16 21:53:32 tombigel Exp $
+// $Id: block.tpl.php,v 1.1.2.2.2.6 2009/02/26 08:07:39 tombigel Exp $
 
 /**
  * @file block.tpl.php
@@ -33,7 +33,7 @@
  * @see template_preprocess_block()
  */
 ?>
-<div id="block-<?php print $block->module .'-'. $block->delta; ?>" class="block block-<?php print $block->module ?> <?php print $block_region_placement ?> block-<?php print $block_zebra ?> <?php if ($blocktheme != '') print $blocktheme; if (function_exists(block_class)) print block_class($block); ?>">
+<div id="block-<?php print $block->module .'-'. $block->delta; ?>" class="block block-<?php print $block->module ?> <?php print $block_region_placement ?> block-<?php print $block_zebra ?><?php if ($blocktheme != '') print ' '.$blocktheme; if (function_exists(block_class)) print ' '.block_class($block); ?>">
 <?php if ($block->subject): ?>
   <h2><?php print $block->subject ?></h2>
 <?php endif;?>

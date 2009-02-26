@@ -32,7 +32,7 @@
           <div id="site-details">
             <?php if ($logo): ?>
             <<?php ($is_front && !$site_name) ? print 'h1' : print 'div'; ?> id="site-logo">
-              <a href="<?php print $front_page; ?>" name="home" title="<?php print t('Home'); ?>" rel="home"><img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" id="logo-image" /></a>
+              <a href="<?php print $front_page; ?>" name="home" title="<?php print t('Home'); ?>" rel="home"><img src="<?php print $base_path . path_to_theme() . '/logo-inner.png'; ?>" alt="<?php print t('Home'); ?>" id="logo-image" /></a>
             </<?php ($is_front && !$site_name) ? print 'h1' : print 'div'; ?>>
             <!-- /logo -->
             <?php endif; ?>
@@ -170,7 +170,7 @@
          <?php if ($title): ?>  
          <div id="content-title">
            <<?php ($is_front) ? print 'h2' : print 'h1'; ?> class="title">
-             <?php print $title; ?>
+             <?php print $title; ?><?php if ($feed_icons): ?><span class="feed-icons"><?php print $feed_icons; ?></span><?php endif; ?>
            </<?php ($is_front) ? print 'h2' : print 'h1'; ?>>
          </div>
          <?php endif; ?>
@@ -189,10 +189,6 @@
            <?php print $content_bottom; ?>
          </div>
           <!-- /content-bottom -->
-         <?php endif; ?>
-         
-         <?php if ($feed_icons): ?>
-           <div class="feed-icons"><?php print $feed_icons; ?></div>
          <?php endif; ?>
         
         </div>
