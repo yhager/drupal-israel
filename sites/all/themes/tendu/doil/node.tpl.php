@@ -52,7 +52,7 @@
 
   <?php print $picture ?>
   
-  <div class="meta<?php if (!$page) print ' '.meta-next-to-title; ?>">
+  <div class="meta<?php if (!$page) print ' meta-next-to-title'; ?>">
     <?php if ($submitted): ?>
       <span class="submitted"><?php print $name ?>, <?php print $date?></span>
     <?php endif; ?>
