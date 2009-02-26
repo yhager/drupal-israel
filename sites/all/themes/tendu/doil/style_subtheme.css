@@ -241,6 +241,21 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 #block-block-23 h2{text-align:center;font-size:1.666em}
 #block-block-23 #drupal_download{display:block;width:171px;padding-right:25px;height:45px;line-height:43px;white-space:nowrap;font-size:1.25em;color:#fff;text-align:center;background:url(images/btn_download.gif) no-repeat  0 0;margin:0 auto;}
 #block-block-23 #more_drupal_versions{font-size:.83em;text-align:center;display:block;}
+
+.magic_tabs {width:100%; overflow:hidden;}
+.magic_tabs .tabs li{list-style-type:none;margin:0;float:right;}
+.magic_tabs .tabs li a{padding:4px 8px;display:block;display:inline-block;color:#063049}
+.magic_tabs .tabs li a.selected{border:1px solid #C1CFC0;background:#fff;}
+.magic_tabs table, 
+.magic_tabs thead,
+.magic_tabs tbody,
+.magic_tabs th,
+.magic_tabs tr,
+.magic_tabs td{border:none;background:none;}
+.magic_tabs{}
+.magic_tabs{}
+
+
 /*********************************************************************************/
 /* Tweak Admin panel */
 div.admin .right,
