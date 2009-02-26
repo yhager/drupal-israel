@@ -159,9 +159,6 @@
          <!-- /content-info -->
          <?php endif; ?>         
 
-         <!-- /content-header -->
-         <?php endif; ?>         
-
          <?php if (!empty($content_top)):?>
          <div id="content-top" class="region content-region">
            <?php print $content_top; ?>

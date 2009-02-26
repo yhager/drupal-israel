@@ -158,10 +158,7 @@
            <?php print $help; ?>                 
          </div>         
          <!-- /content-info -->
-         <?php endif; ?>         
-
-         <!-- /content-header -->
-         <?php endif; ?>         
+         <?php endif; ?>           
 
          <?php if (!empty($content_top)):?>
          <div id="content-top" class="region content-region">
