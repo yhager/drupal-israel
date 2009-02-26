@@ -24,7 +24,7 @@
         
         <?php if ($accesibility_links):?>
         <a name="top" class="accessibility-link" href="#after-header"><?php print t('[Skip Header and Navigation]');?></a>
-        <a class="accessibility-link" href="#content"><?php print t('[Jump to Main Content]');?></a>
+        <a class="accessibility-link" href="#content-anchor"><?php print t('[Jump to Main Content]');?></a>
         <?php endif;?>
         
         <div id="header-content"> 
@@ -57,7 +57,7 @@
           <!-- /site-details -->
           
           <?php if (!empty($language_switcher) or !empty($search_box) or !empty($header)):?>
-          <div id="header-blocks">            
+          <div id="header-blocks" class="region">            
             
             <?php if (!empty($language_switcher)): ?>
             <div id="language-switcher"><?php print $language_switcher; ?></div>
@@ -78,7 +78,7 @@
             <?php endif; ?>
           
           </div>          
-          <!-- /header-blocks -->             
+          <!-- /header-blocks -->  
           <?php endif; ?>
           <?php if ($mission): ?>
             <div id="mission">
@@ -90,7 +90,7 @@
         </div>        
         
         <?php if (!empty($primary_links) or !empty($secondary_links) or !empty($main_nav)): ?>   
-        <div id="main-nav">
+        <div id="main-nav" class="region">
           
           <?php if (!empty($primary_links)): ?>         
           <h2 class="primary-links-title"><?php print t('Primary Links');?></h2>
@@ -125,7 +125,7 @@
       
       <div id="main" <?php if (empty($content_after)) print 'class="footer-spacer"';?>>
         <?php if ($left): ?>
-        <div id="sidebar-first" class="sidebar-region">
+        <div id="sidebar-first" class="region sidebar-region">
           <?php print $left; ?>
         </div>
          <!-- /sidebar-first -->
@@ -139,6 +139,10 @@
         <?php endif; ?>        
 
         <div id="content">
+          <?php if ($accesibility_links):?>
+          <a class="accessibility-target" name="content-anchor"></a>
+          <?php endif;?> 
+          
           <?php if (!empty($tabs)): ?>
           <div class="tabs">
             <?php print $tabs; ?>
@@ -146,39 +150,35 @@
           <!-- /tabs -->
           <?php endif; ?>          
 
-         <?php if ($breadcrumb or $title or $help or $messages): ?>
-         <div id="content-header">  
-           <div id="content-info">
-             <?php print $breadcrumb; ?>
-             <?php print $messages; ?>
-             <?php print $help; ?>               
-           </div>
-           
-           <?php if ($accesibility_links):?>
-           <a class="accessibility-target" name="content"></a>
-           <?php endif;?>
-           
-           <?php if ($title): ?>  
-           <div id="content-title">
-             <<?php ($is_front) ? print 'h2' : print 'h1'; ?> class="title">
-               <?php print $title; ?>
-             </<?php ($is_front) ? print 'h2' : print 'h1'; ?>>
-           </div>
-           <?php endif; ?>
-         </div>
+         <?php if ($breadcrumb or $help or $messages): ?>        
+         <div id="content-info">
+           <?php print $breadcrumb; ?>
+           <?php print $messages; ?>
+           <?php print $help; ?>                 
+         </div>         
+         <!-- /content-info -->
+         <?php endif; ?>         
+
          <!-- /content-header -->
          <?php endif; ?>         
 
          <?php if (!empty($content_top)):?>
-         <div id="content-top" class="content-region">
+         <div id="content-top" class="region content-region">
            <?php print $content_top; ?>
          </div>
          <!-- /content-top -->
          <?php endif; ?>
          
-
+         <?php if ($title): ?>  
+         <div id="content-title">
+           <<?php ($is_front) ? print 'h2' : print 'h1'; ?> class="title">
+             <?php print $title; ?>
+           </<?php ($is_front) ? print 'h2' : print 'h1'; ?>>
+         </div>
+         <?php endif; ?>
+           
          <?php if (!empty($content)):?>
-         <div id="content-area" class="content-region">
+         <div id="content-area" class="region content-region">
            <div id="default-content">
              <?php print $content; ?>
            </div>
@@ -187,10 +187,14 @@
          <?php endif; ?>         
 
          <?php if (!empty($content_bottom)):?>
-         <div id="content-bottom" class="content-region">
+         <div id="content-bottom" class="region content-region">
            <?php print $content_bottom; ?>
          </div>
           <!-- /content-bottom -->
+         <?php endif; ?>
+         
+         <?php if ($feed_icons): ?>
+           <div class="feed-icons"><?php print $feed_icons; ?></div>
          <?php endif; ?>
         
         </div>
@@ -199,29 +203,30 @@
       <!-- /main -->
      
       <?php if (!empty($content_after)):?>
-      <div id="after-content" class="footer-spacer extra-region">
+      <div id="after-content" class="region footer-spacer extra-region">
         <?php print $content_after; ?>
       </div>
        <!-- /after-content -->   
       <?php endif; ?>
       
       <div id="footer">
-        <?php if (!empty($footer)):?>
-        
-        <div id="footer-blocks">
+        <?php if (!empty($footer)):?>        
+        <div id="footer-blocks" class="region">
           <?php print $footer; ?>    
         </div>
+        <!--/footer-blocks-->
         <?php endif;?>
         
         <?php if (!empty($footer_message)):?>
         <div id="footer-message">
           <?php print $footer_message; ?>    
         </div>
+        <!--/footer-message-->
         <?php endif;?>
         
         <?php if ($accesibility_links):?>
         <a class="accessibility-link" href="#top"><?php print t('[Jump to Top]');?></a>
-        <a class="accessibility-link" href="#content"><?php print t('[Jump to Main Content]');?></a>
+        <a class="accessibility-link" href="#content-anchor"><?php print t('[Jump to Main Content]');?></a>
         <?php endif;?>  
       
       </div>
