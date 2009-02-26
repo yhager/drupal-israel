@@ -14,16 +14,47 @@ function wdoil_theme() {
       'arguments' => array('args' => NULL),
       'template' => 'wdoil-user-block'
     ),
+    'wdoil_user_block_title' => array(
+      'arguments' => array('args' => NULL),
+    ),
   );
 }
 
 function template_preprocess_wdoil_user_block(&$vars) {
-  dpm ($vars);
   foreach ($vars['args'] as $key => $value) {
     $vars[$key] = $value;
   }
   $vars['name'] = 'Zohar';
 }
+
+function theme_wdoil_user_block_title() {
+  global $user;
+  if ($user) {
+    // Add user image if it exists.
+    if (!empty($user->picture)) {
+      $picture = file_create_url($user->picture);
+      $alt = t("@user's picture", array('@user' => $user->name));
+      $user_picture = theme('image', $picture, $alt, $alt, '', FALSE);
+    }
+    else $user_picture = '';
+    $title = $user_picture . '<span class="wdoil-user-links">' . l(t('Logout'), 'logout') . '</span>' . t('Hello @user', array('@user' => $user->name));
+  }
+  else {
+    $title = '<span class="wdoil-user-links">' . l(t('Login'), 'user/login') . ' | ' . l(t('Register'), 'user/register') . '</span>' . t('Hello @user', array('@user' => variable_get('anonymous')));
+  }
+  return $title;
+}
+
+/*function wdoil_preprocess(&$vars, $hook) {
+  switch ($hook) {
+    case "block":
+      // Change the block's title:
+      if ($vars['block']->module == 'wdoil' && $vars['block']->delta == '0') {
+        $vars['block']->subject = theme('wdoil_user_block_title');
+      }
+      break;
+  }
+}*/
 
 function wdoil_link_alter(&$links, $node) {
   foreach ($links as $key => $value) {
@@ -48,20 +79,8 @@ function wdoil_block($op = 'list', $delta = 0) {
   elseif ($op == 'view') {
     switch($delta) {
       case '0':
-        $block['subject'] = '';
-        // Add user image if it exists.
-        if (!empty($user->picture)) {
-          $picture = file_create_url($user->picture);
-          $alt = t("@user's picture", array('@user' => $user->name));
-          $user_picture = theme('image', $picture, $alt, $alt, '', FALSE);
-          $block['subject'] .= '<span id="doil-hello-visitor-picture">'. $user_picture .'</span>';
-        }
-                
-        $block['subject'] .= t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
-        // Add links for anon or authenticated user.
-        $user_links = $user->uid ? t('<a href="@user-profile">Edit profile</a>', array('@user-profile' => url('user/'. $user->uid. '/edit'))) : t('<a href="@login">Login</a> | <a href="@register">Register</a>', array('@login' => url('user'), '@register' => url('user/register')));
-        $block['subject'] .= '<span id="doil-hello-visitor>"'. $user_links .'</span>';
-
+        $block['subject'] = theme('wdoil_user_block_title');
+        
         // Get the connected users. Taken from user module.
         $connected = module_invoke('user', 'block', 'view', 3);
         // Remove the 'online user' h3 tag.
