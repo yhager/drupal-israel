@@ -10,7 +10,7 @@ body{color:#333;background:#fff url(images/bg_body.gif) repeat-x 0 0;padding:0 1
 /**
  * Override page width of base Tendu theme
  */
-#page{min-width:990px;max-width:1560px;width:990px;}
+#page{min-width:950px;max-width:1250px;width:990px;}
 
 /**
  * Override sidebars widths of the base Tendu theme.
@@ -232,8 +232,8 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 
 /*Node*/
 .meta-next-to-title{float:left;padding:10px 3px;}
-.node-bottom{text-align:left;}
-
+.node-bottom{text-align:left;float:left;padding:.4em 0;}
+.node .terms{display:block;padding:.4em 0;}
 /*Sidebar agreggation */
 .view-doil-latest-content .views-field-name a{font-weight:normal;color:#333;}
 
