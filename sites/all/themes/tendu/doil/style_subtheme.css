@@ -157,6 +157,7 @@ div.messages{padding:12px;margin-bottom:10px;}
 #user-blocks .block-green-light{border-color:#697668;}
 #user-blocks .block-green-light h2{color:#58943f;}
 #user-blocks .block-green-light a{color:#0073bb;text-decoration:none;}
+#user-blocks .block-green-light a:hover{text-decoration:underline;}
 #user-blocks .block-green-light a:visited{color:#1f7bb3;}
 
 .block-blue-light {padding:12px 0 0 0 !important;border:1px solid #b8d4e4;background:#d5ebf8 url(images/bg_blue_light_top.gif) repeat-x 0 0;overflow:hidden}
@@ -245,8 +246,8 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 .magic_tabs {width:100%; overflow:hidden;}
 .magic_tabs .tabs{width:100%;overflow:hidden;padding:0;margin:0;}
 .magic_tabs .tabs li{list-style-type:none;margin:0;float:right;}
-.magic_tabs .tabs li a{padding:4px 8px;display:block;display:inline-block;color:#063049}
-.magic_tabs .tabs li a.selected{border:1px solid #C1CFC0;background:#fff;}
+#user-blocks .magic_tabs .tabs li a{padding:4px 8px;display:block;display:inline-block;color:#063049}
+#user-blocks .magic_tabs .tabs li a.selected{border:1px solid #C1CFC0;background:#fff;}
 .magic_tabs table, 
 .magic_tabs thead,
 .magic_tabs tbody,
