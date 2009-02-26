@@ -257,7 +257,7 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 .magic_tabs{}
 .magic_tabs{}
 
-
+.comment-published{padding:6px;margin:6px 0;border:1px solid #f8f8f8;background:#fafbfe}
 /*********************************************************************************/
 /* Tweak Admin panel */
 div.admin .right,
@@ -286,8 +286,10 @@ table#blocks{width:100%;}
 .block .content,
 .sticky ul.links,
 #header-content,
+.comment-published,
 #header{-moz-border-radius:0 0 8px 8px;-webkit-border-bottom-left-radius: 8px;-webkit-border-bottom-right-radius: 8px;border-radius:0 0 8px 8px;}
 
+.magic_tabs .tabs a,
 div.tabs,
 ul.secondary,
 ul.primary li.active a,
