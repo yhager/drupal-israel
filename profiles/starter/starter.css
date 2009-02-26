@@ -1,0 +1,7 @@
+div#wrapper {
+  background:#EDF5FA url(body.png) repeat-x scroll 50% 0;
+}
+#wrapper #container #header h1, #wrapper #container #header h1 a:link, #wrapper #container #header h1 a:visited {
+color:#597B20;
+font-weight:normal;
+}
