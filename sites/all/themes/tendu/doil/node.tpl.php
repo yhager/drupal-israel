@@ -51,14 +51,14 @@
 <div id="node-<?php print $node->nid; ?>" class="node<?php if ($sticky) { print ' sticky'; } ?><?php if (!$status) { print ' node-unpublished'; } ?> clear-block">
 
 <?php print $picture ?>
-
+<div class="meta<?php if (!$page) print ' '.meta-next-to-title ?>">
+  <?php if ($submitted): ?>
+    <span class="submitted"><?php print $name ?>, <?php print $date?></span>
+  <?php endif; ?>
+</div>
 <?php if (!$page): ?>
   <h2><a href="<?php print $node_url ?>" title="<?php print $title ?>"><?php print $title ?></a></h2>
 <?php endif; ?>
-
-  
-
-  </div>
 
   <div class="content">
     <?php print $content ?>
