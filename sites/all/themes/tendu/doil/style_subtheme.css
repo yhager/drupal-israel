@@ -29,7 +29,7 @@ h4{font-size:1.166em;line-height:1.333em;font-weight:bold;}
 h5{font-size:1.083em;line-height:1.333em;font-weight:bold;}
 h6{font-size:1em;line-height:1.333em;font-weight:bold;}
 p{padding-bottom:.5em;}
-.meta{font-size:.83em;padding-bottom:.5em;}
+.meta{font-size:1em;padding-bottom:.5em;color:#666;}
 
 /*Tables*/
 table{margin-top:10px;}
@@ -232,6 +232,10 @@ ul.secondary li.active a:visited{text-decoration:none;font-weight:bold;color:#20
 
 /*Node*/
 .meta-next-to-title{float:left;padding:10px 3px;}
+.node-bottom{text-align:left;}
+
+/*Sidebar agreggation */
+.view-doil-latest-content .views-field-name a{font-weight:normal;color:#333;}
 /*********************************************************************************/
 /* Tweak Admin panel */
 div.admin .right,
