@@ -4,6 +4,27 @@
  * @file
  * The Doil module.
  */
+
+/**
+ * implementation of hook_theme()
+ */
+function wdoil_theme() {
+  return array(
+    'wdoil_user_block' => array(
+      'arguments' => array('args' => NULL),
+      'template' => 'wdoil-user-block'
+    ),
+  );
+}
+
+function template_preprocess_wdoil_user_block(&$vars) {
+  dpm ($vars);
+  foreach ($vars['args'] as $key => $value) {
+    $vars[$key] = $value;
+  }
+  $vars['name'] = 'Zohar';
+}
+
 function wdoil_link_alter(&$links, $node) {
   foreach ($links as $key => $value) {
     if (substr($key, 0, 14) == 'notifications_') {
@@ -33,7 +54,7 @@ function wdoil_block($op = 'list', $delta = 0) {
           $picture = file_create_url($user->picture);
           $alt = t("@user's picture", array('@user' => $user->name));
           $user_picture = theme('image', $picture, $alt, $alt, '', FALSE);
-          $block['subject'] .= '<span id="doil-hello-visitor-picture>"'. $user_picture .'</span>';
+          $block['subject'] .= '<span id="doil-hello-visitor-picture">'. $user_picture .'</span>';
         }
                 
         $block['subject'] .= t('Hello @visitor', array('@visitor' => !empty($user->uid) ? $user->name : t('visitor')));
@@ -44,12 +65,13 @@ function wdoil_block($op = 'list', $delta = 0) {
         // Get the connected users. Taken from user module.
         $connected = module_invoke('user', 'block', 'view', 3);
         // Remove the 'online user' h3 tag.
-        $block['content'] .= preg_replace('/\<h3(.*)h3\>/', '', $connected['content']);
+        $args['connected_users'] .= preg_replace('/\<h3(.*)h3\>/', '', $connected['content']);
 
         // Get newset user. Taken from user module.
         $sql = "SELECT uid, name FROM {users} WHERE status != 0 AND access != 0 ORDER BY created DESC";
         $result = db_fetch_object(db_query($sql));
-        $block['content'] .= t('!user is that latest member in the site.', array('!user' => theme('username', $result)));
+        $args['newest_user'] = t('!user is the newest member in the site.', array('!user' => theme('username', $result)));
+        $block['content'] = theme('wdoil_user_block', $args);
       break;
       case '1':
       $block['subject'] = '';
