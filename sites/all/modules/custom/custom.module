@@ -121,7 +121,7 @@ function custom_user_block_args() {
     $links[] = l(t('logout'), 'logout');
   }
   else {
-    $args['hello'] = t('Hello @user', array('@user' => variable_get('anonymous'));
+    $args['hello'] = t('Hello @user', array('@user' => variable_get('anonymous')));
     $links[] = l(t('login'), 'user');
     $links[] = l(t('register'), 'user/register');
   }
