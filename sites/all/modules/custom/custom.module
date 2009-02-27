@@ -117,11 +117,11 @@ function custom_user_block_args() {
 
   if ($user->uid) {
     // logged in
-    $args['hello'] = theme('user_picture', $user) . theme('username', $user);
+    $args['hello'] = theme('user_picture', $user) . ' ' . theme('username', $user);
     $links[] = l(t('logout'), 'logout');
   }
   else {
-    $args['hello'] = t('Hello visitor.');
+    $args['hello'] = t('Hello @user', array('@user' => variable_get('anonymous'));
     $links[] = l(t('login'), 'user');
     $links[] = l(t('register'), 'user/register');
   }
