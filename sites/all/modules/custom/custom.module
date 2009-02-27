@@ -11,16 +11,30 @@ function custom_block($op = 'list', $delta = 0, $edit = array()) {
       'info' => t('drupal.org.il toolbox'),
       'cache' => BLOCK_CACHE_PER_USER,
     );
+    $blocks[1] = array(
+      'info' => t('drupal.org.il user block'),
+      'cache' => BLOCK_CACHE_PER_USER,
+    );
     return $blocks;
   }
 
   if ($op == 'view') {
-    $block = array(
-      'subject' => t('toolbox'),
-      'content' => magic_tabs_get('custom_toolbox_callback'),
-    );
+    switch ($delta) {
+      case 0:
+        $block = array(
+          'subject' => t('Toolbox'),
+          'content' => magic_tabs_get('custom_toolbox_callback'),
+        );
+        break;
+      case 1:
+        $block = array(
+          'subject' => t('User Info'),
+          'content' => theme('custom_user_block', custom_user_block_args()),
+        );
+        break;
+    }
+    return $block;
   }
-  return $block;
 }
 
 /**
@@ -55,23 +69,81 @@ function custom_content_form() {
       $types[$type['type']] = $type['name'];
     }
   }
-  
-  $form['type'] = array(
-    '#type' => 'select',
-    '#title' => t('Create new content'),
-    '#options' => $types,
-  );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Create'),
-  );
 
+  if ($types) {
+//      $types = array_merge(array('<none>' => t('[Choose content type]')), $types);
+      
+      $form['type'] = array(
+          '#type' => 'select',
+          '#title' => t('Create new content'),
+          '#options' => $types,
+          );
+      $form['submit'] = array(
+          '#type' => 'submit',
+          '#value' => t('Create'),
+          );
+  };
   return $form;
 }
 
-function custom_content_form_submit($form, $form_state) {
+function custom_content_form_validate($form, &$form_state) {
+  if ($form_state['values']['type'] == '<none>') {
+//    form_set_error('type', t('Please choose a content type to create'));
+  }
+}
+
+function custom_content_form_submit($form, &$form_state) {
   drupal_goto('node/add/'. $form_state['values']['type']);
 }
 
+/**
+ * implementation of hook_theme().
+ */
+function custom_theme() {
+  return array(
+    'custom_user_block' => array(
+      'arguments' => array('vars' => NULL),
+      'template' => 'custom-user-block',
+    ),
+  );
+}
 
+/**
+ * @ingroup themeable
+ * @{
+ */
+function custom_user_block_args() {
+  global $user;
 
+  if ($user->uid) {
+    // logged in
+    $args['hello'] = theme('user_picture', $user) . theme('username', $user);
+    $links[] = l(t('logout'), 'logout');
+  }
+  else {
+    $args['hello'] = t('Hello visitor.');
+    $links[] = l(t('login'), 'user');
+    $links[] = l(t('register'), 'user/register');
+  }
+  $args['links'] = implode('|', $links);
+  
+  // Add count of active anonymous/authenticated users.
+  // @see user_block(), user.module
+  $interval = time() - variable_get('user_block_seconds_online', 900);
+  $count_anon = sess_count($interval);
+  //$count_auth = db_result(db_query("SELECT COUNT(DISTINCT uid) FROM {sessions} WHERE uid > 0 AND timestamp >= %d", $interval));
+  
+  $result  = db_query("SELECT DISTINCT uid FROM {sessions} WHERE uid > 0 AND timestamp >= %d", $interval);
+  while ($u = db_fetch_object($result)) {
+    $cur = user_load($u->uid);
+    $users[$u->uid] = theme('username', $cur);
+  }
+  
+  $args['status'] = t('There are currently @users users and @anon anonymous users:', array('@users' => count($users), '@anon' => $count_anon));
+  $args['users_list'] = implode(',', $users);
+
+  $latest = user_load(db_result(db_query('SELECT uid FROM {users} WHERE status != 0 AND access != 0 ORDER BY created DESC LIMIT 1')));
+  $args['latest'] = t('!user is the newest member', array('!user' => theme('username', $latest)));
+
+  return $args;
+}
