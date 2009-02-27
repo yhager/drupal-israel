@@ -118,7 +118,7 @@ function custom_user_block_args() {
   if ($user->uid) {
     // logged in
     $args['hello'] = theme('user_picture', $user) . ' ' . theme('username', $user);
-    $links[] = '(' . l(t('I\'m not @user!', array('@user' => $user->name)), 'logout') . ')';
+    $links[] = l(t('logout'), 'logout');
   }
   else {
     $args['hello'] = t('Hello @user', array('@user' => variable_get('anonymous')));
