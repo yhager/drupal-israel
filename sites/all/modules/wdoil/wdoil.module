@@ -1,5 +1,5 @@
 <?php
-// $Id:
+// $Id$
 /**
  * @file
  * The Doil module.
@@ -37,10 +37,10 @@ function theme_wdoil_user_block_title() {
       $user_picture = theme('image', $picture, $alt, $alt, '', FALSE);
     }
     else $user_picture = '';
-    $title = $user_picture . '<span class="wdoil-user-links">' . l(t('Logout'), 'logout') . '</span>' . t('Hello @user', array('@user' => $user->name));
+    $title = $user_picture . '<span class="wdoil-user-links">' . l(t('Logout'), 'logout') . '</span> ' . t('Hello @user', array('@user' => $user->name));
   }
   else {
-    $title = '<span class="wdoil-user-links">' . l(t('Login'), 'user/login') . ' | ' . l(t('Register'), 'user/register') . '</span>' . t('Hello @user', array('@user' => variable_get('anonymous')));
+    $title = '<span class="wdoil-user-links">' . l(t('Login'), 'user/login') . ' | ' . l(t('Register'), 'user/register') . '</span> ' . t('Hello @user', array('@user' => variable_get('anonymous')));
   }
   return $title;
 }
