@@ -1,0 +1,17 @@
+? po/he.po
+Index: modules/comment/views_plugin_row_comment_rss.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/views/modules/comment/views_plugin_row_comment_rss.inc,v
+retrieving revision 1.2
+diff -u -u -p -r1.2 views_plugin_row_comment_rss.inc
+--- modules/comment/views_plugin_row_comment_rss.inc	2 Dec 2008 22:17:42 -0000	1.2
++++ modules/comment/views_plugin_row_comment_rss.inc	8 Jan 2009 09:41:16 -0000
+@@ -25,7 +25,7 @@ class views_plugin_row_comment_rss exten
+       array('key' => 'dc:creator', 'value' => $comment->name),
+       array(
+         'key' => 'guid',
+-        'value' => 'comment ' .  $item->cid . ' at ' . $base_url,
++        'value' => 'comment ' .  $row->cid . ' at ' . $base_url,
+         'attributes' => array('isPermaLink' => 'false'),
+         'namespace' => array('xmlns:dc' => 'http://purl.org/dc/elements/1.1/'),
+       ),
