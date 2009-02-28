@@ -23,7 +23,7 @@ function custom_block($op = 'list', $delta = 0, $edit = array()) {
       case 0:
         $block = array(
           'subject' => t('Toolbox'),
-          'content' => magic_tabs_get('custom_toolbox_callback'),
+          'content' => views_embed_view('my_content', 'block_2') . drupal_get_form('custom_content_form'),
         );
         break;
       case 1:
@@ -35,25 +35,6 @@ function custom_block($op = 'list', $delta = 0, $edit = array()) {
     }
     return $block;
   }
-}
-
-/**
- * Magic tabs callback
- */
-function custom_toolbox_callback($active = 0) {
-  $tabs[] = array(
-    'title' => t('Edit Content'),
-    'content' => views_embed_view('my_content', 'block_2') . drupal_get_form('custom_content_form'),
-  );
-  $tabs[] = array(
-    'title' => t('Developers'),
-    'content' => 'Developers content here',
-  );
-  $tabs[] = array(
-    'title' => t('Profile'),
-    'content' => 'Profile content here',
-  );
-  return $tabs;
 }
 
 /**
