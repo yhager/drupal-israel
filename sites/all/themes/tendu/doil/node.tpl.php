@@ -72,7 +72,7 @@
   <?php if ($terms): ?>
     <div class="terms terms-inline"><?php print '<strong>' . t('Tags') . ':</strong>' . $terms ?></div>
   <?php endif;?>
-  <?php if ($notifications_links) {
+  <?php if ($notifications_links && !$page) {
     foreach ($notifications_links as $link) {
       print '<div class="notifications">' . $link . '</div>'; 
     }
