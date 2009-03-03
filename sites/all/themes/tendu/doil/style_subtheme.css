@@ -122,7 +122,8 @@ a.active:visited{color:#264463;}
 
 /* Page info */
 .breadcrumb{padding:0;}
-#content-title{padding:0 12px;margin-bottom:0;margin-top:0;}
+#content-title{margin-bottom:0;margin-top:0;}
+#content-title .title{padding:0 12px}
 #content-info{padding:6px 12px;margin-bottom:0;}
 div.messages{padding:12px;margin-bottom:10px;}
 .status{background:#f0fdf0;border:1px solid #e0ede0;}
