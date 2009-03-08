@@ -98,7 +98,7 @@ function custom_user_block_args() {
 
   if ($user->uid) {
     // logged in
-    $args['hello'] = theme('user_picture', $user) . ' ' . theme('username', $user);
+    $args['hello'] = _custom_user_picture($user) . ' ' . theme('username', $user);
     $links[] = l(t('logout'), 'logout');
   }
   else {
@@ -128,3 +128,25 @@ function custom_user_block_args() {
 
   return $args;
 }
+
+function _custom_user_picture($account) {
+  if (variable_get('user_pictures', 0)) {
+    if (!empty($account->picture) && file_exists($account->picture)) {
+      $picture = $account->picture;
+    }
+    else if (variable_get('user_picture_default', '')) {
+      $picture = variable_get('user_picture_default', '');
+    }
+
+    if (isset($picture)) {
+      $alt = t("@user's picture", array('@user' => $account->name ? $account->name : variable_get('anonymous', t('Anonymous'))));
+      $output = theme('imagecache', 'small_userpic', $picture, $alt, $alt, '', FALSE);
+      if (!empty($account->uid) && user_access('access user profiles')) {
+        $attributes = array('attributes' => array('title' => t('View user profile.')), 'html' => TRUE);
+        $output = l($output, "user/$account->uid", $attributes);
+      }
+    }
+  }
+  return $output;
+}
+
