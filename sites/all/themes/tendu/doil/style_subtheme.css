@@ -347,3 +347,6 @@ fieldset{-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
 ul.secondary{-moz-border-radius-topleft:0;-webkit-border-top-left-radius:0;border-top-left-radius:0;}
 #blocks .block{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0;background:none;}
 
+/* Image thumbnails */
+.field-field-screenshots .field-item {margin:1em; float:right;}
+.node-bottom{clear:both}
