@@ -1,5 +1,5 @@
 <?php
-// $Id: googleanalytics.admin.inc,v 1.2.2.54 2008/11/26 19:37:48 hass Exp $
+// $Id: googleanalytics.admin.inc,v 1.4.2.12 2009/03/08 11:38:26 hass Exp $
 
 /**
  * @file
@@ -123,7 +123,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
   $form['segmentation']['googleanalytics_segmentation'] = array(
     '#type' => 'select',
     '#title' => t('Add segmentation information to tracking code'),
-    '#description' => t('Segment users based on different properties, additionally to the basic IP address based tracking provided by Google Analytics.') . (!$profile_enabled ? ' '. t('<a href="@module_list">Enable the profile module</a> to be able to use profile fields for more granular tracking.', array('@module_list' => url('admin/build/modules'))) : '') .' '. t('Make sure you will not associate (or permit any third party to associate) any data gathered from Your Website(s) (or such third parties\' website(s)) with any personally identifying information from any source as part of Your use (or such third parties\' use) of the Google Analytics service. For more information see section 8.1 in the <a href="@ga_tos">Google Analytics terms of use</a>.', array('@ga_tos' => 'http://www.google.com/analytics/en-GB/tos.html')) .' '. t('Selecting one or more values is supported. To select multiple items, hold down CTRL while selecting fields.'),
+    '#description' => t('Segment users based on different properties, additionally to the basic IP address based tracking provided by Google Analytics.') . (!$profile_enabled ? ' '. t('<a href="@module_list">Enable the profile module</a> to be able to use profile fields for more granular tracking.', array('@module_list' => url('admin/build/modules'))) : '') .' '. t('Make sure you will not associate (or permit any third party to associate) any data gathered from Your Website(s) (or such third parties\' website(s)) with any personally identifying information from any source as part of Your use (or such third parties\' use) of the Google Analytics service. For more information see section 8.1 in the <a href="@ga_tos">Google Analytics terms of use</a>.', array('@ga_tos' => 'http://www.google.com/analytics/en-GB/tos.html')) .' '. t('Selecting one or more values is supported. To select multiple items, hold down CTRL (PC) or &#8984; (Mac) while selecting fields.'),
     '#default_value' => variable_get('googleanalytics_segmentation', ''),
     '#options' => $fields,
     '#size' => (count($fields)>10) ? 10 : count($fields),
@@ -171,17 +171,6 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#collapsed' => TRUE,
   );
 
-  $form['advanced']['googleanalytics_legacy_version'] = array(
-    '#type' => 'radios',
-    '#title' => t('Google Analytics version used'),
-    '#default_value' => variable_get('googleanalytics_legacy_version', 0),
-    '#options' => array(
-      0 => t('Latest (ga.js) tracking code'),
-      1 => t('Legacy (urchin.js) tracking code')
-    ),
-    '#description' => t('<a href="@ga_js_url">On December 13, 2007, Google rolled out a new API</a> for its tracking code, and suggests all new sites to use this code. You should only use the older legacy code, if you have custom tracking code tied to that API. Otherwise it is suggested you use the latest API, as the legacy code will not receive feature updates and is not compatible with new features.', array('@ga_js_url' => 'http://analytics.blogspot.com/2007/12/announcing-new-graphing-tools-gajs.html')),
-  );
-
   $form['advanced']['googleanalytics_cache'] = array(
     '#type' => 'checkbox',
     '#title' => t('Cache tracking code file locally'),
@@ -217,6 +206,13 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#disabled' => (module_exists('search') ? FALSE : TRUE),
   );
 
+  $form['advanced']['googleanalytics_trackadsense'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Track AdSense ads'),
+    '#description' => t('If checked, your AdSense ads will be tracked in your Google Analytics account.'),
+    '#default_value' => variable_get('googleanalytics_trackadsense', FALSE),
+  );
+
   $form['advanced']['codesnippet'] = array(
     '#type' => 'fieldset',
     '#title' => t('Custom JavaScript code'),
@@ -230,7 +226,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#default_value' => variable_get('googleanalytics_codesnippet_before', ''),
     '#rows' => 5,
     '#wysiwyg' => FALSE,
-    '#description' => t('Code in this textarea will be added <strong>before</strong> urchinTracker() or pageTracker._trackPageview().')
+    '#description' => t('Code in this textarea will be added <strong>before</strong> pageTracker._trackPageview().')
   );
   $form['advanced']['codesnippet']['googleanalytics_codesnippet_after'] = array(
     '#type' => 'textarea',
@@ -238,7 +234,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#default_value' => variable_get('googleanalytics_codesnippet_after', ''),
     '#rows' => 5,
     '#wysiwyg' => FALSE,
-    '#description' => t("Code in this textarea will be added <strong>after</strong> urchinTracker() or pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts.")
+    '#description' => t("Code in this textarea will be added <strong>after</strong> pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts.")
   );
 
   $form['advanced']['googleanalytics_js_scope'] = array(
@@ -261,10 +257,10 @@ function googleanalytics_admin_settings_form_validate($form, &$form_state) {
   }
 
   // This is for the Newbie's who cannot read a text area description.
-  if (stristr($form_state['values']['googleanalytics_codesnippet_before'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet_before'], 'google-analytics.com/ga.js')) {
+  if (stristr($form_state['values']['googleanalytics_codesnippet_before'], 'google-analytics.com/ga.js')) {
     form_set_error('googleanalytics_codesnippet_before', t('Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings.'));
   }
-  if (stristr($form_state['values']['googleanalytics_codesnippet_after'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet_after'], 'google-analytics.com/ga.js')) {
+  if (stristr($form_state['values']['googleanalytics_codesnippet_after'], 'google-analytics.com/ga.js')) {
     form_set_error('googleanalytics_codesnippet_after', t('Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings.'));
   }
   if (preg_match('/(.*)<\/?script(.*)>(.*)/i', $form_state['values']['googleanalytics_codesnippet_before'])) {

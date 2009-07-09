@@ -1,5 +1,5 @@
 <?php
-// $Id: views_plugin_row_comment_rss.inc,v 1.2 2008/12/02 22:17:42 merlinofchaos Exp $
+// $Id: views_plugin_row_comment_rss.inc,v 1.3 2009/01/08 19:40:44 merlinofchaos Exp $
 /**
  * @file
  * Contains the comment RSS row style plugin.

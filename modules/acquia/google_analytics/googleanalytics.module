@@ -1,5 +1,5 @@
 <?php
-// $Id: googleanalytics.module,v 1.16.2.52 2008/10/13 21:48:12 hass Exp $
+// $Id: googleanalytics.module,v 1.19.2.10 2009/04/01 18:10:36 hass Exp $
 
 /*
  * @file
@@ -46,12 +46,10 @@ function googleanalytics_init() {
   // 2. Track page views based on visibility value.
   // 3. Check if we should track the currently active user's role.
   if (!empty($id) && _googleanalytics_visibility_pages() && _googleanalytics_visibility_user($user)) {
-    // Use the old version of Google Analytics?
-    $legacy_version = variable_get('googleanalytics_legacy_version', FALSE);
     $scope = variable_get('googleanalytics_js_scope', 'footer');
 
-    // Should a local cached copy of urchin.js or ga.js be used?
-    $js_file = ($legacy_version) ? 'urchin.js' : 'ga.js';
+    // Should a local cached copy of ga.js be used?
+    $js_file = 'ga.js';
     $url = 'http://www.google-analytics.com/'. $js_file;
 
     if (variable_get('googleanalytics_cache', 0) && (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PUBLIC) && $source = _googleanalytics_cache($url)) {
@@ -76,10 +74,13 @@ function googleanalytics_init() {
       $link_settings['trackDownloadExtensions'] = $trackfiles_extensions;
     }
     if (!empty($link_settings)) {
-      // TODO: Why is this legacy_version added as data type string and not integer to settings?
-      $link_settings['LegacyVersion'] = $legacy_version ? 1 : 0;
       drupal_add_js(array('googleanalytics' => $link_settings), 'setting', 'header');
       drupal_add_js(drupal_get_path('module', 'googleanalytics') .'/googleanalytics.js', 'module', $scope);
+    }
+
+    // Custom tracking.
+    if (variable_get('googleanalytics_trackadsense', FALSE)) {
+      drupal_add_js('window.google_analytics_uacct = ' . drupal_to_js($id) . ';', 'inline', 'header');
     }
   }
 }
@@ -93,9 +94,6 @@ function googleanalytics_footer($main = 0) {
   $id = variable_get('googleanalytics_account', '');
 
   if (!empty($id) && _googleanalytics_visibility_pages() && _googleanalytics_visibility_user($user)) {
-
-    // Use the old version of Google Analytics?
-    $legacy_version = variable_get('googleanalytics_legacy_version', FALSE);
 
     // Add User profile segmentation values.
     if (is_array($profile_fields = variable_get('googleanalytics_segmentation', '')) && ($user->uid > 0)) {
@@ -116,12 +114,7 @@ function googleanalytics_footer($main = 0) {
       // Only show segmentation variable if there are specified fields.
       $segmentation = '';
       if (count($fields) > 0) {
-        if ($legacy_version) {
-          $segmentation = '__utmSetVar('. drupal_to_js(implode(':', $fields)) .');';
-        }
-        else {
-          $segmentation = 'pageTracker._setVar('. drupal_to_js(implode(':', $fields)) .');';
-        }
+        $segmentation = 'pageTracker._setVar('. drupal_to_js(implode(':', $fields)) .');';
       }
     }
 
@@ -148,22 +141,11 @@ function googleanalytics_footer($main = 0) {
     if (function_exists('drupal_get_headers')) {
       $headers = drupal_get_headers();
       if (strstr($headers, 'HTTP/1.1 403 Forbidden')) {
-        if ($legacy_version) {
-          // See http://www.google.com/support/analytics/bin/answer.py?answer=86928
-          $url_custom = '"/403.html?page=" + _udl.pathname + _udl.search';
-        }
-        else {
-          // See http://www.google.com/support/analytics/bin/answer.py?answer=86927
-          $url_custom = '"/403.html?page=" + document.location.pathname + document.location.search + "&from=" + document.referrer';
-        }
+        // See http://www.google.com/support/analytics/bin/answer.py?answer=86927
+        $url_custom = '"/403.html?page=" + document.location.pathname + document.location.search + "&from=" + document.referrer';
       }
       elseif (strstr($headers, 'HTTP/1.1 404 Not Found')) {
-        if ($legacy_version) {
-          $url_custom = '"/404.html?page=" + _udl.pathname + _udl.search';
-        }
-        else {
-          $url_custom = '"/404.html?page=" + document.location.pathname + document.location.search + "&from=" + document.referrer';
-        }
+        $url_custom = '"/404.html?page=" + document.location.pathname + document.location.search + "&from=" + document.referrer';
       }
     }
 
@@ -171,34 +153,20 @@ function googleanalytics_footer($main = 0) {
     $codesnippet_before = variable_get('googleanalytics_codesnippet_before', '');
     $codesnippet_after = variable_get('googleanalytics_codesnippet_after', '');
 
-    // Should the legacy code be used?
-    $script = '';
-    if ($legacy_version) {
-      $script .= '_uacct = '. drupal_to_js($id) .';';
-      if (!empty($segmentation)) {
-        $script .= $segmentation;
-      }
-      if (!empty($codesnippet_before)) {
-        $script .= $codesnippet_before;
-      }
-      $script .= 'urchinTracker('. $url_custom .');';
-      if (!empty($codesnippet_after)) {
-        $script .= $codesnippet_after;
-      }
+    // Build tracker code for footer.
+    $script = 'try{';
+    $script .= 'var pageTracker = _gat._getTracker('. drupal_to_js($id) .');';
+    if (!empty($segmentation)) {
+      $script .= $segmentation;
     }
-    else {
-      $script .= 'var pageTracker = _gat._getTracker('. drupal_to_js($id) .');';
-      if (!empty($segmentation)) {
-        $script .= $segmentation;
-      }
-      if (!empty($codesnippet_before)) {
-        $script .= $codesnippet_before;
-      }
-      $script .= 'pageTracker._trackPageview('. $url_custom .');';
-      if (!empty($codesnippet_after)) {
-        $script .= $codesnippet_after;
-      }
+    if (!empty($codesnippet_before)) {
+      $script .= $codesnippet_before;
     }
+    $script .= 'pageTracker._trackPageview('. $url_custom .');';
+    if (!empty($codesnippet_after)) {
+      $script .= $codesnippet_after;
+    }
+    $script .= '} catch(err) {}';
 
     drupal_add_js($script, 'inline', 'footer');
   }
@@ -220,9 +188,21 @@ function googleanalytics_user($type, $edit, &$account, $category = NULL) {
           '#collapsible' => TRUE,
           '#tree' => TRUE
         );
+
+        switch ($custom) {
+          case 1:
+            $description = t('Users are tracked by default, but you are able to opt out.');
+            break;
+
+          case 2:
+            $description = t('Users are <em>not</em> tracked by default, but you are able to opt in.');
+            break;
+        }
+
         $form['googleanalytics']['custom'] = array(
           '#type' => 'checkbox',
-          '#title' => t('User tracking'),
+          '#title' => t('Enable user tracking'),
+          '#description' => $description,
           '#default_value' => isset($account->googleanalytics['custom']) ? $account->googleanalytics['custom'] : ($custom == 1)
         );
 
@@ -258,11 +238,8 @@ function googleanalytics_requirements($phase) {
  * Implementation of hook_cron().
  */
 function googleanalytics_cron() {
-  // Regenerate the google analytics urchin.js or ga.js every day.
+  // Regenerate the google analytics ga.js every day.
   if (time() - variable_get('googleanalytics_last_cache', 0) >= 86400) {
-    // Legacy google analytics version.
-    file_delete(file_directory_path() .'/googleanalytics/urchin.js');
-
     // New google analytics version.
     file_delete(file_directory_path() .'/googleanalytics/ga.js');
 
@@ -276,7 +253,7 @@ function googleanalytics_cron() {
 }
 
 /**
- * Download and cache the urchin.js file locally.
+ * Download and cache the ga.js file locally.
  * @param $location
  *   The full URL to the external javascript file.
  * @return mixed

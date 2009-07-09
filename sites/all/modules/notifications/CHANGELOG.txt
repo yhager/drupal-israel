@@ -1,15 +1,79 @@
-// $Id: CHANGELOG.txt,v 1.1.2.11.2.35 2009/01/30 20:45:46 jareyero Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.11.2.51.2.19 2009/06/16 15:23:09 jareyero Exp $
 
-TO DO
-------
-* Add CAN-SPAM complicance, 'Unsubscribe from all'..
-* Use actions and triggers instead of old notifications' events, see http://drupal.org/node/260100
-* Streamline the UI. Replace the user account tabs with a single page using collapsible fieldsets providing some more global options for each type (method, interval for each subscription type)
-* Move some left parts of the UI provided by modules into the notifications_ui module so we can have a drop-in replacement to provide a yet more simple UI.
-* Support for persistent notifications that will be triggered with a given interval until the user takes some action. Look into the subscription system to see whether this is currently possible with a plug-in or we need some api extensions.
-* Support for notifications in multiple languages, depending on user language
+6.x-2.0 to .......
+-------------------------------
+- Extended field value and formatting callbacks (cck support), by David Goode, #329516
+- Fixed word "undisclose" and other string issues, #451932, #452102
+- Fixed: wrong parameters in notifications_user_form, #479246
+- Fixed: implode error from notifications, by kaare, #453498
+- Fixed wrong permission checking for user managing subscriptions, by ozzin, #455160
+- Fixed: Empty Notifications fieldset, #453578
+- Fixed: Do not send notifications field value not kept for node preview, #455648
 
-6.x-1.0 to ......
+6.x-1.1 to 6.x-2.0
+-------------------------------
+- Removed logging functions, now using messaging logging facility.
+- Added content type subscription update when content type name changes, #429296
+- Fixed wrong db_placehoder type for node autocomplete callback
+- Fixed inconsistent fieldset for 'Skip notifications' in node and comment form.
+- Added comment about Immediate notifications not working with AJAX forms, #444010
+- Fixed wrong names for sending methods on subscriptions form, #443802
+- Fixed: notification subscription error in postgreSQL, #442852
+- Fixed: notifications lite messages were not digested properly
+- Renamed template parts for group footer: 'footer' => 'closing' to avoid overlap
+- Fixed: Event for token replacement was not properly set in short digests
+- Fixed: notifications_process_rows() not returning the right number of rows in queue
+- Added some tests a base test clase, some utility function, etc...
+- Improved queue status report and new clean option, #441342
+- Added event information to objects for token replacement in digests, #348722
+- Fixed multiple minor usability and formatting issues in subscriptions form
+- Renamed custom subscriptions field names: explanation -> description.
+- Fixed bug: double emails, #440168
+- Fixed some notices, variables not initialized.
+- New option to limit the displayed terms to subscribed ones only, by mehmeta, #328708
+- Change in notifications ui to avoid loading subscriptions twice.
+- Added temporary enable / disable options
+- Fixed some issues with administration and edit forms
+- Improved event handling functions, removed global variable, fixed event schema
+- Some code clean up and performance improvements in notifications_lite, related #434826
+- Fixed WSOD When Notifications Content Module is Enabled, #438886
+- Fixed subscribe/unsubscribe forms redirection, #400996, #380672
+- Improved notifications for node/comment approval workflow, added tests, #285226
+- Notifications autosubscribe now operating on node/comment post fixing some issues, #359634
+- Added table and fields description to schema, #429184
+- Fixed code style / formatting, by grendzy, #437286
+- New feature: support for anonymous subscriptions, #233830
+- Fixed some notices, by grendzy, #437282
+- Fixed PHP fatal error: unsupported operand types, by chintu84, #436698
+- Fixed wrong event author for node/comment events, #436498
+- Added taxonomy subscription links/options to nodes, by Jody Lynn, #406606
+- Fixed WSOD with notifications_ui, renamed old functions, #434766
+- Fixing releases, moved new development to DRUPAL--6-2 branch
+- Added subscription options to user account, optionally in block too.
+- Reworked UI module, more options, moved some stuff from other modules there.
+- Improved query builder used for notifications_get_subscriptions() and notifications_delete_subscriptions()
+- New UI for creating new subscriptions with autocomplete fields and drop downs.
+- User account tabs now provided by Notifications UI, can be disabled.
+- Added new account overview page and administration page
+- Fixed upgrade script error (pending pgsql testing), #375746
+- Added field type handling for the query builder (performance++ and pgsql support)
+- Fixed comment token parameters, by peter.swietoslawski, #420342
+- Notifications UI improvements. Better API, new form option for nodes..
+- Created node library for functions to be reused by multiple plug-ins.
+- Updated FeedAPI plug-in for 6.x (untested). Added some theming for feed items
+- Fixed: Leftover debug message, by David Lesieur, #402306
+- Fixed: Autosubscribe on Create and Comment - but NOT on update, by a_c_m, #406072
+- Changed node/comment form fieldset so it works better with notifications_team, by David Goode.
+- Reworded and simplified the 'Disable notifications' option
+- Fixed events where being deleted when doing a test run
+- Fixed bulk deletion for 'manage subscriptions' page
+- Fixed wrong placeholders for subscription names, #376298
+- Fixed typo in node comment template, by bas.hr, #374725
+- Added fallback information for message templates, some better help texts.
+- Fixed notifications for unpublished nodes, #369633
+- New plug-in notifications_views, by Young Hahn and David Goode, #260435
+
+6.x-1.0 to 6.x-1.1
 -----------------
 - Reworked notifications_save_subscription(): allow similar subscriptions and return status value
 - Vocabularies default to disabled for tag subscriptions, #329208
@@ -172,4 +236,3 @@ TO DO
 - Added simpletest for content notifications. Needs more cases.
 - Fixed buggy url generation (destination not working on cron)
 - Improved page workflow and fixed bug in confirmation form (send_method)
- 

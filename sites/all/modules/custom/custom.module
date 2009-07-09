@@ -46,7 +46,9 @@ function custom_views_api() {
 
 function custom_content_form() {
   foreach (content_types() as $type) {
-    if (user_access('create ' . $type['type'] . ' content')) {
+  $forum =  ($type['type'] == 'forum' && user_access('create forum topics')) ? TRUE : FALSE;
+  $blog = ($type['type'] == 'blog' && user_access('create blog entries')) ? TRUE : FALSE;
+    if ( user_access('create ' . $type['type'] . ' content') || $forum || $blog ) {
       $types[$type['type']] = $type['name'];
     }
   }

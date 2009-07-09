@@ -1,5 +1,5 @@
 <?php
-// $Id: messaging.admin.inc,v 1.1.2.11 2009/01/12 14:14:28 jareyero Exp $
+// $Id: messaging.admin.inc,v 1.1.2.13.2.2 2009/04/30 10:42:35 jareyero Exp $
 /**
  * @file
  * Messaging Framework - Admin UI
@@ -10,20 +10,71 @@
  */
 
 /**
+ * Aditional help for admin pages, will be called from messaging_help().
+ * 
+ * All paths here start with 'admin/messaging'
+ */
+function messaging_admin_help($path, $arg) {
+  switch ($path) {
+    case 'admin/messaging/template':
+      $output = '<p>' . t('Configure the templates for different types of messages. Each message group is defined by other modules using the Messaging Framework. A typical message consists on the following parts:') . '</p>';
+      $output .= '<small><table>';
+      $output .= '<tr><td colspan="2"><em>' . t('Subject') . '</em></td><td>' . t('Single line with a short description') . '</td></tr>';
+      $output .= '<tr><td rowspan="3">' . t('Body') . '</td><td><em>' . t('Header') . '</em></td><td>' . t('Greetings line') . '</td></tr>';
+      $output .= '<tr><td><em>' . t('Content') . '</em></td><td>' . t('Message main content, usually longer with the full description'). '</td></tr>';
+      $output .= '<tr><td><em>' . t('Footer') . '</em></td><td>' .  t('Closing part with site information, unsubscribe links, etc...') . '</td></tr>';
+      $output .= '</table></small>';
+      $output .= '<p>' . t('Here you\'ll be able to configure each of these parts for each sending method. When one of these parts is left blank, there is a fallback system which goes as follows:') . '</p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('If a message part is left blank for a sending method, the text part from Default sending method will be used.') . '</li>';
+      $output .= '<li>' . t('If the Default part is blank too, the fallback template (the parent in this tree) will be used.') . '</li>';
+      $output .= '</ul>';
+      return $output;
+    case 'admin/messaging/settings/method':
+      $output = '<p>' . t('Depending on your content format and the tokens you are using for messages it is important that you use the right filtering for the message body. Set up the filters you need using the <a href="@input_formats">Input formats</a> page', array('@input_formats' => url('admin/settings/filters'))) . '</p>';
+      return $output; 
+    default:
+      // Edit template groups
+      if ($arg[3] == 'edit' && ($group = $arg[4])) {
+        $info = messaging_message_group($group);
+        $output = '<p>'. t('These are the message parts for %group.', array('%group' => messaging_message_group($group, 'name')));
+        if (!empty($info['description'])) {
+          $output .= ' ' . $info['description'];
+        }
+        $output .= '</p>';
+        if (!empty($info['help'])) {
+          $output .= '<p>'. $info['help'] .'</p>';
+        }
+        $output .= '<p>' . t('Leave blank to use the default texts or use \'%empty\' for an empty message part, preventing fallback to default message texts.', array('%empty' => MESSAGING_EMPTY));
+        if (!empty($info['fallback'])) {
+          $output .= ' ' . t('The fallback template from which message parts will be taken if left blank is <a href="@template_edit">%template_name</a>', array('@template_edit' => url('admin/messaging/template/edit/' . $info['fallback']), '%template_name' => messaging_message_group($info['fallback'], 'name') ));
+        }
+        $output .= '</p>';
+        return $output;
+      }
+  }
+}
+
+/*
  * Overview of message parts and sending methods
  */
 function messaging_admin_template() {
   $output = '';
   // List message groups
   $groups = module_invoke_all('messaging', 'message groups');
-  $rows = array();
+  // Check fallbacks and get root templates for tree-like display
+  $root = array();
   foreach ($groups as $group => $group_info) {
-    $rows[] = array(
-    l($group_info['name'], 'admin/messaging/template/edit/'.$group),
-    !empty($group_info['description']) ? $group_info['description'] : '',
-    );
+    if (empty($group_info['fallback'])) {
+      $root[] = $group;
+    } else {
+      $groups[$group_info['fallback']]['children'][] = $group;
+    }
   }
-  $output .= theme('box', t('Message groups'), theme('table', NULL, $rows));
+  // Now build table which will have some indentation
+  $rows = messaging_admin_template_tree($root, $groups);
+  $header = array(t('Message groups'), t('Description'), t('Parts'));
+  $output .= theme('table', $header, $rows);
 
   // List sending methods
   $rows = array();
@@ -39,14 +90,32 @@ function messaging_admin_template() {
 }
 
 /**
+ * Recursively build a table tree for fallback methods
+ */
+function messaging_admin_template_tree($parents, $groups, $depth = 0) {
+  $rows = array();
+  foreach ($parents as $key) {
+    $info = $groups[$key];    
+    $rows[] = array(
+      theme('indentation', $depth) . l($info['name'], 'admin/messaging/template/edit/'.$key),
+      !empty($info['description']) ? $info['description'] : '',
+      ($parts = module_invoke_all('messaging', 'message keys', $key)) ? implode(', ', $parts) : '',
+    );
+    if (!empty($info['children'])) {
+      $rows = array_merge($rows, messaging_admin_template_tree($info['children'], $groups, $depth + 1));
+    }
+  }
+  return $rows;
+}
+
+/**
  * Message groups edit page
  */
 function messaging_admin_template_edit($group) {
   $output = '';
   $groups = module_invoke_all('messaging', 'message groups');
   if (isset($groups[$group])) {
-    drupal_set_title($groups[$group]['name']);
-
+    drupal_set_title(t('Message template for %name', array('%name' => $groups[$group]['name'])));
     $output .= drupal_get_form('messaging_admin_message_form', $group, $groups[$group]);
 
   }
@@ -151,12 +220,12 @@ function messaging_admin_message_form_submit($form, &$form_state) {
   foreach ($form_state['values']['messages'] as $key => $messages) {
     foreach ($messages as $method => $text) {
       db_query("DELETE FROM {messaging_message_parts} WHERE type = '%s' AND msgkey = '%s' AND method = '%s'", $group, $key, $method);
-      if ($text = trim($text)) {
+      if (trim($text)) {
         db_query("INSERT INTO {messaging_message_parts} (type, msgkey, method, module, message) VALUES('%s', '%s', '%s', '', '%s')", $group, $key, $method, $text);
       }
     }
   }
-  drupal_set_message('The messages have been updated');
+  drupal_set_message('The message templates have been updated');
 }
 
 /**
@@ -191,46 +260,6 @@ function messaging_admin_settings() {
     '#description' => t('If enabled all messages will be logged and kept for the specified time after they\'re sent.'),
   );
 
-  // Sending methods settings
-  $form['messaging_methods'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Settings for messaging methods'),
-    '#collapsible' => TRUE,
-    '#description' => t('Depending on your content format and the tokens you are using for messages it is important that you use the right filtering for the message body.').' '.
-      t('Set up the filters you need using the !input_formats page', array('!input_formats' => l('Input Formats', 'admin/settings/filters'))),
-  );
-  if ($info = messaging_method_info()) {
-    foreach (filter_formats() as $format) {
-      $format_options[$format->format] = $format->name;
-    }
-    // We add this last for it not bo be default
-    $format_options[0] = t('None (Insecure)');
-    foreach ($info as $method => $options) {
-      $key = 'messaging_method_'.$method;
-      // This will preserve settings for disabled modules
-      $form['messaging_methods'][$key] = array(
-        '#type' => 'fieldset',
-        '#title' => t('!name settings', array('!name' => $options['title'])),
-        '#tree' => TRUE,
-      );
-      // Display name
-      $form['messaging_methods'][$key]['name'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Name'),
-        '#default_value' => $options['name'],
-        '#description' => t('Name for display.'),
-      );      
-      // Output filter applied to message body
-      $form['messaging_methods'][$key]['filter'] = array(
-        '#type' => 'select',
-        '#title' => t('Message body filter'),
-        '#default_value' => isset($options['filter']) ? $options['filter'] : variable_get('messaging_default_filter', ''),
-        '#options' => $format_options,
-      );
-    }
-  } else {
-    $form['messaging_methods']['warning'] = array('#value' => t('You should enable some messaging method plug-ins for this to work.'));
-  }
   // Processing limits
   $limit = variable_get('messaging_process_limit', array('message' => 0, 'percent' => 0, 'time' => 0));
   $form['messaging_process_limit'] = array(
@@ -261,4 +290,60 @@ function messaging_admin_settings() {
     '#description' => t('Maximum percentage of cron time the process may use.'),
   );
   return system_settings_form($form);
+}
+
+/**
+ * Default sending methods settings
+ */
+function messaging_admin_method_settings() {
+  // Sending methods settings
+  if ($info = messaging_method_info()) {
+    foreach (filter_formats() as $format) {
+      $format_options[$format->format] = $format->name;
+    }
+    // We add this last for it not bo be default
+    $format_options[0] = t('None (Insecure)');
+    $form['methods'] = array('#theme' => 'messaging_admin_method_settings');
+    foreach ($info as $method => $options) {
+      $key = 'messaging_method_'.$method;
+      // This will preserve settings for disabled modules
+      $form['methods'][$key]['#tree'] = TRUE;
+      $form['methods'][$key]['title'] = array(
+        '#value' => $options['title'],
+      );
+      // Display name
+      $form['methods'][$key]['name'] = array(
+        '#type' => 'textfield',
+        '#default_value' => $options['name'],
+        '#size'          => 40,
+      );      
+      // Output filter applied to message body
+      $form['methods'][$key]['filter'] = array(
+        '#type' => 'select',
+        '#default_value' => isset($options['filter']) ? $options['filter'] : variable_get('messaging_default_filter', ''),
+        '#options' => $format_options,
+      );
+    }
+  } else {
+    $form['warning'] = array('#value' => t('You should enable some messaging method plug-ins for this to work.'));
+  }
+  return system_settings_form($form);  
+}
+
+/**
+ * Theme method settings
+ */
+function theme_messaging_admin_method_settings(&$form) {
+  $header = array(t('Method'), t('Name for display'), t('Message body filter'));
+  $rows = array();
+  foreach (element_children($form) as $key) {
+    $rows[] = array(
+      drupal_render($form[$key]['title']),
+      drupal_render($form[$key]['name']),
+      drupal_render($form[$key]),
+    );
+  }
+  $output = theme('table', $header, $rows);
+  $output .= drupal_render($form);
+  return $output;
 }

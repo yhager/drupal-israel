@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.3.2.7 2008/09/28 21:28:43 hass Exp $
+// $Id: README.txt,v 1.4.2.3 2008/09/28 21:31:03 hass Exp $
 
 Module: Google Analytics
 Author: Mike Carter <www.ixis.co.uk/contact>
@@ -66,6 +66,6 @@ code textarea. These can be found on the official Google Analytics pages
 and a few examples at http://drupal.org/node/248699. Support is not
 provided for any customisations you include.
 
-To speed up page loading you may also cache the Analytics urchin.js/ga.js
+To speed up page loading you may also cache the Analytics ga.js
 file locally. You need to make sure the site file system is in public
 download mode.

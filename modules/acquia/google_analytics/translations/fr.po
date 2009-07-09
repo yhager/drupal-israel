@@ -1,4 +1,4 @@
-# $Id: fr.po,v 1.1.4.2 2008/10/08 18:35:12 hass Exp $
+# $Id: fr.po,v 1.1.2.1 2008/10/08 18:34:13 hass Exp $
 #
 # French translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
@@ -8,8 +8,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Google Analytics 6.x-1.x\n"
-"POT-Creation-Date: 2008-09-28 23:37+0200\n"
+"Project-Id-Version: Google Analytics 6.X-2.x\n"
+"POT-Creation-Date: 2008-09-28 23:40+0200\n"
 "PO-Revision-Date: 2008-10-07 14:23+0100\n"
 "Last-Translator: Jérémy Chatard <jchatard@breek.fr>\n"
 "Language-Team: French <jchatard@breek.fr>\n"
@@ -178,102 +178,86 @@ msgid "Advanced settings"
 msgstr "Paramètres avancés"
 
 #: googleanalytics.admin.inc:178
-msgid "Google Analytics version used"
-msgstr "Version de Google Analytics utilisée"
-
-#: googleanalytics.admin.inc:181
-msgid "Latest (ga.js) tracking code"
-msgstr "Dernier code de suivi (ga.js)"
-
-#: googleanalytics.admin.inc:182
-msgid "Legacy (urchin.js) tracking code"
-msgstr "Vieux code de suivi (urchin.js)"
-
-#: googleanalytics.admin.inc:184
-msgid "<a href=\"@ga_js_url\">On December 13, 2007, Google rolled out a new API</a> for its tracking code, and suggests all new sites to use this code. You should only use the older legacy code, if you have custom tracking code tied to that API. Otherwise it is suggested you use the latest API, as the legacy code will not receive feature updates and is not compatible with new features."
-msgstr "<a href=\"@ga_js_url\">Le 13 décembre 2007, Google a sorti une nouvelle API</a> pour son code de suivi et suggère à tous les sites de l'utiliser. Vous ne devriez utiliser le vieux code que si vous avez du code personnalisé y recourant massivement. Dans le cas contraire, il est recommandé d'utiliser la dernière API car l'ancien code ne sera plus maintenu et pourrait être incompatible avec les nouvelles fonctionnalités."
-
-#: googleanalytics.admin.inc:189
 msgid "Cache tracking code file locally"
 msgstr "Mettre en cache local le code de suivi"
 
-#: googleanalytics.admin.inc:190
+#: googleanalytics.admin.inc:179
 msgid "If checked, the tracking code file is retrieved from Google Analytics and cached locally. It is updated daily from Google's servers to ensure updates to tracking code are reflected in the local copy. Do not activate this until after Google Analytics has confirmed your tracker!"
 msgstr "Si cochée, le fichier contenant le code de suivi est récupéré depuis Google Analytics et mis en cache local. Il est mis à jour chaque jour par les serveurs de Google. Ne pas activer avant que Google Analytics n'est confirmé l'ID de suivi."
 
-#: googleanalytics.admin.inc:195
+#: googleanalytics.admin.inc:184
 msgid "<a href=\"@url\">Public file transfers</a> must be enabled to allow local caching."
 msgstr "<a href=\"!url\">La méthode de téléchargement publique</a> doit être activée pour que le système de cache local fonctionne."
 
-#: googleanalytics.admin.inc:199
+#: googleanalytics.admin.inc:188
 msgid "Depends on: !dependencies"
 msgstr "Dépend de !dependencies"
 
-#: googleanalytics.admin.inc:199
+#: googleanalytics.admin.inc:188
 msgid " (<span class=\"admin-enabled\">enabled</span>)"
 msgstr " (<span class=\"admin-enabled\">activé</span>)"
 
-#: googleanalytics.admin.inc:199
+#: googleanalytics.admin.inc:188
 msgid " (<span class=\"admin-disabled\">disabled</span>)"
 msgstr " (<span class=\"admin-disabled\">désactivé</span>)"
 
-#: googleanalytics.admin.inc:206
+#: googleanalytics.admin.inc:195
 msgid "Track internal search"
 msgstr "Suivre les recherches internes"
 
-#: googleanalytics.admin.inc:207
+#: googleanalytics.admin.inc:196
 msgid "If checked, internal search keywords are tracked. You must configure your Google account to use the internal query parameter <strong>search</strong>. For more information see <a href=\"!url\">How do I set up Site Search for my profile</a>."
 msgstr "Si cochée, les mots clés des recherches internes sont suivis. Vous devez configurer votre compte Google pour utiliser les paramètres internes de requête. Pour plus d'information voir <a href=\"!url\">Comment paramétrer les recherches internes pour mon profil</a>."
 
-#: googleanalytics.admin.inc:214
+#: googleanalytics.admin.inc:203
 msgid "Custom JavaScript code"
 msgstr "Code JavaScript personnalisé"
 
-#: googleanalytics.admin.inc:217
+#: googleanalytics.admin.inc:206
 msgid "You can add custom Google Analytics <a href=\"!snippets\">code snippets</a> here. These will be added to every page that Google Analytics appears on. Before you add custom code to the below textarea's you should read <a href=\"!GaConceptsOverview\">Google Analytics Tracking Code - Functional Overview</a> and the <a href=\"!gaJSApi\">Google Analytics Tracking API</a> documentation. <strong>Do not include the &lt;script&gt; tags</strong>, and always end your code with a semicolon (;)."
 msgstr "Vous pouvez ajouter des <a href=\"!snippets\">morceaux de code</a> Google Analytics ici. Avant d'ajouter du code personnalisé dans le champ de saisi, vous devriez lire <a href=\"!GaConceptsOverview\">Google Analytics Tracking Code - Functional Overview</a> ainsi que la documentation <a href=\"!gaJSApi\">Google Analytics Tracking API</a>. <strong>Ne pas inclure les balises &lt;script&gt;</strong>, et toujours terminer votre code par un point virgule \";\"."
 
-#: googleanalytics.admin.inc:221
+#: googleanalytics.admin.inc:210
 msgid "Code snippet (before)"
 msgstr "Code (avant)"
 
-#: googleanalytics.admin.inc:224
-msgid "Code in this textarea will be added <strong>before</strong> urchinTracker() or pageTracker._trackPageview()."
-msgstr "Le code de ce champ texte sera ajouté <strong>avant</strong> urchinTracker() ou pageTracker._trackPageview()."
+#: googleanalytics.admin.inc:213
+msgid "Code in this textarea will be added <strong>before</strong> pageTracker._trackPageview()."
+msgstr "Le code de ce champ texte sera ajouté <strong>avant</strong> pageTracker._trackPageview()."
 
-#: googleanalytics.admin.inc:228
+#: googleanalytics.admin.inc:217
 msgid "Code snippet (after)"
 msgstr "Code (après)"
 
-#: googleanalytics.admin.inc:231
-msgid "Code in this textarea will be added <strong>after</strong> urchinTracker() or pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts."
-msgstr "Le code de ce champ texte sera ajouté <strong>après</strong> urchinTracker() ou pageTracker._trackPageview(). C'est util pour si vous souhaitez suivre un site depuis deux comptes."
+#: googleanalytics.admin.inc:220
+msgid "Code in this textarea will be added <strong>after</strong> pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts."
+msgstr "Le code de ce champ texte sera ajouté <strong>après</strong> pageTracker._trackPageview(). C'est util pour si vous souhaitez suivre un site depuis deux comptes."
 
-#: googleanalytics.admin.inc:236
+#: googleanalytics.admin.inc:225
 msgid "JavaScript scope"
 msgstr "Scope JavaScript"
 
-#: googleanalytics.admin.inc:237
+#: googleanalytics.admin.inc:226
 msgid "<strong>Warning:</strong> Google recommends adding the external JavaScript files to footer for performance reasons."
 msgstr "<strong>Attention :</strong> pour de meilleures performances, Google recommande d'ajouter le fichier JavaScript externe dans le footer."
 
-#: googleanalytics.admin.inc:239
+#: googleanalytics.admin.inc:228
 msgid "Footer"
 msgstr "Pied de page"
 
-#: googleanalytics.admin.inc:240
+#: googleanalytics.admin.inc:229
 msgid "Header"
 msgstr "Titre"
 
-#: googleanalytics.admin.inc:250
+#: googleanalytics.admin.inc:239
 msgid "A valid Google Analytics account number is case sensitive and formatted like UA-xxxxxx-x."
 msgstr "Un numéro de compte Google Analytics est sensible à la casse et formaté de cette manière UA-xxxxxx-x."
 
-#: googleanalytics.admin.inc:255;258
+#: googleanalytics.admin.inc:244;247
 msgid "Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings."
 msgstr "Ne placez pas l'ensemble du code de suivi fourni par Google dans le code JavaScript ! Ce module construit le code de suivi en se basant sur le numéro de votre compte Google Analytics et les paramètres."
 
-#: googleanalytics.admin.inc:261;264
+#: googleanalytics.admin.inc:250;253
 msgid "Do not include the &lt;script&gt; tags in the javascript code snippets."
 msgstr "Ne pas inclure les balises &lt;script&gt; dans ce champ."
 
@@ -281,23 +265,23 @@ msgstr "Ne pas inclure les balises &lt;script&gt; dans ce champ."
 msgid "<a href=\"@ga_url\">Google Analytics</a> is a free statistics package based on the excellent Urchin system. This module provides services to better integrate Drupal with Google Analytics."
 msgstr "<a href=\"@ga_url\">Google Analytics</a> est un outil d'analyse de trafic gratuit basé sur l'excellent Urchin. Ce module fourni des services pour mieux intégrer Google Analytics avec Drupal."
 
-#: googleanalytics.module:204
+#: googleanalytics.module:165
 msgid "Google Analytics configuration"
 msgstr "Configuration de Google Analytics"
 
-#: googleanalytics.module:211
+#: googleanalytics.module:172
 msgid "User tracking"
 msgstr "Suivi des utilisateurs"
 
-#: googleanalytics.module:232
+#: googleanalytics.module:193
 msgid "Google Analytics module"
 msgstr "Module Google Analytics"
 
-#: googleanalytics.module:233
+#: googleanalytics.module:194
 msgid "Google Analytics module has not been configured yet. Please configure its settings from the <a href=\"@url\">Google Analytics settings page</a>."
 msgstr "Le module Google Analyics n'a pas encore été configuré. Merci de le configurer dans <a href=\"@url\">sa page de paramètres</a>."
 
-#: googleanalytics.module:235
+#: googleanalytics.module:196
 msgid "Not configured"
 msgstr "Pas configuré"
 
@@ -325,4 +309,29 @@ msgstr "googleanalytics"
 #: googleanalytics.info:0
 msgid "Adds Google Analytics javascript tracking code to all your site's pages."
 msgstr "Ajoute le fichier javascript de tracking de Google Analytics à toutes les pages de votre site."
+
+#: googleanalytics.info:0
+msgid "Statistics"
+msgstr "Statistiques"
+
+#~ msgid "Google Analytics version used"
+#~ msgstr "Version de Google Analytics utilisée"
+#~ msgid "Latest (ga.js) tracking code"
+#~ msgstr "Dernier code de suivi (ga.js)"
+#~ msgid "Legacy (urchin.js) tracking code"
+#~ msgstr "Vieux code de suivi (urchin.js)"
+#~ msgid ""
+#~ "<a href=\"@ga_js_url\">On December 13, 2007, Google rolled out a new API</"
+#~ "a> for its tracking code, and suggests all new sites to use this code. "
+#~ "You should only use the older legacy code, if you have custom tracking "
+#~ "code tied to that API. Otherwise it is suggested you use the latest API, "
+#~ "as the legacy code will not receive feature updates and is not compatible "
+#~ "with new features."
+#~ msgstr ""
+#~ "<a href=\"@ga_js_url\">Le 13 décembre 2007, Google a sorti une nouvelle "
+#~ "API</a> pour son code de suivi et suggère à tous les sites de l'utiliser. "
+#~ "Vous ne devriez utiliser le vieux code que si vous avez du code "
+#~ "personnalisé y recourant massivement. Dans le cas contraire, il est "
+#~ "recommandé d'utiliser la dernière API car l'ancien code ne sera plus "
+#~ "maintenu et pourrait être incompatible avec les nouvelles fonctionnalités."
 
