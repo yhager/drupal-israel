@@ -17,8 +17,10 @@ function doil_preprocess_page(&$vars) {
 }
 
 function doil_preprocess_node(&$vars) {
-  $notifications_links = module_invoke('notifications_ui', 'link', 'node', $vars['node']);
-  foreach ($notifications_links as $link) {
-    $vars['notifications_links'][] = l($link['title'], $link['href'], $link);
+  if (module_exists('notifications_ui')) {
+    $notifications_links = module_invoke('notifications_ui', 'link', 'node', $vars['node']);
+    foreach ($notifications_links as $link) {
+      $vars['notifications_links'][] = l($link['title'], $link['href'], $link);
+    }
   }
 }
