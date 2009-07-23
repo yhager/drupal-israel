@@ -123,7 +123,7 @@ function custom_user_block_args() {
   }
   
   $args['status'] = t('There are currently @users users and @anon anonymous users:', array('@users' => count($users), '@anon' => $count_anon));
-  $args['users_list'] = implode(', ', $users);
+  $args['users_list'] = is_array($users) ? implode(', ', $users) : '';
 
   $latest = user_load(db_result(db_query('SELECT uid FROM {users} WHERE status != 0 AND access != 0 ORDER BY created DESC LIMIT 1')));
   $args['latest'] = t('!user is the newest member', array('!user' => theme('username', $latest)));
