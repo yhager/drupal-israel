@@ -83,6 +83,8 @@ DirectoryIndex index.php
   # adapt and uncomment the following:
   # RewriteCond %{HTTP_HOST} ^example\.com$ [NC]
   # RewriteRule ^(.*)$ http://www.example.com/$1 [L,R=301]
+    RewriteCond %{HTTP_HOST} ^drupal\.org\.il$ [NC]
+    RewriteRule ^(.*)$ http://www.drupal.org.il/$1 [L,R=301]
   #
   # To redirect all users to access the site WITHOUT the 'www.' prefix,
   # (http://www.example.com/... will be redirected to http://example.com/...)
