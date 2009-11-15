@@ -25,7 +25,7 @@ ul li, ol li{margin-left:0;margin-right:1.5em;}
 #header-blocks #search-box form{text-align:left;}
 
 /*Site details*/
-#site-details{float:right}
+#site-details{float:right; width:700px;}
 #site-logo{float:right;padding:5px 10px 0 0;}
 
 /*Mission*/

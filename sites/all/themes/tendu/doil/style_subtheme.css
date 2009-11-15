@@ -384,3 +384,13 @@ form#custom-content-form input.form-submit{ margin:10px 10px 0 0;}
 
 
 .view-doil-israeli-promoted-websites .views-field-body p{padding-bottom:0;}
+
+
+/*
+overrides
+*/
+#site-name{font-size:4em;line-height:1.333em;font-weight:normal;}
+#site-name a{font-weight:normal;}
+#site-slogan{font-size:1.5em;line-height:1.333em;}
+.block-promoted-world h2, block-promoted-israeli h2{font-size:1.8em;
+font-weight:normal;}
