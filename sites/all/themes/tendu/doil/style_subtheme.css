@@ -363,9 +363,10 @@ service block
 
 #block-quicktabs-1 ul.quicktabs_tabs li.active{ 
 	padding:6px; 
-	background:#E5F3E4; 
-	-moz-border-radius:4px 0 0 4px;
+	background:#ECFBEB; 
+	-moz-border-radius:4px 4px 0 0;
 	-webkit-border-top-left-radius: 4px;
 	-webkit-border-top-right-radius: 4px;
-	border-radius:4px 0 0 4px;
+	border-radius:4px 4px 0 0;
+	border-color:#697668;
 	}
