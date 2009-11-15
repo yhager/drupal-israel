@@ -369,4 +369,7 @@ service block
 	-webkit-border-top-right-radius: 4px;
 	border-radius:4px 4px 0 0;
 	border-color:#697668;
+	border-left:1px solid;
+	border-right:1px solid;
+	border-top:1px solid;
 	}
