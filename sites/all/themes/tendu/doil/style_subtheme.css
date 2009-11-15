@@ -154,7 +154,7 @@ div.messages{padding:12px;margin-bottom:10px;}
 .block-header h2{float:right;}
 .block-header .links{display:block;text-align:left;font-size:1.5em;}
 /* Style blocks with Block Class (or Block Theme):*/
-.block-green-light {padding:12px 0 0 0 !important;border:1px solid #bfd3bd;background:#ecfbeb url(images/bg_green_light_top.gif) repeat-x 0 0;overflow:hidden}
+.block-green-light {padding:12px 0 0 0 !important;border:1px solid #bfd3bd;background:#ecfbeb url(images/bg_green_light_top.gif) repeat-x 0 0 !important; overflow:hidden}
 .block-green-light h2{color:#000;padding:0 12px;}
 .block-green-light .content{color:#333;padding:12px;background: url(images/bg_green_light_bottom.gif) repeat-x 0 100%;}
 
@@ -165,7 +165,7 @@ div.messages{padding:12px;margin-bottom:10px;}
 #user-blocks .block-green-light a:hover{text-decoration:underline;}
 #user-blocks .block-green-light a:visited{color:#1f7bb3;}
 
-.block-blue-light {padding:12px 0 0 0 !important;border:1px solid #b8d4e4;background:#d5ebf8 url(images/bg_blue_light_top.gif) repeat-x 0 0;overflow:hidden}
+.block-blue-light {padding:12px 0 0 0 !important;border:1px solid #b8d4e4;background:#d5ebf8 url(images/bg_blue_light_top.gif) repeat-x 0 0 !important; overflow:hidden}
 .block-blue-light h2{color:#000;padding:0 12px;}
 .block-blue-light .content{color:#333;padding:12px;background: url(images/bg_blue_light_bottom.gif) repeat-x 0 100%}
 
