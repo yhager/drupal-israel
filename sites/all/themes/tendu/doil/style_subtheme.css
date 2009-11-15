@@ -374,9 +374,9 @@ service block
 	border-top:1px solid;
 
 	}
-form#custom-content-form div.edit-type-wrapper label{float:right; margin:0 0 0 12px;}
-form#custom-content-form div.edit-type-wrapper{ float:right;}	
-form#custom-content-form input#edit-submit-1{ margin:10px 10px 0 0;}		
+form#custom-content-form div#edit-type-wrapper label{float:right; margin:0 0 0 12px;}
+form#custom-content-form div#edit-type-wrapper{ float:right;}	
+form#custom-content-form input.form-submit{ margin:10px 10px 0 0;}		
 	
 	
 #block-quicktabs-1 ul.quicktabs_tabs li.active a{	color:#000;}
