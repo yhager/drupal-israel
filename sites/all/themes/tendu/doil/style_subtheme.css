@@ -392,5 +392,5 @@ overrides
 #site-name{font-size:4em;line-height:1.333em;font-weight:normal;}
 #site-name a{font-weight:normal;}
 #site-slogan{font-size:1.5em;line-height:1.333em;}
-.block-promoted-world h2, block-promoted-israeli h2{font-size:1.8em;
+.block-promoted-world h2, .block-promoted-israeli h2{font-size:1.8em;
 font-weight:normal;}
