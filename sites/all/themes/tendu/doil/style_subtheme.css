@@ -379,7 +379,7 @@ form#custom-content-form div#edit-type-wrapper{ float:right;}
 form#custom-content-form input.form-submit{ margin:10px 10px 0 0;}		
 	
 	
-#block-quicktabs-1 ul.quicktabs_tabs li.active a{	color:#000;}
+#block-quicktabs-1 ul.quicktabs_tabs li.active a{color:#000;}
 
 
 
@@ -394,3 +394,19 @@ overrides
 #site-slogan{font-size:1.5em;line-height:1.333em;}
 .block-promoted-world h2, .block-promoted-israeli h2{font-size:1.8em;
 font-weight:normal;}
+span.feed-icons{ margin:-2px 12px;}
+div.content{ margin:24px 0 0 0;}
+
+
+/*
+user block favorite tab
+*/
+.view-favorites {
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	border-color:#697668;
+	background:#ECFBEB url(images/bg_green_light_top.gif) repeat-x scroll 0 0 !important;
+	border:1px solid #BFD3BD;
+	overflow:hidden;padding:12px 0 0 !important;
+}
