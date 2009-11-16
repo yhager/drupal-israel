@@ -395,7 +395,7 @@ overrides
 .block-promoted-world h2, .block-promoted-israeli h2{font-size:1.8em;
 font-weight:normal;}
 span.feed-icons{ margin:-2px 12px;}
-.node div.content{ margin:24px 0 0 0;}
+.node div.content{ margin:12px 0 0 0;}
 
 
 /*
@@ -408,5 +408,15 @@ user block favorite tab
 	border-color:#697668;
 	background:#ECFBEB url(images/bg_green_light_top.gif) repeat-x scroll 0 0 !important;
 	border:1px solid;
-	overflow:hidden;padding:12px 0 0 !important;
+	overflow:hidden;
+	padding:12px 0 0 !important;
+}
+.view-favorites .view-content{
+	padding:12px;
+}
+.view-favorites .view-content a,
+.view-favorites .view-content a:link,
+.view-favorites .view-content a:visited,
+.view-favorites .view-content a:focus{
+	color:#333;
 }
