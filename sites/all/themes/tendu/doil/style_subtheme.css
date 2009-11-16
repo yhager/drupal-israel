@@ -395,7 +395,7 @@ overrides
 .block-promoted-world h2, .block-promoted-israeli h2{font-size:1.8em;
 font-weight:normal;}
 span.feed-icons{ margin:-2px 12px;}
-div.content{ margin:24px 0 0 0;}
+.node div.content{ margin:24px 0 0 0;}
 
 
 /*
@@ -407,6 +407,6 @@ user block favorite tab
 	border-radius:8px;
 	border-color:#697668;
 	background:#ECFBEB url(images/bg_green_light_top.gif) repeat-x scroll 0 0 !important;
-	border:1px solid #BFD3BD;
+	border:1px solid;
 	overflow:hidden;padding:12px 0 0 !important;
 }
