@@ -420,3 +420,4 @@ user block favorite tab
 .view-favorites .view-content a:focus{
 	color:#0073BB !important;
 }
+.node-bottom ul.links li{float:right;}
