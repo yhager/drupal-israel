@@ -49,7 +49,13 @@ function custom_content_form() {
   $forum =  ($type['type'] == 'forum' && user_access('create forum topics')) ? TRUE : FALSE;
   $blog = ($type['type'] == 'blog' && user_access('create blog entries')) ? TRUE : FALSE;
     if ( user_access('create ' . $type['type'] . ' content') || $forum || $blog ) {
-      $types[$type['type']] = $type['name'];
+      if ($type['type'] == 'forum') {
+        // push forum to the start
+        $types = array('forum' => $type['name']) + $types;
+      }
+      else {
+        $types[$type['type']] = $type['name'];
+      }
     }
   }
 
