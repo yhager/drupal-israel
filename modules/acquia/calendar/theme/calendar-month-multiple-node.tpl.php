@@ -1,12 +1,12 @@
 <?php
-// $Id: calendar-month-multiple-node.tpl.php,v 1.1.2.4 2008/11/20 12:29:14 karens Exp $
+// $Id: calendar-month-multiple-node.tpl.php,v 1.1.2.5 2009/02/14 16:51:50 karens Exp $
 /**
  * @file
  * Template to display a summary of the days items as a calendar month node.
  * 
  * 
  * @see template_preprocess_calendar_month_multiple_node.
- */ 
+ */
 ?>
 <div class="view-item view-item-<?php print $view->name ?>">
   <div class="calendar monthview" id="<?php print $curday ?>">

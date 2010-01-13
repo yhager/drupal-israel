@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_plugin_style.inc,v 1.1.2.11 2008/12/02 17:32:48 karens Exp $
+// $Id: calendar_plugin_style.inc,v 1.1.2.15 2009/05/11 23:52:15 karens Exp $
 /**
  * Style plugin to create the calendar navigation and links.
  * 
@@ -42,7 +42,7 @@ class calendar_plugin_style extends views_plugin_style {
    */
   function date_fields() {
     $date_fields = array();
-    $calendar_fields = date_api_fields();
+    $calendar_fields = date_api_fields($this->view->base_table);
     $arguments = $this->display->handler->get_option('arguments');
     foreach ($arguments as $name => $argument) {
       if (isset($argument['date_fields'])) {
@@ -75,22 +75,30 @@ class calendar_plugin_style extends views_plugin_style {
         $errors[$style] = t("The @style style requires a Date argument.", array('@style' => $style));      
       }
       $this->view->date_info->arg_missing = TRUE;
+      $this->date_info->arg_fields = array();
     }
-    elseif ($arguments['date_argument']['default_action'] != 'default' || $arguments['date_argument']['default_argument_type'] != 'date') {
-      if (empty($this->view->date_info->arg_missing_default)) {
-        $errors[] = calendar_errors('missing_argument_default');      
+    else {
+      $this->date_info->arg_fields = $arguments['date_argument']['date_fields'];
+      if ($arguments['date_argument']['default_action'] != 'default' || $arguments['date_argument']['default_argument_type'] != 'date') {
+        if (empty($this->view->date_info->arg_missing_default)) {
+          $errors[] = calendar_errors('missing_argument_default');      
+        }
+        $this->view->date_info->arg_missing_default = TRUE;
       }
-      $this->view->date_info->arg_missing_default = TRUE;
     }
-     
+    
     // Make sure date fields are not set up to 'Group multiple values' 
     // in the calendar style.
     if ($style == 'calendar_style') {
-      $view_fields = date_api_fields('node');
+      $view_fields = date_api_fields($this->view->base_table);
       $view_fields = $view_fields['name'];
       $fields = $this->display->handler->get_option('fields');
+      $has_fields = FALSE;
       foreach ($fields as $column => $field) {
         $field_name = $field['table'] .".". $field['field'];
+        if (in_array($field_name, $this->date_info->arg_fields)) {
+          $has_fields = TRUE;
+        }
         if (!empty($field['multiple']) && array_key_exists($field_name, $view_fields)) {
           $cck_fields = content_fields();
           $real_name = $view_fields[$field_name]['real_field_name'];
@@ -98,6 +106,12 @@ class calendar_plugin_style extends views_plugin_style {
             $errors[] = t("The date field '@field' used by the display '@display_title' cannot be set to 'Group multiple values'.", array('@field' => $view_fields[$field_name]['label'], '@display_title' => $this->display->display_title));
           }
         }
+      }
+      // The calendar needs the values from the date fields to split
+      // the nodes into calendar cells, so make sure the field gets
+      // added into the query.
+      if (!$has_fields) {
+        $errors[] = t('The date argument date fields must be added to this query. You can exclude them if you do not want them displayed in the calendar.');
       }
     }
     return $errors;
@@ -124,7 +138,7 @@ class calendar_plugin_style extends views_plugin_style {
           $argument->max_date = $range[1];
         }
         $this->view->date_info->granularity = !empty($argument->granularity) ? $argument->granularity : $argument->options['granularity'];
-        $this->view->date_info->date_arg = !empty($this->view->args) ? $this->view->args[$argument->position] : '';
+        $this->view->date_info->date_arg = !empty($this->view->args) && count($this->view->args) > $argument->position ? $this->view->args[$argument->position] : '';
         $this->view->date_info->date_arg_pos = $i;
         $this->view->date_info->year = isset($argument->year) ? $argument->year : NULL;
         $this->view->date_info->month = isset($argument->month) ? $argument->month: NULL;
@@ -142,10 +156,12 @@ class calendar_plugin_style extends views_plugin_style {
     }
     $this->view->date_info->display_types = $this->display_types();
     $keys = drupal_map_assoc(array_keys(calendar_display_types()));
-    $this->view->date_info->calendar_display = $keys[$this->view->date_info->granularity];
+    $this->view->date_info->calendar_type = $keys[$this->view->date_info->granularity];
     
     // bring the node type into the query so we can use it in the theme
-    $this->view->query->add_field('node', 'type');
+    if ($this->view->base_table == 'node') {
+      $this->view->query->add_field('node', 'type');
+    }
       
     parent::query();
   }

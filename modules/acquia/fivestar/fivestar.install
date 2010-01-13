@@ -1,5 +1,10 @@
 <?php
-// $Id: fivestar.install,v 1.5.2.8 2008/07/23 15:44:19 quicksketch Exp $
+// $Id: fivestar.install,v 1.5.2.13 2009/10/22 00:23:29 ezrag Exp $
+
+/**
+ * @file
+ * Installation file for fivestar module.
+ */
 
 function fivestar_schema() {
   return array();
@@ -21,17 +26,18 @@ function fivestar_uninstall() {
 }
 
 /**
-* Implementation of hook_enable().
-*/
+ * Implementation of hook_enable().
+ */
 function fivestar_enable() {
   if (module_exists('content')) {
+    module_load_include('inc', 'fivestar', 'fivestar_field');
     content_notify('enable', 'fivestar');
   }
 }
 
 /**
-* Implementation of hook_disable().
-*/
+ * Implementation of hook_disable().
+ */
 function fivestar_disable() {
   if (module_exists('content')) {
     content_notify('disable', 'fivestar');
@@ -96,10 +102,15 @@ function fivestar_update_2() {
 
 /**
  * Upgrade to Drupal 6 and VotingAPI 2.
- * 
+ *
  * Remove anonymous vote interval from Fivestar, now handled by VotingAPI.
  */
 function fivestar_update_6100() {
+  // If using CCK, make sure it has updated first.
+  if (function_exists('content_check_update') && ($abort = content_check_update('fivestar'))) {
+    return $abort;
+  }
+  
   $ret = array();
   variable_del('fivestar_anonymous_vote_interval');
   $ret[] = array('success' => TRUE, 'query' => "variable_del('fivestar_anonymous_vote_interval')");
@@ -155,7 +166,8 @@ function fivestar_update_6103() {
  */
 function fivestar_update_6104() {
   // Previously ran as fivestar_update_5703 on Drupal 5.
-  if (fivestar_update_version() >= 6100) {
+  // Also, don't run this update if CCK is not enabled.
+  if (fivestar_update_version() >= 6100 && module_exists('content')) {
     $result = db_query("SELECT field_name, global_settings FROM {content_node_field} WHERE type = 'fivestar'");
     while ($field = db_fetch_object($result)) {
       $settings = unserialize($field->global_settings);
@@ -178,4 +190,29 @@ function fivestar_update_6104() {
     }
   }
   return array();
+}
+
+/**
+ * Belated update for Drupal 6: Re-enable Fivestar CCK fields.
+ */
+function fivestar_update_6105() {
+  $ret = array();
+
+  if (!module_exists('content')) {
+    $ret[] = array('success' => TRUE, 'query' => t('CCK is not installed. No update ran.'));
+    return $ret;
+  }
+
+  if ($abort = content_check_update('fivestar')) {
+    return $abort;
+  }
+
+  // All CCK fields are disabled by Content module during the D6 upgrade.
+  // Re-enable the Fivestar fields.
+  module_load_include('inc', 'fivestar', 'fivestar_field');
+  content_associate_fields('fivestar');
+
+  $ret[] = array('success' => TRUE, 'query' => t('Re-enabled Fivestar CCK fields.'));
+
+  return $ret;
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent_streams.inc,v 1.2 2009/01/20 18:24:28 pwolanin Exp $
+// $Id: acquia_agent_streams.inc,v 1.4 2009/06/16 20:47:10 pwolanin Exp $
 
 /**
  * @file
@@ -65,7 +65,7 @@ function _acquia_agent_xmlrpc() {
 function acquia_agent_stream_context_create($url, $module = 'acquia_agent') {
   $opts = array();
   $uri = parse_url($url);
-  if ($uri['scheme'] == 'https') {
+  if (isset($uri['scheme']) && ($uri['scheme'] == 'https') && variable_get('acquia_agent_verify_peer', 0)) {
     // Look for a local certificate to validate the server identity.
     $pem_file = drupal_get_path('module', $module) .'/'. $uri['host'] . '.pem';
     if (file_exists($pem_file)) {
@@ -90,23 +90,7 @@ function acquia_agent_stream_context_create($url, $module = 'acquia_agent') {
  *   The rest of the parameters and return values are the same as xmlrpc().
  */
 function acquia_agent_http_request($context, $url, $headers = array(), $method = 'GET', $data = NULL, $retry = 3) {
-  static $self_test = FALSE;
   $result = new stdClass();
-  // Try to clear the drupal_http_request_fails variable if it's set. We
-  // can't tie this call to any error because there is no surefire way to
-  // tell whether a request has failed, so we add the check to places where
-  // some parsing has failed.
-  if (!$self_test && variable_get('drupal_http_request_fails', FALSE)) {
-    $self_test = TRUE;
-    $works = module_invoke('system', 'check_http_request');
-    $self_test = FALSE;
-    if (!$works) {
-      // Do not bother with further operations if we already know that we
-      // have no chance.
-      $result->error = t("The server can't issue HTTP requests");
-      return $result;
-    }
-  }
 
   // Parse the URL and make sure we can handle the schema.
   $uri = parse_url($url);
@@ -163,8 +147,15 @@ function acquia_agent_http_request($context, $url, $headers = array(), $method =
     // host that do not take into account the port number.
     'Host' => "Host: $host",
     'User-Agent' => 'User-Agent: Drupal (+http://drupal.org/)',
-    'Content-Length' => 'Content-Length: '. strlen($data)
   );
+
+  // Only add Content-Length if we actually have any content or if it is a POST
+  // or PUT request. Some non-standard servers get confused by Content-Length in
+  // at least HEAD/GET requests, and Squid always requires Content-Length in
+  // POST/PUT requests.
+  if (!empty($data) || $method == 'POST' || $method == 'PUT') {
+    $defaults['Content-Length'] = 'Content-Length: '. strlen($data);
+  }
 
   // If the server url has a user then attempt to use basic authentication
   if (isset($uri['user'])) {

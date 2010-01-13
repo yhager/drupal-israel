@@ -1,5 +1,5 @@
 <?php
-// $Id: webform_report.inc,v 1.17.2.12 2009/01/10 01:55:02 quicksketch Exp $
+// $Id: webform_report.inc,v 1.17.2.15 2009/03/04 05:05:12 quicksketch Exp $
 
 /**
  * @file
@@ -389,7 +389,7 @@ function webform_results_download($node, $format = 'delimiter', $options = array
   // Open a new Webform exporter object.
   $exporter = webform_export_create_handler($format, $options);
 
-  $file_name = tempnam(variable_get('file_directory_temp', FILE_DIRECTORY_TEMP), 'webform');
+  $file_name = tempnam(variable_get('file_directory_temp', file_directory_temp()), 'webform');
   $handle = @fopen($file_name, 'w'); // The @ suppresses errors.
   $exporter->bof($handle);
 
@@ -429,10 +429,11 @@ function webform_results_download($node, $format = 'delimiter', $options = array
     $row[] = $submission->uid;
     $row[] = $submission->name;
     foreach ($node->webform['components'] as $cid => $component) {
-      $csv_data_function   = '_webform_csv_data_'. $component['type'];
+      $csv_data_function = '_webform_csv_data_'. $component['type'];
       if (function_exists($csv_data_function)) {
         // Let each component add its data.
-        $data = $csv_data_function($submission->data[$cid], $component);
+        $raw_data = isset($submission->data[$cid]) ? $submission->data[$cid] : NULL;
+        $data = $csv_data_function($raw_data, $component);
         if (is_array($data)) {
           $row = array_merge($row, array_values($data));
         }
@@ -461,7 +462,7 @@ function webform_results_download($node, $format = 'delimiter', $options = array
 /**
  * Provides a simple analysis of all submissions to a webform.
  */
-function webform_results_analysis($node) {
+function webform_results_analysis($node, $sids = array()) {
   $rows = array();
   $question_number = 0;
 
@@ -477,7 +478,7 @@ function webform_results_analysis($node) {
     // Do component specific call.
     $analysis_function = '_webform_analysis_rows_'. $component['type'];
     if (function_exists($analysis_function)) {
-      $crows = $analysis_function($component);
+      $crows = $analysis_function($component, $sids);
       if (is_array($crows)) {
         $row[0] = array('data' => '<strong>'. $question_number .'</strong>', 'rowspan' => count($crows) + 1, 'valign' => 'top');
         $row[1] = array('data' => '<strong>'. $component['name'] .'</strong>', 'colspan' => '10');

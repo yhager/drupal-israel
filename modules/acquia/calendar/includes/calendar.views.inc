@@ -1,5 +1,5 @@
 <?php
-//$Id: calendar.views.inc,v 1.1.2.8 2008/10/23 12:31:37 karens Exp $
+//$Id: calendar.views.inc,v 1.1.2.9 2009/01/23 21:05:41 karens Exp $
 /**
  *  Implementation of hook_views_query()
  *  
@@ -118,7 +118,7 @@ function calendar_views_plugins() {
         'parent' => 'page',
         'theme' => 'views_view',
         'no ui' => TRUE,
-        'no remove' => TRUE,
+        //'no remove' => TRUE,
         'uses hook menu' => TRUE,
         'uses hook block' => FALSE,
         'use ajax' => TRUE,
@@ -140,7 +140,7 @@ function calendar_views_plugins() {
         'parent' => 'block',
         'theme' => 'views_view',
         'no ui' => TRUE,
-        'no remove' => TRUE,
+        //'no remove' => TRUE,
         'uses hook block' => TRUE,
         'use ajax' => TRUE,
         'use pager' => FALSE,
@@ -159,7 +159,7 @@ function calendar_views_plugins() {
         'parent' => 'calendar_attachment',
         'theme' => 'views_view',
         'no ui' => TRUE,
-        'no remove' => TRUE,
+        //'no remove' => TRUE,
         'use ajax' => TRUE,
         'use pager' => TRUE,
         'admin' => t('Calendar page year, month, week, or day view'),

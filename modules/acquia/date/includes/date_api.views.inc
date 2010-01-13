@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api.views.inc,v 1.1.2.6 2008/11/30 13:58:27 karens Exp $
+//$Id: date_api.views.inc,v 1.1.2.11 2009/06/09 12:57:12 karens Exp $
 
 /**
  * @file
@@ -122,26 +122,32 @@ function date_api_views_plugins() {
 function date_api_views_data() {
   $data = array();
   
-  // The flexible date argument.
-  $data['node']['date_argument'] = array(
-    'group' => t('Date'),
-    'title' => t('Date'),
-    'help' => t('Filter any Views date field by a date argument, using any common ISO date/period format (i.e. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, etc).'),
-    'argument' => array(
-      'handler' => 'date_api_argument_handler',
-      'empty name field' => t('Undated'),
-    ),
-  );  
-  // The flexible date filter.
-  $data['node']['date_filter'] = array(
-    'group' => t('Date'),
-    'title' => t('Date'),
-    'help' => t('Filter any Views date field.'),
-    'filter' => array(
-      'handler' => 'date_api_filter_handler',
-      'empty name field' => t('Undated'),
-    ),
-  ); 
+  $tables = module_invoke_all('date_api_tables');
+  
+  foreach ($tables as $base_table) {
+    // The flexible date argument.
+    $data[$base_table]['date_argument'] = array(
+      'group' => t('Date'),
+      'title' => t('Date (!base_table)', array('!base_table' => $base_table)),
+      'help' => t('Filter any Views !base_table date field by a date argument, using any common ISO date/period format (i.e. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, etc).', array('!base_table' => $base_table)),
+      'argument' => array(
+        'handler' => 'date_api_argument_handler',
+        'empty name field' => t('Undated'),
+        'base' => $base_table,
+      ),
+    );  
+    // The flexible date filter.
+    $data[$base_table]['date_filter'] = array(
+      'group' => t('Date'),
+      'title' => t('Date (!base_table)', array('!base_table' => $base_table)),
+      'help' => t('Filter any Views !base_table date field.', array('!base_table' => $base_table)),
+      'filter' => array(
+        'handler' => 'date_api_filter_handler',
+        'empty name field' => t('Undated'),
+        'base' => $base_table,
+      ),
+    ); 
+  }
   return $data;
 }
 
@@ -149,7 +155,8 @@ function date_api_views_data() {
  *  Identify all potential date/timestamp fields and cache the data.
  */
 function date_api_fields($base = 'node', $reset = FALSE) {
-  static $fields;
+  static $fields = array();
+  $empty = array('name' => array(), 'alias' => array());
   require_once('./'. drupal_get_path('module', 'date_api') .'/includes/date_api_fields.inc');
   if (empty($fields[$base]) || $reset) {
     $cid = 'date_api_fields_'. $base;
@@ -160,7 +167,8 @@ function date_api_fields($base = 'node', $reset = FALSE) {
       $fields[$base] = _date_api_fields($base);
     }
   }
-  return $fields[$base];
+  // Make sure that empty values will be arrays in he expected format.
+  return !empty($fields) && !empty($fields[$base]) ? $fields[$base] : $empty;
 }
 
 /**

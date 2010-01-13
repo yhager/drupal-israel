@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.admin.inc,v 1.1.2.10 2009/02/05 00:37:43 jcnventura Exp $
+// $Id: print_mail.admin.inc,v 1.1.2.14 2009/07/09 12:00:52 jcnventura Exp $
 
 /**
  * @file
@@ -7,6 +7,8 @@
  *
  * This file is included by the send by e-mail module, and includes the
  * settings form.
+ *
+ * @ingroup print
  */
 
 /**
@@ -32,7 +34,7 @@ function print_mail_settings() {
     '#type' => 'fieldset',
     '#title' => t('Advanced link options'),
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
+    '#collapsed' => FALSE,
   );
 
   $form['settings']['adv_link']['print_mail_show_link'] = array(
@@ -108,7 +110,7 @@ function print_mail_settings() {
     $form['settings']['adv_link']['print_mail_sys_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
 
-  $form['settings']['print_mail_book_link'] = array(
+  $form['settings']['adv_link']['print_mail_book_link'] = array(
     '#type' => 'radios',
     '#title' => t('Link in book hierarchy nodes'),
     '#default_value' => variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT),
@@ -137,6 +139,15 @@ function print_mail_settings() {
     '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
   );
 
+  if (module_exists('job_queue')) {
+    $form['settings']['print_mail_job_queue'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Send e-mails using Job Queue'),
+      '#default_value' => variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT),
+      '#description' => t("Selecting this option, e-mail delivery will be performed by the Job Queue module during each cron run. Leaving this unselected, the e-mail will be sent immediately, but the site will take slightly longer to reply to the user."),
+    );
+  }
+
   return system_settings_form($form);
 }
 
@@ -146,7 +157,7 @@ function print_mail_settings() {
  * @ingroup forms
  */
 function print_mail_strings_settings() {
-  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning');
+  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning', FALSE);
 
   $form['print_mail_text'] = array(
     '#type' => 'fieldset',
@@ -164,7 +175,7 @@ function print_mail_strings_settings() {
     '#type' => 'textfield',
     '#title' => t('Message Subject'),
     '#default_value' => variable_get('print_mail_text_subject', t('!user has sent you a message from !site')),
-    '#description' => t("e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site."),
+    '#description' => t("e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."),
   );
   $form['print_mail_text']['print_mail_text_message'] = array(
     '#type' => 'textfield',

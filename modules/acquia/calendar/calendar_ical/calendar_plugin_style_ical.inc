@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_plugin_style_ical.inc,v 1.1.2.9 2008/12/02 17:32:48 karens Exp $
+// $Id: calendar_plugin_style_ical.inc,v 1.1.2.17 2009/04/28 22:47:29 karens Exp $
 /**
  * Default style plugin to render an iCal feed.
  */
@@ -45,7 +45,7 @@ class calendar_plugin_style_ical extends views_plugin_style_rss {
    */
   function options(&$options) {
     parent::options($options);
-    $options['summary_field'] = 'node_title';
+    $options['summary_field'] = 'title';
     $options['description_field'] = '';
     $options['location_field'] = '';
     $options['fields'] = array();
@@ -65,16 +65,16 @@ class calendar_plugin_style_ical extends views_plugin_style_rss {
     $options = array('' => '');
     foreach ($this->options['fields'] as $field) {
       $handler = views_get_handler($field['table'], $field['field'], 'field');
-      $alias = $field['table'] .'_'. $field['field'];
-      $options[$alias] = $handler->ui_name();
+      $options[$field['field']] = $handler->ui_name();
     }
-    $form['#prefix'] = t('<div class="form-item">Map the View fields to the values they should represent in the iCal feed.</div>');
+    $form['#prefix'] = '<div class="form-item">'. t("Map the View fields to the values they should represent in the iCal feed. Only fields that have been added to the view are available to use in this way. You can add additional fields to the view and mark them 'Exclude from display' if you only want them in the iCal feed.") .'</div>';
     
     $form['summary_field'] = array(
       '#type' => 'select',
       '#title' => t('Title'),
-      '#default_value' => !empty($this->options['summary_field']) ? $this->options['summary_field'] : 'node_title',
+      '#default_value' => !empty($this->options['summary_field']) ? $this->options['summary_field'] : 'title',
       '#options' => $options,
+      '#required' => TRUE,
       );
     $form['description_field'] = array(
       '#type' => 'select',
@@ -116,10 +116,13 @@ class calendar_plugin_style_ical extends views_plugin_style_rss {
       $this->view->date_info->arg_missing_default = TRUE;
     }
      
+    if (empty($this->options['summary_field'])) {
+      $errors[] = $errors[$style] = t("The @style style requires a Title field for the iCal export.", array('@style' => $style));
+    }
     // Make sure date fields are not set up to 'Group multiple values' 
     // in the calendar style.
     if ($style == 'calendar_style') {
-      $view_fields = date_api_fields('node');
+      $view_fields = date_api_fields($this->view->base_table);
       $view_fields = $view_fields['name'];
       $fields = $this->display->handler->get_option('fields');
       foreach ($fields as $column => $field) {
@@ -185,7 +188,7 @@ class calendar_plugin_style_ical extends views_plugin_style_rss {
           // Adding this now is to prevent fatal errors later if the
           // view is used in unexpected ways without a date being set.
           if (empty($filter->min_date)) {
-            $value = $filter->get_default_argument();
+            $value = $filter->default_value('value');
             $range = $filter->date_handler->arg_range($value);
             $filter->min_date = $range[0];
             $filter->max_date = $range[1];
@@ -211,8 +214,9 @@ class calendar_plugin_style_ical extends views_plugin_style_rss {
        
     // Render each field into an output array.
     $items = array();
-    $calendar_fields = date_api_fields();
+    $calendar_fields = date_api_fields($this->view->base_table);
     $calendar_fields = array_keys($calendar_fields['alias']);
+    
     foreach ($this->view->result as $num => $row) {
       $items[$num] = $row;
       // Store the raw date values before formatting the results.
@@ -221,10 +225,12 @@ class calendar_plugin_style_ical extends views_plugin_style_rss {
           $items[$num]->calendar_fields->$key = $value;
         }
       }
-      foreach ($this->view->field as $field) {
+      foreach ($this->view->field as $name => $field) {
+        // Some fields, like the node edit and delete links, have no alias.
+        $field_alias = $field->field_alias != 'unknown' ? $field->field_alias : $name; 
         if (!empty($field) && is_object($field)) {
           $field_output = $field->theme($row);
-          $items[$num]->{$field->field_alias} = $field_output;
+          $items[$num]->{$field_alias} = $field_output;
         }
       }
     }

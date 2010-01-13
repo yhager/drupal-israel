@@ -1,5 +1,6 @@
 <?php
-// $Id: calendar_view_plugin_style.inc,v 1.1.2.15 2008/11/26 09:58:31 karens Exp $
+// $Id: calendar_view_plugin_style.inc,v 1.1.2.19 2009/02/17 18:09:35 karens Exp $
+
 /**
  * Style plugin to render the year, month, week, or day calendar view.
  */
@@ -12,13 +13,10 @@ class calendar_view_plugin_style extends calendar_plugin_style {
   function init(&$view, &$display) {
     parent::init($view, $display);
     $calendar_type = $this->display->handler->get_option('calendar_type');
-    $view->date_info->calendar_popup = $this->display->handler->get_option('calendar_popup');
     $view->date_info->style_name_size = $this->options['name_size'];
     $view->date_info->style_with_weekno = $this->options['with_weekno'];
     $view->date_info->style_max_items = $this->options['max_items'];
     $view->date_info->style_max_items_behavior = $this->options['max_items_behavior'];
-    $view->date_info->style_truncated_fields = $this->options['truncated_fields'];
-    $view->date_info->style_truncate_length = $this->options['truncate_length'];
     if (!empty($this->options['groupby_times_custom'])) {
       $view->date_info->style_groupby_times = explode(',', $this->options['groupby_times_custom']);
     }
@@ -32,6 +30,7 @@ class calendar_view_plugin_style extends calendar_plugin_style {
     
     // Make sure views does't try to limit the number of items in this view.
     $this->view->pager['items_per_page'] = 0;
+    
   }
   
   /**
@@ -42,8 +41,6 @@ class calendar_view_plugin_style extends calendar_plugin_style {
     $options['with_weekno'] = 0;
     $options['max_items'] = 0;
     $options['max_items_behavior'] = 'more';
-    $options['truncated_fields'] = array();
-    $options['truncate_length'] = '';
     $options['groupby_times'] = 'hour';
     $options['groupby_times_custom'] = '';
     $options['groupby_field'] = '';
@@ -71,7 +68,7 @@ class calendar_view_plugin_style extends calendar_plugin_style {
     $form['max_items'] = array(
       '#title' => t('Maximum items'),
       '#type' => in_array($calendar_type, array('month')) ? 'select' : 'value',
-      '#options' => array(0 => t('Unlimited'), 3 => t('3 items'), 5 => t('5 items'), 10 => t('10 items')),
+      '#options' => array(CALENDAR_SHOW_ALL => t('Unlimited'), CALENDAR_HIDE_ALL => t('No items'), 3 => t('3 items'), 5 => t('5 items'), 10 => t('10 items')),
       '#default_value' => $calendar_type != 'day' ? $this->options['max_items'] : 0,
       '#description' => t('Maximum number of items to show in calendar cells, used to keep the calendar from expanding to a huge size when there are lots of items in one day. '),
       );
@@ -117,31 +114,11 @@ class calendar_view_plugin_style extends calendar_plugin_style {
       '#description' => t("Optionally group items into columns by a field value, for instance select the content type to show items for each content type in their own column, or use a location field to organize items into columns by location."),
       '#options' => array('' => '') + $field_options,
       );
-    $form['truncated_fields'] = array(
-      '#title' => t('Truncated fields'),
-      '#type' => in_array($calendar_type, array('month', 'week', 'day')) ? 'checkboxes' : 'value',
-      '#options' => $field_options + $date_field_options,
-      '#default_value' => $this->options['truncated_fields'],
-      '#multiple' => TRUE,
-      '#description' => t("Fields that should be truncated to fit in the calendar cell. For instance, change the title from 'Very Very Very Long Name' to something like 'Very Very...'."),
-      );
-    $form['truncate_length'] = array(
-      '#title' => t('Truncate length'),
-      '#type' => in_array($calendar_type, array('month', 'week', 'day')) ? 'textfield' : 'value',
-      '#default_value' => $this->options['truncate_length'],
-      '#description' => t("Maximum number of characters to leave in truncated fields."),
-      '#maxlength' => 4,
-      '#size' => 4,
-      );
     foreach ($form as $key => $value) {
       if ($value['#type'] == 'value') {
         $form[$key]['#value'] = $value['#default_value'];
       }
     }
-  }
-
-  function options_submit($form, &$form_state) {
-    $form_state['values']['style_options']['truncated_fields'] = array_filter($form_state['values']['style_options']['truncated_fields']);
   }
 
   /**

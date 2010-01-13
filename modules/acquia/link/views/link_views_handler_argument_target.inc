@@ -1,5 +1,10 @@
 <?php
-// $Id: link_views_handler_argument_target.inc,v 1.1.2.1 2008/09/06 21:45:25 quicksketch Exp $
+// $Id: link_views_handler_argument_target.inc,v 1.1.4.2 2009/07/04 19:07:42 jcfiala Exp $
+
+/**
+ * @file
+ * Argument handler to filter results by target.
+ */
 
 /**
  * Argument handler to filter results by target.

@@ -1,5 +1,5 @@
 <?php
-// $Id: nodereference.module,v 1.138.2.50 2009/03/18 21:00:58 yched Exp $
+// $Id: nodereference.module,v 1.138.2.60 2009/08/26 17:29:58 markuspetrux Exp $
 
 /**
  * @file
@@ -52,6 +52,15 @@ function nodereference_theme() {
 }
 
 /**
+ * Implementaion of hook_ctools_plugin_directory().
+ */
+function nodereference_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'relationships') {
+    return 'panels/' . $plugin;
+  }
+}
+
+/**
  * Implementation of hook_field_info().
  */
 function nodereference_field_info() {
@@ -59,6 +68,7 @@ function nodereference_field_info() {
     'nodereference' => array(
       'label' => t('Node reference'),
       'description' => t('Store the ID of a related node as an integer value.'),
+//      'content_icon' => 'icon_content_noderef.png',
     ),
   );
 }
@@ -134,7 +144,7 @@ function nodereference_field_settings($op, $field) {
 
     case 'database columns':
       $columns = array(
-        'nid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE),
+        'nid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE, 'index' => TRUE),
       );
       return $columns;
 
@@ -152,6 +162,7 @@ function nodereference_field_settings($op, $field) {
         'left_table' => $table_alias,
         'left_field' => $field['field_name'] .'_nid',
       );
+      $data[$table_alias][$field['field_name'] .'_nid']['argument']['handler'] = 'content_handler_argument_reference';
       $data[$table_alias][$field['field_name'] .'_nid']['argument']['name table'] = "node_$table_alias";
       $data[$table_alias][$field['field_name'] .'_nid']['argument']['name field'] = 'title';
       // Relationship: add a relationship for related node.
@@ -411,6 +422,7 @@ function nodereference_widget_settings($op, $widget) {
     case 'form':
       $form = array();
       $match = isset($widget['autocomplete_match']) ? $widget['autocomplete_match'] : 'contains';
+      $size = (isset($widget['size']) && is_numeric($widget['size'])) ? $widget['size'] : 60;
       if ($widget['type'] == 'nodereference_autocomplete') {
         $form['autocomplete_match'] = array(
           '#type' => 'select',
@@ -422,14 +434,22 @@ function nodereference_widget_settings($op, $widget) {
           ),
           '#description' => t('Select the method used to collect autocomplete suggestions. Note that <em>Contains</em> can cause performance issues on sites with thousands of nodes.'),
         );
+        $form['size'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Size of textfield'),
+          '#default_value' => $size,
+          '#element_validate' => array('_element_validate_integer_positive'),
+          '#required' => TRUE,
+        );
       }
       else {
         $form['autocomplete_match'] = array('#type' => 'hidden', '#value' => $match);
+        $form['size'] = array('#type' => 'hidden', '#value' => $size);
       }
       return $form;
 
     case 'save':
-      return array('autocomplete_match');
+      return array('autocomplete_match', 'size');
   }
 }
 
@@ -667,7 +687,7 @@ function nodereference_autocomplete_validate($element, &$form_state) {
     if (!empty($matches)) {
       // Explicit [nid:n].
       list(, $title, $nid) = $matches;
-      if (!empty($title) && ($n = node_load($nid)) && $title != $n->title) {
+      if (!empty($title) && ($n = node_load($nid)) && trim($title) != trim($n->title)) {
         form_error($element[$field_key], t('%name: title mismatch. Please check your selection.', array('%name' => t($field['widget']['label']))));
       }
     }
@@ -705,7 +725,7 @@ function nodereference_allowed_values($field) {
 /**
  * Fetch an array of all candidate referenced nodes.
  *
- * This info is used in various places (aloowed values, autocomplete results,
+ * This info is used in various places (allowed values, autocomplete results,
  * input validation...). Some of them only need the nids, others nid + titles,
  * others yet nid + titles + rendered row (for display in widgets).
  * The array we return contains all the potentially needed information, and lets
@@ -794,9 +814,8 @@ function _nodereference_potential_references_views($field, $string = '', $match 
     // should be moved to content_plugin_display_references
 
     // Limit result set size.
-    if (isset($limit)) {
-      $view->display_handler->set_option('items_per_page', $limit);
-    }
+    $limit = isset($limit) ? $limit : 0;
+    $view->display_handler->set_option('items_per_page', $limit);
 
     // Get arguments for the view.
     if (!empty($field['advanced_view_args'])) {
@@ -914,12 +933,20 @@ function nodereference_node_type($op, $info) {
         // content.module's implementaion of hook_node_type() has already
         // refreshed _content_type_info().
         $fields = content_fields();
+        $rebuild = FALSE;
         foreach ($fields as $field_name => $field) {
           if ($field['type'] == 'nodereference' && isset($field['referenceable_types'][$info->old_type])) {
             $field['referenceable_types'][$info->type] = empty($field['referenceable_types'][$info->old_type]) ? 0 : $info->type;
             unset($field['referenceable_types'][$info->old_type]);
-            content_field_instance_update($field);
+            content_field_instance_update($field, FALSE);
+            $rebuild = TRUE;
           }
+        }
+
+        // Clear caches and rebuild menu only if any field has been updated.
+        if ($rebuild) {
+          content_clear_type_cache(TRUE);
+          menu_rebuild();
         }
       }
       break;

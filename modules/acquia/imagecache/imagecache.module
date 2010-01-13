@@ -1,5 +1,5 @@
 <?php
-// $Id: imagecache.module,v 1.97 2009/02/06 11:43:45 drewish Exp $
+// $Id: imagecache.module,v 1.112.2.5 2009/08/19 20:59:07 drewish Exp $
 
 /**
  * @file
@@ -30,6 +30,21 @@
  *
  */
 
+/**
+ * Imagecache preset storage constant for user-defined presets in the DB.
+ */
+define('IMAGECACHE_STORAGE_NORMAL', 0);
+
+/**
+ * Imagecache preset storage constant for module-defined presets in code.
+ */
+define('IMAGECACHE_STORAGE_DEFAULT', 1);
+
+/**
+ * Imagecache preset storage constant for user-defined presets that override
+ * module-defined presets.
+ */
+define('IMAGECACHE_STORAGE_OVERRIDE', 2);
 
 /*********************************************************************************************
  * Drupal Hooks
@@ -68,6 +83,12 @@ function imagecache_menu() {
   return $items;
 }
 
+/**
+ * Clear imagecache presets cache on admin/build/modules form.
+ */
+function imagecache_form_system_modules_alter(&$form, $form_state) {
+  imagecache_presets(TRUE);
+}
 
 /**
  * Implementation of hook_theme().
@@ -90,6 +111,7 @@ function imagecache_theme() {
         'attributes' => array(),
     )),
     'imagecache_resize' => array(
+      'file' => 'imagecache_actions.inc',
       'arguments' => array('element' => NULL),
     ),
     'imagecache_scale' => array(
@@ -125,23 +147,23 @@ function imagecache_theme() {
   foreach (imagecache_presets() as $preset) {
     $theme['imagecache_formatter_'. $preset['presetname'] .'_default'] = array(
       'arguments' => array('element' => NULL),
-      'function' => 'theme_imagecache_formatter',
+      'function' => 'theme_imagecache_formatter_default',
     );
     $theme['imagecache_formatter_'. $preset['presetname'] .'_linked'] = array(
       'arguments' => array('element' => NULL),
-      'function' => 'theme_imagecache_formatter',
+      'function' => 'theme_imagecache_formatter_linked',
     );
     $theme['imagecache_formatter_'. $preset['presetname'] .'_imagelink'] = array(
       'arguments' => array('element' => NULL),
-      'function' => 'theme_imagecache_formatter',
+      'function' => 'theme_imagecache_formatter_imagelink',
     );
     $theme['imagecache_formatter_'. $preset['presetname'] .'_path'] = array(
       'arguments' => array('element' => NULL),
-      'function' => 'theme_imagecache_formatter',
+      'function' => 'theme_imagecache_formatter_path',
     );
     $theme['imagecache_formatter_'. $preset['presetname'] .'_url'] = array(
       'arguments' => array('element' => NULL),
-      'function' => 'theme_imagecache_formatter',
+      'function' => 'theme_imagecache_formatter_url',
     );
   }
 
@@ -168,6 +190,7 @@ function imagecache_imagecache_actions() {
     'imagecache_resize' => array(
       'name' => 'Resize',
       'description' => 'Resize an image to an exact set of dimensions, ignoring aspect ratio.',
+      'file' => 'imagecache_actions.inc',
     ),
     'imagecache_scale' => array(
       'name' => 'Scale',
@@ -181,7 +204,7 @@ function imagecache_imagecache_actions() {
     ),
     'imagecache_scale_and_crop' => array(
       'name' => 'Scale And Crop',
-      'description' => 'Resize an image to an exact set of dimensions, ignoring aspect ratio.',
+      'description' => 'Resize an image while maintaining aspect ratio, then crop it to the specified dimensions.',
       'file' => 'imagecache_actions.inc',
     ),
     'imagecache_crop' => array(
@@ -219,7 +242,7 @@ function imagecache_imagecache_actions() {
  * @return
  *   An array of actions to be used when transforming images.
  */
-function imagecache_action_definitions($reset = false) {
+function imagecache_action_definitions($reset = FALSE) {
   static $actions;
   if (!isset($actions) || $reset) {
     if (!$reset && ($cache = cache_get('imagecache_actions')) && !empty($cache->data)) {
@@ -267,7 +290,7 @@ function imagecache_action_definition($action) {
 
 /**
  * Return a URL that points to the location of a derivative of the
- * original image at @p $path, transformed with the given @p $preset.
+ * original image transformed with the given preset.
  *
  * Special care is taken to make this work with the possible combinations of
  * Clean URLs and public/private downloads. For example, when Clean URLs are not
@@ -277,10 +300,28 @@ function imagecache_action_definition($action) {
  *
  * This code is very similar to the Drupal core function file_create_url(), but
  * handles the case of Clean URLs and public downloads differently however.
+ *
+ * @param $presetname
+ * @param $filepath
+ *   String specifying the path to the image file.
+ * @param $bypass_browser_cache
+ *   A Boolean indicating that the URL for the image should be distinct so that
+ *   the visitors browser will not be able to use a previously cached version.
+ *   This is
  */
-function imagecache_create_url($presetname, $path) {
-  $path = _imagecache_strip_file_directory($path);
-  return file_create_url(file_directory_path() .'/imagecache/'. $presetname .'/'. $path);
+function imagecache_create_url($presetname, $filepath, $bypass_browser_cache = FALSE) {
+  $path = _imagecache_strip_file_directory($filepath);
+  if (module_exists('transliteration')) {
+    $path = transliteration_get($path);
+  }
+
+  $args = array('absolute' => TRUE, 'query' => empty($bypass_browser_cache) ? NULL : time());
+  switch (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC)) {
+    case FILE_DOWNLOADS_PUBLIC:
+      return url($GLOBALS['base_url'] . '/' . file_directory_path() .'/imagecache/'. $presetname .'/'. $path, $args);
+    case FILE_DOWNLOADS_PRIVATE:
+      return url('system/files/imagecache/'. $presetname .'/'. $path, $args);
+  }
 }
 
 /**
@@ -324,7 +365,7 @@ function imagecache_cache_private() {
   $preset = check_plain(array_shift($args));
   $source = implode('/', $args);
 
-  if (user_access('view imagecache '. $preset)) {
+  if (user_access('view imagecache '. $preset) && !in_array(-1, module_invoke_all('file_download', $source))) {
     _imagecache_cache($preset, $source);
   }
   else {
@@ -359,15 +400,17 @@ function _imagecache_cache($presetname, $path) {
   // preserve path for watchdog.
   $src = $path;
 
-  // check if the path to the file exists
+  // Check if the path to the file exists.
   if (!is_file($src) && !is_file($src = file_create_path($src))) {
-    // Send a 404 if we don't know of a preset.
+    watchdog('imagecache', '404: Unable to find %image ', array('%image' => $src), WATCHDOG_ERROR);
     header("HTTP/1.0 404 Not Found");
     exit;
   };
 
-  // bail if the requested file isn't an image you can't just summon .php files etc...
+  // Bail if the requested file isn't an image you can't request .php files
+  // etc...
   if (!getimagesize($src)) {
+    watchdog('imagecache', '403: File is not an image %image ', array('%image' => $src), WATCHDOG_ERROR);
     header('HTTP/1.0 403 Forbidden');
     exit;
   }
@@ -404,7 +447,7 @@ function _imagecache_cache($presetname, $path) {
  * @param $image
  *   Image object
  * @return
- *   Boolean, true indicating success and false failure.
+ *   Boolean, TRUE indicating success and FALSE failure.
  */
 function _imagecache_apply_action($action, $image) {
   $actions = imagecache_action_definitions();
@@ -417,13 +460,18 @@ function _imagecache_apply_action($action, $image) {
   }
   // skip undefined actions.. module probably got uninstalled or disabled.
   watchdog('imagecache', 'non-existant action %action', array('%action' => $action['action']), WATCHDOG_NOTICE);
-  return true;
+  return TRUE;
 }
 
 /**
- * helper function to transfer files from imagecache. Determines mime type and sets a last modified header.
- * @param $path path to file to be transferred.
- * @return <exit>
+ * Helper function to transfer files from imagecache.
+ *
+ * Determines MIME type and sets a last modified header.
+ *
+ * @param $path
+ *   String containing the path to file to be transferred.
+ * @return
+ *   This function does not return. It calls exit().
  */
 
 function imagecache_transfer($path) {
@@ -432,6 +480,8 @@ function imagecache_transfer($path) {
 
   if ($fileinfo = stat($path)) {
     $headers[] = 'Content-Length: '. $fileinfo[7];
+    $headers[] = 'Expires: ' . gmdate('D, d M Y H:i:s', time() + 1209600) .' GMT';
+    $headers[] = 'Cache-Control: max-age=1209600, private, must-revalidate';
     _imagecache_cache_set_cache_headers($fileinfo, $headers);
   }
   file_transfer($path, $headers);
@@ -440,7 +490,18 @@ function imagecache_transfer($path) {
 
 /**
  * Set file headers that handle "If-Modified-Since" correctly for the
- * given fileinfo. Most code has been taken from drupal_page_cache_header().
+ * given fileinfo.
+ *
+ * Note that this function may return or may call exit().
+ *
+ * Most code has been taken from drupal_page_cache_header().
+ *
+ * @param $fileinfo
+ *   Array returned by stat().
+ * @param
+ *   Array of existing headers.
+ * @return
+ *   Nothing but beware that this function may not return.
  */
 function _imagecache_cache_set_cache_headers($fileinfo, &$headers) {
   // Set default values:
@@ -450,10 +511,10 @@ function _imagecache_cache_set_cache_headers($fileinfo, &$headers) {
   // See if the client has provided the required HTTP headers:
   $if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
                         ? stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE'])
-                        : false;
+                        : FALSE;
   $if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH'])
                     ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])
-                    : false;
+                    : FALSE;
 
   if ($if_modified_since && $if_none_match
       && $if_none_match == $etag // etag must match
@@ -474,22 +535,26 @@ function _imagecache_cache_set_cache_headers($fileinfo, &$headers) {
 }
 
 /**
- * build an image cache derivative
+ * Create a new image based on an image preset.
  *
- * @param $actions  Array of imagecache actions.
- * @param $src      Path of the source file.
- * @param $dst      Path of the destination file.
- * @param $tmp      Path of the temporary file used for manipulating the image.
- * @return true - derivative generated, false - no derivative generated, null - derivative being generated
+ * @param $preset
+ *   An image preset array.
+ * @param $source
+ *   Path of the source file.
+ * @param $destination
+ *   Path of the destination file.
+ * @return
+ *   TRUE if an image derivative is generated, FALSE if no image
+ *  derivative is generated. NULL if the derivative is being generated.
  */
 function imagecache_build_derivative($actions, $src, $dst) {
   // get the folder for the final location of this preset...
   $dir = dirname($dst);
 
   // Build the destination folder tree if it doesn't already exists.
-  if (!file_check_directory($dir, FILE_CREATE_DIRECTORY) && !mkdir($dir, 0775, true)) {
+  if (!file_check_directory($dir, FILE_CREATE_DIRECTORY) && !mkdir($dir, 0775, TRUE)) {
     watchdog('imagecache', 'Failed to create imagecache directory: %dir', array('%dir' => $dir), WATCHDOG_ERROR);
-    return false;
+    return FALSE;
   }
 
   // Simply copy the file if there are no actions.
@@ -498,36 +563,42 @@ function imagecache_build_derivative($actions, $src, $dst) {
   }
 
   if (!$image = imageapi_image_open($src)) {
-    return false;
+    return FALSE;
+  }
+
+  if (file_exists($dst)) {
+    watchdog('imagecache', 'Cached image file %dst already exists but is being regenerated. There may be an issue with your rewrite configuration.', array('%dst' => $dst), WATCHDOG_WARNING);
   }
 
   foreach ($actions as $action) {
     if (!empty($action['data'])) {
-      // QuickSketch, why do these run first/twice? - dopry.
+      // Make sure the width and height are computed first so they can be used
+      // in relative x/yoffsets like 'center' or 'bottom'.
       if (isset($action['data']['width'])) {
-        $width = _imagecache_filter('width', $action['data']['width'], $image->info['width'], $image->info['height']);
+        $action['data']['width']   = _imagecache_percent_filter($action['data']['width'], $image->info['width']);
       }
       if (isset($action['data']['height'])) {
-        $height = _imagecache_filter('height', $action['data']['height'], $image->info['width'], $image->info['height']);
+        $action['data']['height']  = _imagecache_percent_filter($action['data']['height'], $image->info['height']);
       }
-      foreach ($action['data'] as $key => $value) {
-        $action['data'][$key] = _imagecache_filter($key, $value, $image->info['width'], $image->info['height'], $width, $height);
+      if (isset($action['data']['xoffset'])) {
+        $action['data']['xoffset'] = _imagecache_keyword_filter($action['data']['xoffset'], $image->info['width'], $action['data']['width']);
+      }
+      if (isset($action['data']['yoffset'])) {
+        $action['data']['yoffset'] = _imagecache_keyword_filter($action['data']['yoffset'], $image->info['height'], $action['data']['height']);
       }
     }
     if (!_imagecache_apply_action($action, $image)) {
       watchdog('imagecache', 'action(id:%id): %action failed for %src', array('%id' => $action['actionid'], '%action' => $action['action'], '%src' => $src), WATCHDOG_ERROR);
-      return false;
+      return FALSE;
     }
   }
 
   if (!imageapi_image_close($image, $dst)) {
-    if (file_exists($dst)) {
-      watchdog('imagecache', 'Cached image file %dst already exists. There may be an issue with your rewrite configuration.', array('%dst' => $dst), WATCHDOG_ERROR);
-    }
-    return false;
+    watchdog('imagecache', 'There was an error saving the new image file %dst.', array('%dst' => $dst), WATCHDOG_ERROR);
+    return FALSE;
   }
 
-  return true;
+  return TRUE;
 }
 
 /**
@@ -541,18 +612,12 @@ function imagecache_user($op, &$edit, &$account, $category = NULL) {
 }
 
 /**
- * Implementation of hook_imagefield_file().
+ * Implementation of filefield.module's hook_file_delete().
+ *
+ * Remove derivative images after the originals are deleted by filefield.
  */
-function imagecache_imagefield_file($op, $file) {
-  switch ($op) {
-    // Delete imagecache presets when imagecache images are deleted.
-    case 'delete': imagecache_image_flush($file['filepath']); break;
-
-    // Create imagecache derivatives when files are saved.
-    case 'save':
-      break;
-  }
-
+function imagecache_file_delete($file) {
+  imagecache_image_flush($file->filepath);
 }
 
 /**
@@ -593,86 +658,94 @@ function imagecache_field_formatter_info() {
   return $formatters;
 }
 
-function theme_imagecache_formatter($element) {
-  if (isset($element['#item']['nid']) && $node = node_load($element['#item']['nid'])) {
-    return imagecache_field_formatter($element['#field_name'], $element['#item'], $element['#formatter'], $node);
+function theme_imagecache_formatter_default($element) {
+  // Inside a view $element may contain NULL data. In that case, just return.
+  if (empty($element['#item']['fid'])) {
+    return '';
   }
+
+  // Extract the preset name from the formatter name.
+  $presetname = substr($element['#formatter'], 0, strrpos($element['#formatter'], '_'));
+  $style = 'linked';
+  $style = 'default';
+
+  $item = $element['#item'];
+  $item['data']['alt'] = isset($item['data']['alt']) ? $item['data']['alt'] : '';
+  $item['data']['title'] = isset($item['data']['title']) ? $item['data']['title'] : NULL;
+
+  $class = "imagecache imagecache-$presetname imagecache-$style imagecache-{$element['#formatter']}";
+  return theme('imagecache', $presetname, $item['filepath'], $item['data']['alt'], $item['data']['title'], array('class' => $class));
 }
 
-
-/**
- * Implementation of hook_field_formatter().
- */
-function imagecache_field_formatter($field, $item, $formatter, $node) {
-  if (empty($item['fid']) && $field['use_default_image']) {
-    $item = $field['default_image'];
+function theme_imagecache_formatter_linked($element) {
+  // Inside a view $element may contain NULL data. In that case, just return.
+  if (empty($element['#item']['fid'])) {
+    return '';
   }
-  // Views does not load the file for us, while CCK display fields does.
-  if (empty($item['filepath'])) {
-    $item = array_merge($item, field_file_load($item['fid']));
-  }
-  if (is_string($item['data'])) {
-    $item['data'] = unserialize($item['data']);
-  }
-  $alt = empty($item['data']['alt']) ? '' : $item['data']['alt'];
-  $title = empty($item['data']['title']) ? '' : $item['data']['title'];
-  $parts =  explode('_', $formatter);
-  $style = array_pop($parts);
-  $presetname = implode('_', $parts);
 
-  $class = "imagecache imagecache-$presetname imagecache-$style imagecache-$formatter";
-  if ($preset = imagecache_preset_by_name($presetname)) {
-    $item['filepath'] = $item['fid'] == 'upload' ? $item['preview'] : $item['filepath'];
-    switch ($style) {
-      case 'linked':
-        $imagetag = theme('imagecache', $presetname, $item['filepath'], $alt, $title);
-        return l($imagetag, 'node/'. $node->nid, array('attributes' => array('class' => $class), 'html' => true));
+  // Extract the preset name from the formatter name.
+  $presetname = substr($element['#formatter'], 0, strrpos($element['#formatter'], '_'));
+  $style = 'linked';
 
-      case 'imagelink':
-        $original_image_url = file_create_url($item['filepath']);
-        $imagetag =  theme('imagecache', $presetname, $item['filepath'], $alt, $title);
-        return l($imagetag, $original_image_url, array('attributes' => array('class' => $class), 'html' => true));
+  $item = $element['#item'];
+  $item['data']['alt'] = isset($item['data']['alt']) ? $item['data']['alt'] : '';
+  $item['data']['title'] = isset($item['data']['title']) ? $item['data']['title'] : NULL;
 
-      case 'url':
-        return imagecache_create_url($presetname, $item['filepath']);
-
-      case 'path':
-        return imagecache_create_path($presetname, $item['filepath']);
-
-      default:
-        return theme('imagecache', $presetname, $item['filepath'], $alt, $title, array('class' => $class));
-    }
-  }
-  return '<!-- imagecache formatter preset('. $presetname .') not found! -->';
+  $imagetag = theme('imagecache', $presetname, $item['filepath'], $item['data']['alt'], $item['data']['title']);
+  $path = empty($item['nid']) ? '' : 'node/'. $item['nid'];
+  $class = "imagecache imagecache-$presetname imagecache-$style imagecache-{$element['#formatter']}";
+  return l($imagetag, $path, array('attributes' => array('class' => $class), 'html' => TRUE));
 }
 
-/**
- * Filter key word values such as 'top', 'right', 'center', and also percentages.
- * All returned values are in pixels relative to the passed in height and width.
- */
-function _imagecache_filter($key, $value, $current_width, $current_height, $new_width = null, $new_height = null) {
-  switch ($key) {
-    case 'width':
-      $value = _imagecache_percent_filter($value, $current_width);
-      break;
-    case 'height':
-      $value = _imagecache_percent_filter($value, $current_height);
-      break;
-    case 'xoffset':
-      $value = _imagecache_keyword_filter($value, $current_width, $new_width);
-      break;
-    case 'yoffset':
-      $value = _imagecache_keyword_filter($value, $current_height, $new_height);
-      break;
+function theme_imagecache_formatter_imagelink($element) {
+  // Inside a view $element may contain NULL data. In that case, just return.
+  if (empty($element['#item']['fid'])) {
+    return '';
   }
-  return $value;
+
+  // Extract the preset name from the formatter name.
+  $presetname = substr($element['#formatter'], 0, strrpos($element['#formatter'], '_'));
+  $style = 'imagelink';
+
+  $item = $element['#item'];
+  $item['data']['alt'] = isset($item['data']['alt']) ? $item['data']['alt'] : '';
+  $item['data']['title'] = isset($item['data']['title']) ? $item['data']['title'] : NULL;
+
+  $imagetag = theme('imagecache', $presetname, $item['filepath'], $item['data']['alt'], $item['data']['title']);
+  $path = file_create_url($item['filepath']);
+  $class = "imagecache imagecache-$presetname imagecache-$style imagecache-{$element['#formatter']}";
+  return l($imagetag, $path, array('attributes' => array('class' => $class), 'html' => TRUE));
+}
+
+function theme_imagecache_formatter_path($element) {
+  // Inside a view $element may contain NULL data. In that case, just return.
+  if (empty($element['#item']['fid'])) {
+    return '';
+  }
+
+  // Extract the preset name from the formatter name.
+  $presetname = substr($element['#formatter'], 0, strrpos($element['#formatter'], '_'));
+
+  return imagecache_create_path($presetname, $element['#item']['filepath']);
+}
+
+function theme_imagecache_formatter_url($element) {
+  // Inside a view $element may contain NULL data. In that case, just return.
+  if (empty($element['#item']['fid'])) {
+    return '';
+  }
+
+  // Extract the preset name from the formatter name.
+  $presetname = substr($element['#formatter'], 0, strrpos($element['#formatter'], '_'));
+
+  return imagecache_create_url($presetname, $element['#item']['filepath']);
 }
 
 /**
  * Accept a percentage and return it in pixels.
  */
 function _imagecache_percent_filter($value, $current_pixels) {
-  if (strpos($value, '%') !== false) {
+  if (strpos($value, '%') !== FALSE) {
     $value = str_replace('%', '', $value) * 0.01 * $current_pixels;
   }
   return $value;
@@ -713,7 +786,7 @@ function _imagecache_recursive_delete($path) {
   }
   elseif (is_dir($path)) {
     $d = dir($path);
-    while (($entry = $d->read()) !== false) {
+    while (($entry = $d->read()) !== FALSE) {
       if ($entry == '.' || $entry == '..') continue;
       $entry_path = $path .'/'. $entry;
       _imagecache_recursive_delete($entry_path);
@@ -731,73 +804,63 @@ function _imagecache_recursive_delete($path) {
 /**
  * Create and image tag for an imagecache derivative
  *
- * @param $namespace
- *   presetname of the derivative you wish to generate a tag for.
+ * @param $presetname
+ *   String with the name of the preset used to generate the derivative image.
  * @param $path
- *   path to the original image you wish to create a derivative image tag for.
+ *   String path to the original image you wish to create a derivative image
+ *   tag for.
  * @param $alt
- *   img tag alternate text
+ *   Optional string with alternate text for the img element.
  * @param $title
- *   img tag title text
- * @param attributes
- *   optional drupal attributes array. If attributes is set, the default imagecache classes
- *   will not be set automatically, you must do this manually.
+ *   Optional string with title for the img element.
+ * @param $attributes
+ *   Optional drupal_attributes() array. If $attributes is an array then the
+ *   default imagecache classes will not be set automatically, you must do this
+ *   manually.
+ * @param $getsize
+ *   If set to TRUE, the image's dimension are fetched and added as width/height
+ *   attributes.
+ * @return
+ *   HTML img element string.
  */
-function theme_imagecache($namespace, $path, $alt = '', $title = '', $attributes = NULL) {
-  if ($image = image_get_info(imagecache_create_path($namespace, $path))) {
+function theme_imagecache($presetname, $path, $alt = '', $title = '', $attributes = NULL, $getsize = TRUE) {
+  // Check is_null() so people can intentionally pass an empty array of
+  // to override the defaults completely.
+  if (is_null($attributes)) {
+    $attributes = array('class' => 'imagecache imagecache-'. $presetname);
+  }
+  if ($getsize && ($image = image_get_info(imagecache_create_path($presetname, $path)))) {
     $attributes['width'] = $image['width'];
     $attributes['height'] = $image['height'];
   }
-  // check is_null so people can intentionally pass an empty array of attributes to override
-  // the defaults completely... if
-  if (is_null($attributes)) {
-    $attributes['class'] = 'imagecache imagecache-'. $namespace;
-  }
+
   $attributes = drupal_attributes($attributes);
-  $imagecache_url = imagecache_create_url($namespace, $path);
+  $imagecache_url = imagecache_create_url($presetname, $path);
   return '<img src="'. $imagecache_url .'" alt="'. check_plain($alt) .'" title="'. check_plain($title) .'" '. $attributes .' />';
 }
 
-function theme_imagecache_imagelink($namespace, $path, $alt = '', $title = '', $attributes = NULL) {
-  $image = theme('imagecache', $namespace, $path, $alt, $title);
+/**
+ * Create a link the original image that wraps the derivative image.
+ *
+ * @param $presetname
+ *   String with the name of the preset used to generate the derivative image.
+ * @param $path
+ *   String path to the original image you wish to create a derivative image
+ *   tag for.
+ * @param $alt
+ *   Optional string with alternate text for the img element.
+ * @param $title
+ *   Optional string with title for the img element.
+ * @param attributes
+ *   Optional drupal_attributes() array for the link.
+ * @return
+ *   An HTML string.
+ */
+function theme_imagecache_imagelink($presetname, $path, $alt = '', $title = '', $attributes = NULL) {
+  $image = theme('imagecache', $presetname, $path, $alt, $title);
   $original_image_url = file_create_url($path);
   return l($image, $original_image_url, array('absolute' => FALSE, 'html' => TRUE));
 }
-
-
-/************************************************************************************
- * ImageCache action implementation example in module.
- */
-function imagecache_resize_image(&$image, $data) {
-  if (!imageapi_image_resize($image, $data['width'], $data['height'])) {
-    watchdog('imagecache', 'imagecache_resize_image failed. image: %image, data: %data.', array('%path' => $image, '%data' => print_r($data, TRUE)), WATCHDOG_ERROR);
-    return false;
-  }
-  return true;
-}
-
-function imagecache_resize_form($action) {
-  $form['width'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Width'),
-    '#default_value' => isset($action['width']) ? $action['width'] : '100%',
-    '#description' => t('Enter a width in pixels or as a percentage. i.e. 500 or 80%.'),
-  );
-  $form['height'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Height'),
-    '#default_value' => isset($action['height']) ? $action['height'] : '100%',
-    '#description' => t('Enter a height in pixels or as a percentage. i.e. 500 or 80%.'),
-  );
-  return $form;
-}
-
-function theme_imagecache_resize($element) {
-  $data = $element['#value'];
-  return 'width: '. $data['width'] .', height: '. $data['height'];
-}
-
-
 
 /**
  *  ImageCache 2.x API
@@ -812,15 +875,15 @@ function theme_imagecache_resize($element) {
  * Get an array of all presets and their settings.
  *
  * @param reset
- *   if set to true it will clear the preset cache
+ *   if set to TRUE it will clear the preset cache
  *
  * @return
  *   array of presets array( $preset_id => array('presetid' => integer, 'presetname' => string))
  */
-function imagecache_presets($reset = false) {
+function imagecache_presets($reset = FALSE) {
   static $presets = array();
 
-  // Clear  caches if $reset is true;
+  // Clear  caches if $reset is TRUE;
   if ($reset) {
     $presets = array();
     cache_clear_all('imagecache:presets', 'cache');
@@ -841,11 +904,40 @@ function imagecache_presets($reset = false) {
     $presets = $cache->data;
   }
   else {
+    $normal_presets = array();
+
     $result = db_query('SELECT * FROM {imagecache_preset} ORDER BY presetname');
     while ($preset = db_fetch_array($result)) {
       $presets[$preset['presetid']] = $preset;
       $presets[$preset['presetid']]['actions'] = imagecache_preset_actions($preset);
+      $presets[$preset['presetid']]['storage'] = IMAGECACHE_STORAGE_NORMAL;
+
+      // Collect normal preset names so we can skip defaults and mark overrides accordingly
+      $normal_presets[$preset['presetname']] = $preset['presetid'];
     }
+
+    // Collect default presets and allow modules to modify them before they
+    // are cached.
+    $default_presets = module_invoke_all('imagecache_default_presets');
+    drupal_alter('imagecache_default_presets', $default_presets);
+
+    // Add in default presets if they don't conflict with any normal presets.
+    // Mark normal presets that take the same preset namespace as overrides.
+    foreach ($default_presets as $preset) {
+      if (!empty($preset['presetname'])) {
+        if (!isset($normal_presets[$preset['presetname']])) {
+          $preset['storage'] = IMAGECACHE_STORAGE_DEFAULT;
+          // Use a string preset identifier
+          $preset['presetid'] = $preset['presetname'];
+          $presets[$preset['presetname']] = $preset;
+        }
+        else {
+          $presetid = $normal_presets[$preset['presetname']];
+          $presets[$presetid]['storage'] = IMAGECACHE_STORAGE_OVERRIDE;
+        }
+      }
+    }
+
     cache_set('imagecache:presets', $presets);
   }
   return $presets;
@@ -861,7 +953,7 @@ function imagecache_presets($reset = false) {
  *   preset array( 'presetname' => string, 'presetid' => integet)
  *   empty array if preset_id is an invalid preset
  */
-function imagecache_preset($preset_id, $reset = false) {
+function imagecache_preset($preset_id, $reset = FALSE) {
   $presets = imagecache_presets($reset);
   return (isset($presets[$preset_id])) ? $presets[$preset_id] : array();
 }
@@ -905,7 +997,7 @@ function imagecache_preset_save($preset) {
 
   // Reset presets cache.
   imagecache_preset_flush($preset);
-  imagecache_presets(true);
+  imagecache_presets(TRUE);
 
   // Rebuild Theme Registry
   drupal_rebuild_theme_registry();
@@ -914,14 +1006,14 @@ function imagecache_preset_save($preset) {
 }
 
 function imagecache_preset_delete($preset) {
-  imagecache_preset_flush($preset['presetid']);
+  imagecache_preset_flush($preset);
   db_query('DELETE FROM {imagecache_action} where presetid = %d', $preset['presetid']);
   db_query('DELETE FROM {imagecache_preset} where presetid = %d', $preset['presetid']);
-  imagecache_presets(true);
-  return true;
+  imagecache_presets(TRUE);
+  return TRUE;
 }
 
-function imagecache_preset_actions($preset, $reset = false) {
+function imagecache_preset_actions($preset, $reset = FALSE) {
   static $actions_cache = array();
 
   if ($reset || empty($actions_cache[$preset['presetid']])) {
@@ -937,8 +1029,9 @@ function imagecache_preset_actions($preset, $reset = false) {
 
 /**
  * Flush cached media for a preset.
- * @param id
- *   A preset id.
+ *
+ * @param preset
+ *   an imagecache preset array.
  */
 function imagecache_preset_flush($preset) {
   if (user_access('flush imagecache')) {
@@ -987,6 +1080,11 @@ function imagecache_action_save($action) {
   $definition = imagecache_action_definition($action['action']);
   $action = array_merge($definition, $action);
 
+  // Some actions don't have data. Make an empty one to prevent SQL errors.
+  if (!isset($action['data'])) {
+    $action['data'] = array();
+  }
+
   if (!empty($action['actionid'])) {
     drupal_write_record('imagecache_action', $action, 'actionid');
   }
@@ -995,7 +1093,7 @@ function imagecache_action_save($action) {
   }
   $preset = imagecache_preset($action['presetid']);
   imagecache_preset_flush($preset);
-  imagecache_presets(true);
+  imagecache_presets(TRUE);
   return $action;
 }
 
@@ -1003,5 +1101,5 @@ function imagecache_action_delete($action) {
   db_query('DELETE FROM {imagecache_action} WHERE actionid=%d', $action['actionid']);
   $preset = imagecache_preset($action['presetid']);
   imagecache_preset_flush($preset);
-  imagecache_presets(true);
+  imagecache_presets(TRUE);
 }

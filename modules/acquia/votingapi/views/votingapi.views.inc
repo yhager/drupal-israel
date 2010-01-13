@@ -1,5 +1,5 @@
 <?php
-// $Id: votingapi.views.inc,v 1.1.2.11 2008/12/04 18:34:39 eaton Exp $
+// $Id: votingapi.views.inc,v 1.1.2.18 2009/08/15 17:51:38 eaton Exp $
 
 /**
  * @file
@@ -40,8 +40,8 @@ function votingapi_views_data() {
 
   // Define the base group of this table. Fields that don't
   // have a group defined will go into this field by default.
-  $data['votingapi_vote']['table']['group']  = t('Voting API votes');
-  $data['votingapi_cache']['table']['group']  = t('Voting API results');
+  $data['votingapi_vote']['table']['group']  = t('Votes');
+  $data['votingapi_cache']['table']['group']  = t('Vote results');
 
   // ----------------------------------------------------------------
   // Fields
@@ -116,6 +116,12 @@ function votingapi_views_data() {
     'argument' => array(
       'handler' => 'views_handler_argument_user_uid',
     ),
+    'relationship' => array(
+      'handler' => 'views_handler_relationship',
+      'base' => 'users',
+      'field' => 'uid',
+      'label' => t('Individual voter'),
+    ),
   );
 
   // uid
@@ -177,6 +183,7 @@ function votingapi_views_data() {
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_numeric',
+      'allow empty' => TRUE,
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -259,93 +266,44 @@ function votingapi_views_data() {
  * @}
  */
 
-function _votingapi_views_value_types($table = 'votingapi_vote') {
-  static $types;
-  if (!isset($types)) {
-    $types = array(
-      'percent' => t('Percent'),
-      'points' => t('Points')
-    );
-    $results = db_query("SELECT DISTINCT value_type FROM {" . $table . "}");
-    while ($tmp = db_fetch_object($results)) {
-      $types[$tmp->value_type] = drupal_ucfirst($tmp->value_type);
-    }
-    $types[''] = t('No filtering');
-  }
-  return $types;
-}
-
-function _votingapi_views_tags($table = 'votingapi_vote') {
-  static $tags;
-  if (!isset($tags)) {
-    $tags = array(
-      'vote' => t('Default vote'),
-    );
-    $results = db_query("SELECT DISTINCT tag FROM {" . $table . "}");
-    while ($tmp = db_fetch_object($results)) {
-      $tags[$tmp->tag] = drupal_ucfirst($tmp->tag);
-    }
-    $tags[''] = t('No filtering');
-  }
-  return $tags;
-}
-
-function _votingapi_views_functions() {
-  static $functions;
-  if (!isset($functions)) {
-    $functions = array(
-      'sum' => t('Sum'),
-      'count' => t('Count'),
-      'average' => t('Average'),
-    );
-    $results = db_query("SELECT DISTINCT function FROM {votingapi_cache}");
-    while ($tmp = db_fetch_object($results)) {
-      $functions[$tmp->function] = drupal_ucfirst($tmp->function);
-    }
-    $functions[''] = t('No filtering');
-  }
-  return $functions;
-}
-
 function votingapi_views_data_alter(&$views_data) {
   // Add relationship handlers for both tables, for any base tables currently
   // available to Views.
 
   $default_relationships = module_invoke_all('votingapi_relationships');
 
-  // This format of array can be returned by any other module that stores
-  // votes for tables that need relationships.
-  $default_relationships += array(
-    array(
-      // This text is used to construct the field desc. "Votes cast by users
-      // on [foo]", where [foo] is the value of the description key.
-      'description' => t('nodes'),
-      // This should contain the value that your module stores in the voting
-      // api 'content_type' column. 'node', 'comment', etc.
-      'content_type' => 'node',
-      // This should contain the name of the Views base table that stores the
-      // data your votes apply to.
-      'base_table' => 'node',
-      // This should contain the name of the views field that corresponds to
-      // the value your module stored in the voting api 'content_id' column.
-      'content_id_column' => 'nid',
-      // VotingAPI constructs pseudo-tables so that multiple relationships can
-      // point to the same base table (normal and translation-based votes nodes
-      // for example. These two columns allow you to override the names of the
-      // pseudo-tables. This default entry for node votes ensures that older
-      // views built against the standard relationships don't break.
-      'pseudo_vote' => 'votingapi_vote',
-      'pseudo_cache' => 'votingapi_cache',
-    ),
+  $default_relationships[] = array(
+    'description' => t('nodes'),
+    'content_type' => 'node',
+    'base_table' => 'node',
+    'content_id_column' => 'nid',
+    'pseudo_vote' => 'votingapi_vote',    // for legacy compatability w/RC1.
+    'pseudo_cache' => 'votingapi_cache',  // for legacy compatability w/RC1.
+  );
+  $default_relationships[] = array(
+    'description' => t('comments'),
+    'content_type' => 'comment',
+    'base_table' => 'comments',
+    'content_id_column' => 'cid',
+    'pseudo_vote' => 'votingapi_vote',    // for legacy compatability w/RC1.
+    'pseudo_cache' => 'votingapi_cache',  // for legacy compatability w/RC1.
+  );
+  $default_relationships[] = array(
+    'description' => t('users'),
+    'content_type' => 'user',
+    'base_table' => 'users',
+    'content_id_column' => 'uid',
+    'pseudo_vote' => 'votingapi_vote',    // for legacy compatability w/RC1.
+    'pseudo_cache' => 'votingapi_cache',  // for legacy compatability w/RC1.
   );
 
-  foreach ($default_relationships as $key => $data) {
+  foreach ($default_relationships as $data) {
     $pseudo = str_replace(array(' ','-','.'), '_', $data['content_type'] . '_' . $data['content_id_column']);
     $pseudo_vote = empty($data['pseudo_vote']) ? 'vapi_'. $pseudo : $data['pseudo_vote'];
     $pseudo_cache = empty($data['pseudo_cache']) ? 'vapic_'. $pseudo : $data['pseudo_cache'];
     
     $views_data[$data['base_table']][$pseudo_vote]['relationship'] = array(
-      'title' => 'Individual votes',
+      'title' => 'Votes',
       'help' => 'Votes cast by users on ' . $data['description'] . '.',
       'base' => 'votingapi_vote',
       'field' => 'content_id',
@@ -361,8 +319,8 @@ function votingapi_views_data_alter(&$views_data) {
     );
 
     $views_data[$data['base_table']][$pseudo_cache]['relationship'] = array(
-      'title' => 'Voting results',
-      'help' => 'The aggregate results of votes cast on ' . $data['description'] . '.',
+      'title' => 'Vote results',
+      'help' => 'Aggregate results of votes cast on ' . $data['description'] . '.',
       'base' => 'votingapi_cache',
       'field' => 'content_id',
       'relationship field' => $data['content_id_column'],

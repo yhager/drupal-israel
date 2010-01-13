@@ -1,4 +1,4 @@
-/* $Id: style-rtl.css,v 1.2 2009/01/10 12:38:13 jwolf Exp $ */
+/* $Id: style-rtl.css,v 1.2.2.2 2009/04/21 04:13:20 jwolf Exp $ */
 
 html {
   direction: rtl; 
@@ -318,14 +318,10 @@ body.layout-main-last #sidebar-last h2.block-title {
 /* $primary_links in page.tpl.php   */
 /************************************/
 
-#primary-menu ul.menu li {                        /* top item layout */
-  float: right;
+#primary-menu {
+  float: left;
 }
   
-#primary-menu ul.menu li ul li {
-  float: right;
-}
-
 #primary-menu ul.menu li ul li ul.menu {
   margin: 0 -14px 0 0;
 }

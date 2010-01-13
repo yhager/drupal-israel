@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent.module,v 1.6 2009/02/04 13:15:00 pwolanin Exp $
+// $Id: acquia_agent.module,v 1.17.2.1 2009/06/21 15:13:45 pwolanin Exp $
 
 /**
  * @file
@@ -49,18 +49,14 @@ function acquia_agent_menu() {
  */
 function acquia_agent_init() {
   if (empty($_POST) && user_access('administer site configuration') && (!acquia_agent_has_credentials())) {
-    if (arg(2) != 'acquia-agent') {
-      drupal_set_message(t('Please enter your Acquia Network subscription keys on the !settings-url.', array('!settings-url' => l(t('settings page'), 'admin/settings/acquia-agent'))), 'warning', FALSE);
-    }
     if (arg(0) == 'admin') {
-      drupal_set_message(t('Complete your Drupal experience. Subscribe to the Acquia Network to:
-<ul>
-<li>Contact dedicated Drupal support professionals.</li>
-<li>Access your operations dashboard integrated across multiple Drupal sites.</li>
-<li>Assign and manage tasks across distributed website teams.</li>
-<li>Extend your Drupal sites with cloud-based services.</li>
-</ul>
-To learn more, visit the <a href="http://acquia.com/network/">Acquia Network Services overview page</a>'), 'warning', FALSE);
+      drupal_set_message(t('Subscribe to the <a href="@acquia-network">Acquia Network</a> to access Network Services and Technical Support for your Drupal site.<br /> 
+To learn how Acquia can help you manage your Drupal site, visit the <a href="@acquia-ps">Acquia Products &amp; Services page</a>.<br />
+Once subscribed, please enter your subscription key and identifier on the <a href="@settings">settings page</a>.<br />
+To turn this message off, disable the Acquia Network Connector modules.', array('@acquia-network' => 'http://acquia.com/network', '@acquia-ps' => 'http://acquia.com/products-services', '@settings' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
+    }
+    else {
+      drupal_set_message(t('If you have an <a href="@acquia-network">Acquia Network subscription</a>, please enter your subscription key and identifier on the <a href="@settings">settings page</a>.', array('@acquia-network' => 'http://acquia.com/network', '@settings' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
     }
   }
 }
@@ -88,6 +84,13 @@ function acquia_agent_check_subscription($params = array()) {
       $params['series']   = ACQUIA_DRUPAL_SERIES;
       $params['branch']   = ACQUIA_DRUPAL_BRANCH;
       $params['revision'] = ACQUIA_DRUPAL_REVISION;
+    }
+    // Include Acquia Search module version number.
+    if (module_exists('acquia_search')) {
+      $info = db_result(db_query("SELECT info FROM {system} WHERE name = 'acquia_search'"));
+      if ($info = unserialize($info)) {
+        $params['search_version'] = $info['version'];
+      }
     }
     $data = acquia_agent_call('acquia.agent.subscription', $params);
     $subscription['timestamp'] = time();
@@ -297,14 +300,14 @@ function acquia_agent_translated_menu_link_alter(&$item, $map) {
     if ($subscription['active']) {
       $icon = '<img src="'. base_path() . 'misc/watchdog-ok.png" height="10" alt="ok" />';
       $item['title'] = t("!icon Subscription active (expires !date)", array('!icon' => $icon, '!date' => format_date(strtotime($subscription['expiration_date']['value']), 'small')));
-      $item['localized_options']['attributes']['class'] .= "acquia-active-subscription";
+      $item['localized_options']['extra class'] .= " acquia-active-subscription";
       $item['localized_options']['attributes']['title'] = $subscription['product']['view'];
       $item['href'] = $subscription['href'];
     }
     else {
       $icon = '<img src="'. base_path() . 'misc/watchdog-error.png" height="10" alt="error" />';
       $item['title'] = t("!icon Subscription not active", array('!icon' => $icon));
-      $item['localized_options']['attributes']['class'] .= "acquia-inactive-subscription";
+      $item['localized_options']['extra class'] .= " acquia-inactive-subscription";
       $item['href'] = 'http://acquia.com/network';
     }
   }
@@ -316,6 +319,13 @@ function acquia_agent_translated_menu_link_alter(&$item, $map) {
 function acquia_agent_theme_registry_alter(&$theme_registry) {
   if (isset($theme_registry['admin_menu_icon'])) {
     $theme_registry['admin_menu_icon']['function'] = 'acquia_agent_menu_icon';
+  }
+  // Re-theme the modules page to add extra warnings inline.
+  
+  if (isset($theme_registry['system_modules'])) {
+    $theme_registry['system_modules']['function'] = 'acquia_agent_system_modules';
+    $theme_registry['system_modules']['file'] = 'acquia_agent.pages.inc';
+    $theme_registry['system_modules']['path'] = drupal_get_path('module', 'acquia_agent');
   }
 }
 
@@ -443,7 +453,7 @@ function acquia_agent_settings($variable_name) {
     case 'acquia_key':
       return variable_get('acquia_key', '');
     case 'acquia_network_address':
-      return variable_get('acquia_network_address', 'rpc.acquia.com');
+      return variable_get('acquia_network_address', 'https://rpc.acquia.com');
     case 'acquia_subscription_data':
       return variable_get('acquia_subscription_data', array('active' => FALSE));
   }
@@ -493,4 +503,22 @@ function acquia_agent_load_versions() {
   // Include version number information.
   include_once 'acquia_agent_drupal_version.inc';
 }
+
+/**
+ * Implementation of hook_form_[form_id]_alter()..
+ */
+function acquia_agent_form_system_modules_alter(&$form, &$form_state) {
+  
+  if (isset($form['description']['acquia_search'])) {
+    $subscription = acquia_agent_settings('acquia_subscription_data');
+    
+    if (!module_exists('acquia_search') && empty($subscription['active'])) {
+      $form['status']['#disabled_modules'][] = 'acquia_search';
+      $text = 'Acquia Search requires an <a href="@network-url">Acquia Network subscription</a>';
+      $message = t($text, array('@network-url' => 'http://acquia.com/products-services/acquia-search'));
+      $form['description']['acquia_search']['#extra'] = '<div style="padding-left:5px; margin:8px 0px" class="messages warning" id="acquia-agent-no-search">'. $message .'</div>';
+    }
+  }
+}
+
 

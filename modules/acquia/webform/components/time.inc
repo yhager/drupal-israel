@@ -1,5 +1,5 @@
 <?php
-// $Id: time.inc,v 1.16.2.9 2009/01/09 08:31:06 quicksketch Exp $
+// $Id: time.inc,v 1.16.2.11 2009/11/06 00:46:15 quicksketch Exp $
 
 /**
  * @file
@@ -40,7 +40,7 @@ function _webform_edit_time($currfield) {
     '#type' => 'textfield',
     '#title' => t('Default value'),
     '#default_value' => $currfield['value'],
-    '#description' => t('The default value of the field.') .'<br />'. t('Accepts a time in any <a href="http://www.gnu.org/software/tar/manual/html_node/tar_109.html">GNU Date Input Format</a>. Strings such as now, +2 hours, and 10:30pm are all valid.'),
+    '#description' => t('The default value of the field.') .'<br />'. t('Accepts a time in any <a href="http://www.gnu.org/software/tar/manual/html_chapter/Date-input-formats.html">GNU Date Input Format</a>. Strings such as now, +2 hours, and 10:30pm are all valid.'),
     '#size' => 60,
     '#maxlength' => 127,
     '#weight' => 0,
@@ -272,18 +272,23 @@ function _webform_theme_time() {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema.
+ * @param $sids
+ *   An optional array of submission IDs (sid). If supplied, the analysis will be limited
+ *   to these sids.
  * @return
  *   An array of data rows, each containing a statistic for this component's
  *   submissions.
  */
-function _webform_analysis_rows_time($component) {
+function _webform_analysis_rows_time($component, $sids = array()) {
+  $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
+  $sidfilter = count($sids) ? " AND sid in (".implode(",", $placeholders).")" : "";
   $query = 'SELECT no,data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
-    ' AND  cid = %d '.
+    ' AND  cid = %d '. $sidfilter.
     ' ORDER BY sid,no ASC ';
 
-  $result = db_query($query, $component['nid'], $component['cid']);
+  $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   // build an array of timestamps from entered values.
   $timestamps = array();
   $submissions = 1;

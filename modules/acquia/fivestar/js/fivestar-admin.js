@@ -1,4 +1,4 @@
-// $Id: fivestar-admin.js,v 1.1.4.2 2008/03/28 15:35:13 quicksketch Exp $
+// $Id: fivestar-admin.js,v 1.1.4.4 2009/05/10 20:56:24 quicksketch Exp $
 
 /**
  * Fivestar admin interface enhancments.
@@ -12,7 +12,7 @@ if (Drupal.jsEnabled) {
     nodePreview.displayTextfields();
 
     // Enable comments if available.
-    $comment = $('input[@name=fivestar_comment]');
+    $comment = $('input[name=fivestar_comment]');
     if ($comment.size()) {
       var commentPreview = new fivestarPreview($('#fivestar-comment-preview .fivestar-preview')[0]);
     }
@@ -204,7 +204,7 @@ fivestarPreview.prototype.update = function() {
         response = Drupal.parseJson(response);
       }
       $(self.preview).html(response.data).hide();
-      $('div.fivestar-form-item', self.preview).rating();
+      $('div.fivestar-form-item', self.preview).fivestar();
       $('input.fivestar-submit', self.preview).hide();
       $(self.preview).show();
     };

@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar-main.tpl.php,v 1.2.2.3 2008/10/21 14:20:33 karens Exp $
+// $Id: calendar-main.tpl.php,v 1.2.2.4 2009/01/10 20:04:18 karens Exp $
 /**
  * @file
  * Template to display calendar navigation and links.
@@ -20,6 +20,7 @@
 
 <div class="calendar-calendar">
   <?php if (!empty($calendar_popup)) print $calendar_popup;?>
+  <?php if (!empty($calendar_add_date)) print $calendar_add_date; ?>
   <?php if (empty($block)) print theme('links', $calendar_links);?>
   <?php print theme('date_navigation', $view) ?>
 </div>

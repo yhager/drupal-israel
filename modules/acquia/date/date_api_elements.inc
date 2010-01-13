@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.49.2.1.2.35 2008/11/19 01:42:18 karens Exp $
+//$Id: date_api_elements.inc,v 1.49.2.1.2.53 2009/09/16 10:56:28 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -97,7 +97,6 @@ function date_timezone_process($element, $edit, $form_state, $form) {
     '#options' => date_timezone_names($element['#required']),
     '#weight' => $element['#weight'],
     '#required' => $element['#required'],
-    '#attributes' => array('class' => 'date-timezone date-clear-block'),
     '#theme' => 'date_select_element',
   );
   if (isset($element['#element_validate'])) {
@@ -106,6 +105,8 @@ function date_timezone_process($element, $edit, $form_state, $form) {
   else {
     $element['#element_validate'] = array('date_timezone_validate');
   }
+  // TODO This sometimes causes problems, do we need it?
+  //$element['#attributes'] = array('class' => 'date-timezone clear-block');
   return $element;
 }
 
@@ -129,14 +130,17 @@ function date_timezone_process($element, $edit, $form_state, $form) {
  */
 function date_text_process($element, $edit, $form_state, $form) {
   $date = NULL;
-  if (!empty($edit)) {
+  $granularity = date_format_order($element['#date_format']);
+  
+  // We sometimes get $edit without $edit['date'] from
+  // Views exposed filters.
+  if (!empty($edit) && is_array($edit) && !empty($edit['date'])) {
     $datetime = date_convert_from_custom($edit['date'], $element['#date_format']);
-    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
+    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
-
   $element['#tree'] = TRUE;
 
   $element['date']['#type'] = 'textfield';
@@ -154,6 +158,9 @@ function date_text_process($element, $edit, $form_state, $form) {
   }
   else {
     $element['#element_validate'] = array('date_text_validate');
+  }
+  if (!empty($element['#force_value'])) {
+    $element['date']['#value'] = $element['date']['#default_value'];
   }
   return $element;
 }
@@ -180,11 +187,12 @@ function date_text_process($element, $edit, $form_state, $form) {
  */
 function date_select_process($element, $edit, $form_state, $form) {
   $date = NULL;
+  $granularity = date_format_order($element['#date_format']);
   if (!empty($edit)) {
-    $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY);
+    $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
@@ -197,7 +205,8 @@ function date_select_process($element, $edit, $form_state, $form) {
     if ($field != 'timezone') {
       $element[$field] = array(
         '#type' => 'hidden',
-        '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
+        '#value' => 0,
+        );
     }
   }
   if (isset($element['#element_validate'])) {
@@ -231,7 +240,7 @@ function date_parts_element($element, $date, $format) {
   $order = array_flip($granularity);
 
   $hours_format  = strpos(strtolower($element['#date_format']), 'a') ? 'g': 'G';
-  $month_function  = strpos($element['#date_format'], 'F') ? 'date_month_names' : 'date_month_names_abbr';
+  $month_function  = strpos($element['#date_format'], 'F') !== FALSE ? 'date_month_names' : 'date_month_names_abbr';
   $count = 0;
   $increment = min(intval($element['#date_increment']), 1);
   foreach ($granularity as $field) {
@@ -246,18 +255,10 @@ function date_parts_element($element, $date, $format) {
       );
     switch ($field) {
       case 'year':
-        // Center the range around the current year, but expand it far
-        // enough so it will pick up the year value in the field in case
-        // the value in the field is outside the initial range.
-        $this_year = date_format(date_now(), 'Y');
-        $value_year = is_object($date) ? date_format($date, 'Y') : '';
-        $range = explode(':', $element['#date_year_range']);
-        $min_year = $this_year + $range[0];
-        $max_year = $this_year + $range[1];
-        if (!empty($value_year)) {
-          $min_year = min($value_year, $min_year);
-          $max_year = max($value_year, $max_year);
-        }
+        $range = date_range_years($element['#date_year_range'], $date);
+        $min_year = $range[0];
+        $max_year = $range[1];
+        
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 'Y') : '';
         if ($part_type == 'select') {
           $sub_element[$field]['#options'] = drupal_map_assoc(date_years($min_year, $max_year, $part_required));
@@ -305,8 +306,10 @@ function date_parts_element($element, $date, $format) {
       $sub_element[$field]['#theme'] = 'date_textfield_element';
       $sub_element[$field]['#size'] = 7;
       if ($element['#date_label_position'] == 'within') {
-        $sub_element[$field]['#options'] = array(
-          '-'. $label => '-'. $label) + $sub_element[$field]['#options'];
+        if (is_array($sub_element[$field]['#options'])) {
+          $sub_element[$field]['#options'] = array(
+            '-'. $label => '-'. $label) + $sub_element[$field]['#options'];
+        }
         if (empty($sub_element[$field]['#default_value'])) {
           $sub_element[$field]['#default_value'] = '-'. $label;
         }
@@ -326,8 +329,14 @@ function date_parts_element($element, $date, $format) {
         $sub_element[$field]['#title'] = $label;
       }
     }
+ 
+    // Views exposed filters are treated as submitted even if not,
+    // so force the #default value in that case.  
+    if (!empty($element[$field]['#force_value'])) {
+      $sub_element[$field]['#value'] = $sub_element[$field]['#default_value'];
+    }
   }
-
+  
   if (($hours_format == 'g' || $hours_format == 'h') && date_has_time($granularity)) {
     $sub_element['ampm'] = array(
       '#type' => 'select',
@@ -398,6 +407,7 @@ function date_select_validate($element, &$form_state) {
  
   $error_field = implode('][', $element['#parents']);
   $errors = array();
+  $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
   
   if (in_array('year', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['year']))) {
     if ($element['#value']['year'] < variable_get('date_min_year', 1) || $element['#value']['year'] > variable_get('date_max_year', 4000)) {
@@ -457,7 +467,7 @@ function date_select_validate($element, &$form_state) {
     $errors[] = t('A valid value is required.');
   }
   if (!empty($errors)) {
-    array_unshift($errors, t('%field has errors.', array('%field' => $element['#title'])));
+    array_unshift($errors, t('Field %field has errors.', array('%field' => $label)));
     form_set_error($error_field, implode(' ', $errors));
   }
   
@@ -474,8 +484,12 @@ function date_select_validate($element, &$form_state) {
  * Helper function for extracting a date value out of user input.
  */
 function date_select_input_value($element) {
-  if (date_is_valid($element['#value'], DATE_ARRAY)) {
-    return date_convert($element['#value'], DATE_ARRAY, DATE_DATETIME);
+  $granularity = date_format_order($element['#date_format']);
+  if (date_is_valid($element['#value'], DATE_ARRAY, $granularity)) {
+    // Use fuzzy_datetime here to be sure year-only dates
+    // aren't inadvertantly shifted to the wrong year by trying
+    // to save '2009-00-00 00:00:00'.
+    return date_fuzzy_datetime(date_convert($element['#value'], DATE_ARRAY, DATE_DATETIME));
   }
   return NULL;
 }
@@ -493,17 +507,17 @@ function date_text_validate($element, &$form_state) {
     return;
   }
   $parents = $element['#parents'];
+  $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
   $value = date_text_input_value($element);
-
-  if (!$element['#required'] && empty($value)) {
-    form_set_value($element, NULL, $form_state);
+  
+  if (empty($value) && !empty($element['#required'])) {
+    form_error($element, t('A valid date is required for %title.', array('%title' => $label))); 
+  }
+  elseif (empty($value) && !empty($element['#value']['date'])) {
+    form_error($element, t('%title is invalid.', array('%title' => $label))); 
   }
   elseif (!empty($value)) {
     form_set_value($element, $value, $form_state);
-  }
-  else {
-    $error_field = implode('][', $element['#parents']);
-    form_set_error($error_field, t('A valid date is required for %title.', array('%title' => $element['#title']))); 
   }
 }
 
@@ -512,21 +526,14 @@ function date_text_validate($element, &$form_state) {
  */
 function date_text_input_value($element) {
   $form_values = $element['#value'];
+  $granularity = date_format_order($element['#date_format']);
   $input = $form_values['date'];
   if (!$element['#required'] && trim($input) == '') return NULL;
 
-  $value = date_convert_from_custom($input, $element['#date_format']);
-
-  // Check for special case when using partial dates, like year only.
-  // We have to create a valid date out of the results to test validity.
-  $granularity = date_format_order($element['#date_format']);
-  $non_granularity = date_nongranularity($granularity);
-  if (array_intersect($non_granularity, array('year', 'month', 'day'))) {
-    $value = date_fuzzy_datetime(str_replace(' ', 'T', $value));
-  }
+  $value = date_limit_value(date_convert_from_custom($input, $element['#date_format']), $granularity);
 
   // If it creates a valid date, use it.
-  if (date_is_valid($value)) {
+  if (date_is_valid($value, DATE_DATETIME, $granularity)) {
     return $value;
   }
   // TODO come back and try to find a way to use strtotime to guess
@@ -590,6 +597,7 @@ function date_convert_from_custom($date, $format) {
   $regex2 = str_replace('a', '(am|pm)', $regex2);
   preg_match('`^'. $regex2 .'$`', $date, $values);
   array_shift($values);
+  
   // if we did not find all the values for the patterns in the format, abort
   if (count($letters) != count($values)) {
     return  NULL;

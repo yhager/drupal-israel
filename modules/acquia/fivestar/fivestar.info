@@ -5,7 +5,7 @@ package = Voting
 core = 6.x
 dependencies[] = votingapi
 ; Information added by Acquia.com packaging script
-version = "6.x-1.13"
+version = "6.x-1.19"
 core = "6.x"
 project = "fivestar"
 acquia = "1"

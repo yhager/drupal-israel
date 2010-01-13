@@ -188,14 +188,14 @@ function acquia_form_alter(&$form, $form_state, $form_id) {
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
 
     $form['site_information']['acquia_identifier'] = array(
-      '#title' => t('Acquia subscription identifier'),
-      '#description' => t('Please provide your <a href="@url">Acquia Network subscription identifier</a> for this installation here. You can also provide it later at Administer > Site configuration > Acquia settings.', array('@url' => 'http://acquia.com/network/dashboard/subscription')),
+      '#title' => st('Acquia subscription identifier'),
+      '#description' => st('If you have an <a href="@url">Acquia Network subscription</a>, please enter the subscription identifier. You can also provide it later at Administer > Site configuration > Acquia settings.', array('@url' => 'http://acquia.com/network/dashboard/subscription')),
       '#type' => 'textfield',
       '#required' => FALSE,
     );
     $form['site_information']['acquia_key'] = array(
-      '#title' => t('Acquia subscription key'),
-      '#description' => t('Please provide your <a href="@url">Acquia Network subscription key</a> for this installation here.  You can also provide it later at Administer > Site configuration > Acquia settings.', array('@url' => 'http://acquia.com/network/dashboard/subscription')),
+      '#title' => st('Acquia subscription key'),
+      '#description' => st('If you have an <a href="@url">Acquia Network subscription</a>, please enter the subscription key. You can also provide it later at Administer > Site configuration > Acquia settings.', array('@url' => 'http://acquia.com/network/dashboard/subscription')),
       '#type' => 'textfield',
       '#required' => FALSE,
     );

@@ -1,5 +1,5 @@
 <?php
-//$Id: calendar_ical.views.inc,v 1.1.2.5 2008/10/15 13:34:00 karens Exp $
+//$Id: calendar_ical.views.inc,v 1.1.2.6 2009/02/16 23:46:22 karens Exp $
 //views_include_handlers();
 /**
  * Implementation of hook_views_plugins
@@ -27,7 +27,7 @@ function calendar_ical_views_plugins() {
         'parent' => 'parent',
       ),
       'calendar_ical' => array(
-        'title' => t('Calendar iCal feed'),
+        'title' => t('iCal feed'),
         'help' => t('Display the view as an iCal feed.'),
         'handler' => 'calendar_plugin_display_ical',
         'path' => "$path",
@@ -61,7 +61,7 @@ function calendar_ical_views_plugins() {
         'parent' => 'parent',
       ),
       'ical' => array(
-        'title' => t('iCal Feed'),
+        'title' => t('iCal feed'),
         'help' => t('Generates an iCal feed from a view.'),
         'handler' => 'calendar_plugin_style_ical',
         'path' => "$path",

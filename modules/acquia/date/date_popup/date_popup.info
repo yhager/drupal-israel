@@ -6,7 +6,7 @@ dependencies[] = date_timezone
 package = Date/Time
 core = 6.x
 ; Information added by Acquia.com packaging script
-version = "6.x-2.0-rc6"
+version = "6.x-2.4"
 core = "6.x"
 project = "date"
 acquia = "1"

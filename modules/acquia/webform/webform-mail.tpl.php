@@ -1,5 +1,5 @@
 <?php
-// $Id: webform-mail.tpl.php,v 1.1.2.3 2009/01/09 08:31:06 quicksketch Exp $
+// $Id: webform-mail.tpl.php,v 1.1.2.5 2009/11/06 00:59:47 quicksketch Exp $
 
 /**
  * @file
@@ -31,7 +31,9 @@
 <?php print t('Submitted by anonymous user: [@ip_address]', array('@ip_address' => $ip_address)) ?>
 <?php endif; ?>
 
-<?php print t('Submitted values are') ?>
+
+<?php print t('Submitted values are') ?>:
+
 <?php
   // Print out all the Webform fields. This is purposely a theme function call
   // so that you may remove items from the submitted tree if you so choose.
@@ -40,4 +42,5 @@
 ?>
 
 <?php print t('The results of this submission may be viewed at:') ?>
+
 <?php print url('node/'. $node->nid .'/submission/'. $sid, array('absolute' => TRUE)) ?>

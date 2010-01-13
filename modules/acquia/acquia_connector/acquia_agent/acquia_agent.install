@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent.install,v 1.2 2009/01/20 18:27:05 pwolanin Exp $
+// $Id: acquia_agent.install,v 1.4 2009/03/23 16:12:57 pwolanin Exp $
 
 /**
  * The minimum PHP memory recommended to install Acquia Drupal.
@@ -10,6 +10,26 @@ define('ACQUIA_DRUPAL_MINIMUM_PHP_MEMORY', '32M');
 // Acquia's preferences.
 if (defined('MAINTENANCE_MODE') && MAINTENANCE_MODE == 'update' && isset($_POST['start'])) {
   acquia_agent_alter_module_updates($_POST['start']);
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function acquia_agent_uninstall() {
+  variable_del('acquia_identifier');
+  variable_del('acquia_key');
+  variable_del('acquia_network_address');
+  variable_del('acquia_subscription_data');
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function acquia_agent_disable() {
+  $mlid = db_result(db_query("SELECT mlid FROM {menu_links} WHERE link_title = 'acquia_subscription_status' AND menu_name = 'admin_menu'"));
+  if ($mlid) {
+     menu_link_delete($mlid);
+  }
 }
 
 /**

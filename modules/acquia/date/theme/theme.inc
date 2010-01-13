@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.1.4.28 2008/11/20 12:28:59 karens Exp $
+// $Id: theme.inc,v 1.1.4.36 2009/06/08 23:10:58 karens Exp $
 /**
  *  Preprocessor to construct back and next navigation from the date argument.
  */
@@ -11,7 +11,7 @@ function template_preprocess_date_navigation(&$vars) {
   $min_date = is_object($view->date_info->min_date) ? $view->date_info->min_date : date_now();
   $max_date = is_object($view->date_info->max_date) ? $view->date_info->max_date : date_now();
   
-  if (!isset($view->date_info->hide_nav)) {
+  if (empty($view->date_info->hide_nav)) {
     $prev_date = drupal_clone($min_date);
     date_modify($prev_date, '-1 '. $view->date_info->granularity);
     $next_date = drupal_clone($min_date);
@@ -52,15 +52,44 @@ function template_preprocess_date_navigation(&$vars) {
   if (!empty($prev_date) && !empty($vars['prev_url']) && date_format($prev_date, 'Y') < $view->date_info->min_allowed_year) {
     $vars['prev_url'] = '';    
   }
+
+  $vars['prev_options'] += array('attributes' => array());
+  $vars['next_options'] += array('attributes' => array());
+  $prev_title = '';
+  $next_title = '';
+
+  // Build next/prev link titles.
+  switch($view->date_info->granularity) {
+    case 'year':
+      $prev_title = t('Navigate to previous year');
+      $next_title = t('Navigate to next year');
+      break;
+    case 'month':
+      $prev_title = t('Navigate to previous month');
+      $next_title = t('Navigate to next month');
+      break;
+    case 'week':
+      $prev_title = t('Navigate to previous week');
+      $next_title = t('Navigate to next week');
+      break;      
+    case 'day':
+      $prev_title = t('Navigate to previous day');
+      $next_title = t('Navigate to next day');
+      break;
+  }
+  $vars['prev_options']['attributes'] += array('title' => $prev_title);
+  $vars['next_options']['attributes'] += array('title' => $next_title);
   
-  $vars['prev_options'] += array('attributes' => array('rel' => 'nofollow'));
-  $vars['next_options'] += array('attributes' => array('rel' => 'nofollow'));
+  // Add nofollow for next/prev links.
+  $vars['prev_options']['attributes'] += array('rel' => 'nofollow');
+  $vars['next_options']['attributes'] += array('rel' => 'nofollow');
   
   $link = FALSE;
   // Month navigation titles are used as links in the block view.
 	if (!empty($view->date_info->block) && $view->date_info->granularity == 'month') {
 	  $link = TRUE;
   }
+  
   $nav_title = theme('date_nav_title', $view->date_info->granularity, $view, $link);
   $vars['nav_title'] = $nav_title;
   $vars['block'] = !empty($view->date_info->block);
@@ -93,7 +122,8 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
   // TODO Update this.
   if (!empty($view->date_info->mini) || $link) {
   	// Month navigation titles are used as links in the mini view.
-  	return l($title, $view->date_info->url);
+   $attributes = array('title' => t('View full page month'));
+  	return l($title, $view->date_info->url, array('attributes' => $attributes));
   }
   else {
     return $title;
@@ -144,7 +174,9 @@ function template_preprocess_date_vcalendar(&$vars) {
   // Format the event results as iCal expects.
   $events_in = $vars['events'];
   $events = array();
+  $rows = $vars['rows'];
   foreach ($events_in as $uid => $event) {
+    $row = array_shift($rows);
     // Omit any items with empty dates.
     if (!empty($event['start'])) {
       $events[$uid] = $event;
@@ -155,9 +187,10 @@ function template_preprocess_date_vcalendar(&$vars) {
       else {
         $events[$uid]['timezone'] = '';
       }
-      $events[$uid]['start'] = date_format($event['start'], DATE_FORMAT_ICAL);
+      $date_format = ($row->calendar_all_day == TRUE) ? DATE_FORMAT_ICAL_DATE : DATE_FORMAT_ICAL;
+      $events[$uid]['start'] = date_format($event['start'], $date_format);
       if ($event['start'] && $event['end']) {
-        $events[$uid]['end'] = date_format($event['end'], DATE_FORMAT_ICAL);
+        $events[$uid]['end'] = date_format($event['end'], $date_format);
       }
       else {
         $events[$uid]['end'] = $events[$uid]['start'];
@@ -299,26 +332,68 @@ function theme_date_part_minsec_prefix($element) {
  *   Properties used: title, value, options, description, required and attributes.
  */
 function theme_date_part_label_year($part_type, $element) {
-  return t('Year');
+  return date_t('Year', 'datetime');
 }
 function theme_date_part_label_month($part_type, $element) {
-  return t('Month');
+  return date_t('Month', 'datetime');
 }
 function theme_date_part_label_day($part_type, $element) {
-  return t('Day');
+  return date_t('Day', 'datetime');
 }
 function theme_date_part_label_hour($part_type, $element) {
-  return t('Hour');
+  return date_t('Hour', 'datetime');
 }
 function theme_date_part_label_minute($part_type, $element) {
-  return t('Minute');
+  return date_t('Minute', 'datetime');
 }
 function theme_date_part_label_second($part_type, $element) {
-  return t('Second');
+  return date_t('Second', 'datetime');
 }
 function theme_date_part_label_ampm($part_type, $element) {
-  return t('am/pm');
+  return ' ';
 }
 function theme_date_part_label_timezone($part_type, $element) {
   return t('Timezone');
+}
+
+/**
+ * Theme for a date block that looks like a mini calendar day.
+ * Pass in a date object already set to the right timezone, 
+ * format as a calendar page date. The calendar styling is created in css.
+ */
+function theme_date_calendar_day($date) {
+  if (empty($date)) {
+    return NULL;
+  }
+  return '<div class="date-calendar-day">' .
+    '<span class="month">' . date_format_date($date, 'custom', 'M') . '</span>' .
+    '<span class="day">' . date_format_date($date, 'custom', 'j') . '</span>' .
+    '<span class="year">' . date_format_date($date, 'custom', 'Y') . '</span>' .
+  '</div>';
+}
+
+function theme_date_time_ago($start_date, $end_date, $interval = 2) {
+  // If no date is sent, then return nothing
+  if (empty($start_date) || empty($end_date)){
+    return NULL;
+  }
+
+  // Time to compare dates to
+  $now = date_format(date_now(), DATE_FORMAT_DATETIME);
+  $start = date_format($start_date, DATE_FORMAT_DATETIME);
+  $end = date_format($end_date, DATE_FORMAT_DATETIME);
+  
+  // 1) The date is entirely in the future
+  if ($now < $start) {
+    return t('!time from now', array('!time' => date_format_interval($start_date, $interval)));
+  }
+  // 2) Ongoing date
+  elseif ($now > $start && $now <= $end) {
+    //return t('Started !time ago', array('!time' => $dates['value']['interval']));
+    return t('ongoing');
+  }
+  // 3) Date is in the past (format_interval added 'ago' to the value).
+  else {
+    return date_format_interval($start_date, $interval);
+  }
 }

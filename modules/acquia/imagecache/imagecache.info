@@ -1,4 +1,4 @@
-; $Id: imagecache.info,v 1.5 2008/05/30 15:46:59 dopry Exp $
+; $Id: imagecache.info,v 1.6.2.1 2009/08/19 21:02:51 drewish Exp $
 name = ImageCache
 description = Dynamic image manipulator and cache.
 package = ImageCache
@@ -6,7 +6,7 @@ dependencies[] = imageapi
 core = 6.x
 
 ; Information added by Acquia.com packaging script
-version = "6.x-2.0-beta6"
+version = "6.x-2.0-beta10"
 core = "6.x"
 project = "imagecache"
 acquia = "1"

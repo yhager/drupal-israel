@@ -1,5 +1,5 @@
 <?php
-// $Id: webform_components.inc,v 1.9.2.27 2009/01/11 08:08:24 quicksketch Exp $
+// $Id: webform_components.inc,v 1.9.2.30 2009/11/06 00:25:43 quicksketch Exp $
 
 /**
  * @file
@@ -242,7 +242,7 @@ function webform_components_form_submit($form, &$form_state) {
 
   // Update all mandatory and weight values.
   foreach ($node->webform['components'] as $cid => $component) {
-    if ($component['weight'] != $form_state['values']['components'][$cid]['weight'] || $component['mandatory'] != $form_state['values']['components'][$cid]['mandatory'] || $component['email'] != $form_state['values']['components'][$cid]['email']) {
+    if ($component['pid'] != $form_state['values']['components'][$cid]['pid'] || $component['weight'] != $form_state['values']['components'][$cid]['weight'] || $component['mandatory'] != $form_state['values']['components'][$cid]['mandatory'] || $component['email'] != $form_state['values']['components'][$cid]['email']) {
       $component['weight'] = $form_state['values']['components'][$cid]['weight'];
       $component['mandatory'] = $form_state['values']['components'][$cid]['mandatory'];
       $component['email'] = $form_state['values']['components'][$cid]['email'];
@@ -267,7 +267,7 @@ function webform_components_form_submit($form, &$form_state) {
   }
 }
 
-function webform_component_edit_form($form_state, &$node, $component, $clone = FALSE) {
+function webform_component_edit_form(&$form_state, $node, $component, $clone = FALSE) {
   drupal_set_title(t('Edit component: @name (@type)', array('@name' => $component['name'], '@type' => t($component['type']))));
 
   // Print the correct field type specification.
@@ -431,7 +431,7 @@ function webform_component_edit_form_submit($form, &$form_state) {
   // Remove empty extra values.
   if (isset($form_state['values']['extra'])) {
     foreach ($form_state['values']['extra'] as $key => $value) {
-      if (empty($value)) {
+      if ($value  === '') {
         unset($form_state['values']['extra'][$key]);
       }
     }
@@ -440,7 +440,7 @@ function webform_component_edit_form_submit($form, &$form_state) {
   // Remove empty attribute values.
   if (isset($form_state['values']['extra']['attributes'])) {
     foreach ($form_state['values']['extra']['attributes'] as $key => $value) {
-      if (empty($value)) {
+      if ($value === '') {
         unset($form_state['values']['extra']['attributes'][$key]);
       }
     }

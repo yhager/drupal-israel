@@ -4,7 +4,7 @@ description = Protects against comment and contact form spam.
 core = 6.x
 
 ; Information added by Acquia.com packaging script
-version = "6.x-1.7"
+version = "6.x-1.10"
 core = "6.x"
 project = "mollom"
 acquia = "1"

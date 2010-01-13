@@ -1,4 +1,4 @@
-// $Id: CHANGELOG.txt,v 1.4.4.4 2008/09/19 18:27:19 eaton Exp $
+// $Id: CHANGELOG.txt,v 1.4.4.9 2009/08/15 17:59:54 eaton Exp $
 
 02/11/06
 --------
@@ -52,3 +52,20 @@ Views integration code seriously reworked (again) to use Views 2 'relationships'
 09/19/08
 --------
 Updated for compatibility with Views RC2, added the ability to filter Views relationships to votes cast by the current user, and added three default views to demonstrate the Views integration. Also added basic Simpletests, fixed a bug that manifested when modules cast votes with minimal information (nothing but a content id and a value, for example). Finally, added the ability to auto-generate dummy votes for testing purposes. This feature is only visible if Devel Generate module is installed and activated.
+
+06/20/09
+--------
+Changed hook_votingapi_content_types() to hook_votingapi_relationships(), since it only deals with Views relationships. Added extra documentation to API.txt and fixed assorted ugly bugs. Moved a bunch of API docs to votingapi.api.php so API.module can generate pretty docs for the hooks. Nodes and comments now have pre-configured relationships available, any other entity types need a hook_votingapi_relationships() implementation.
+
+Added votingapi_metadata() to gather metadata about defined value_types, tags, and aggregate functions. Modified the views relationship handler to use that function rather than querying the tables directly.
+
+07/20/09
+--------
+#480036 by j_ten_man - allow votingapi relationships to be chained off of other relationships (like node references)
+#496454 - PHPDoc incorrectly listed 'uid' and 'vote_source' as valid filtering criteria on cached aggregate results.
+Added an 'Other' option for Relationships filters, to allow nonstandard tags, filters, and so on to be used in VotingAPI relationships with minimal hassle.
+
+08/15/09
+--------
+#527970 - Fixing issues with the 'Other' option when creating relationship filters. Thanks to te-brian for spotting it and whipping up a patch.
+#541236 - Add support for user ratings to the default set of relationships. Patch by Likeless.

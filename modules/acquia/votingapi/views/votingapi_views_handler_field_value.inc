@@ -1,5 +1,5 @@
 <?php
-// $Id: votingapi_views_handler_field_value.inc,v 1.1.2.2 2008/10/01 15:47:47 eaton Exp $
+// $Id: votingapi_views_handler_field_value.inc,v 1.1.2.3 2009/06/21 01:10:39 eaton Exp $
 
 /**
  * @file
@@ -7,6 +7,11 @@
  */
 
 class votingapi_views_handler_field_value extends views_handler_field_numeric {
+  function construct() {
+    parent::construct();
+    $this->definition['float'] = TRUE;
+  }
+
   function option_definition() {
     $options = parent::option_definition();
     $options['appearance'] = '';

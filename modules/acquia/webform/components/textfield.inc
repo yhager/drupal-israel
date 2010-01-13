@@ -1,5 +1,5 @@
 <?php
-// $Id: textfield.inc,v 1.12.2.9 2009/01/11 03:01:47 quicksketch Exp $
+// $Id: textfield.inc,v 1.12.2.11 2009/10/15 01:27:27 quicksketch Exp $
 
 /**
  * @file
@@ -112,8 +112,8 @@ function _webform_render_textfield($component) {
     '#default_value' => _webform_filter_values($component['value']),
     '#required'      => $component['mandatory'],
     '#weight'        => $component['weight'],
-    '#field_prefix'  => empty($component['extra']['field_prefix']) ? NULL : $component['extra']['field_prefix'],
-    '#field_suffix'  => empty($component['extra']['field_suffix']) ? NULL : $component['extra']['field_suffix'],
+    '#field_prefix'  => empty($component['extra']['field_prefix']) ? NULL : check_plain($component['extra']['field_prefix']),
+    '#field_suffix'  => empty($component['extra']['field_suffix']) ? NULL : check_plain($component['extra']['field_suffix']),
     '#description'   => _webform_filter_descriptions($component['extra']['description']),
     '#attributes'    => $component['extra']['attributes'],
     '#prefix'        => '<div class="webform-component-'. $component['type'] .'" id="webform-component-'. $component['form_key'] .'">',
@@ -203,20 +203,25 @@ function _webform_help_textfield($section) {
  * @param $component
  *   An array of information describing the component, directly correlating to
  *   the webform_component database schema
+ * @param $sids
+ *   An optional array of submission IDs (sid). If supplied, the analysis will be limited
+ *   to these sids.
  * @return
  *   An array of data rows, each containing a statistic for this component's
  *   submissions.
  */
-function _webform_analysis_rows_textfield($component) {
+function _webform_analysis_rows_textfield($component, $sids = array()) {
+  $placeholders = count($sids) ? array_fill(0, count($sids), "'%s'") : array();
+  $sidfilter = count($sids) ? " AND sid in (".implode(",", $placeholders).")" : "";
   $query = 'SELECT data '.
     ' FROM {webform_submitted_data} '.
     ' WHERE nid = %d '.
-    '  AND cid = %d';
+    ' AND cid = %d '. $sidfilter;
   $nonblanks = 0;
   $submissions = 0;
   $wordcount = 0;
 
-  $result = db_query($query, $component['nid'], $component['cid']);
+  $result = db_query($query, array_merge(array($component['nid'], $component['cid']), $sids));
   while ($data = db_fetch_array($result)) {
     if (drupal_strlen(trim($data['data'])) > 0) {
       $nonblanks++;

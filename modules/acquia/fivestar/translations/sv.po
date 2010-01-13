@@ -1,4 +1,4 @@
-# $Id: sv.po,v 1.1.2.1 2008/02/26 22:12:07 quicksketch Exp $
+# $Id: sv.po,v 1.3 2008/02/10 23:52:31 quicksketch Exp $
 #
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>

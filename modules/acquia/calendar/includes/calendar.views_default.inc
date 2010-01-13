@@ -1,5 +1,5 @@
 <?php
-//$Id: calendar.views_default.inc,v 1.1.2.17 2008/12/02 17:32:48 karens Exp $
+//$Id: calendar.views_default.inc,v 1.1.2.21 2009/02/21 16:33:15 karens Exp $
 /**
  * Set up so it can be used as an API to create default calendars for
  * specific date fields.
@@ -69,6 +69,7 @@ function calendar_views_default_views() {
  * @return the default calendar array.
  */
 function calendar_views_construct($options = NULL) {
+
 $name = NULL;
 $description = NULL;
 $path = NULL;
@@ -99,8 +100,10 @@ if (empty($date_fields)) {
   $date_fields = array('changed');
 }
 $colors = array();
-foreach ($types as $type) {
-  $colors[$type] = '#ffffff';
+$date_link_type = '';
+foreach ($types as $type => $label) {
+  $colors[0][$type] = '#ffffff';
+  $date_link_type = $type;
 }
 // Can handle core node date fields or CCK date fields.
 
@@ -114,11 +117,13 @@ foreach ($date_fields as $key => $field_name) {
     $table = 'node_data_'. $field_name;
     $alias_fields[$key] = $field_name .'_value';
     $alias = $table .'.'. $field_name .'_value';
+    $cck_field = TRUE;
   }
   else {
     $table = 'node';
     $alias_fields[$key] = $field_name;
     $alias = $table .'.'. $field_name;
+    $cck_field = FALSE;
   }
   $fields[$alias] = $alias;
   
@@ -126,9 +131,9 @@ foreach ($date_fields as $key => $field_name) {
   $sort_fields[$field_name] = array(
     'order' => 'ASC',
     'delta' => '-1',
-    'id' => $field_name,
+    'id' => $field_name . ($cck_field ? '_value' : ''),
     'table' =>  $table,
-    'field' => $field_name,
+    'field' => $field_name . ($cck_field ? '_value' : ''),
     'relationship' => 'none',
   );
 }
@@ -193,7 +198,7 @@ if (!empty($types)) {
   $filters += array(
     'type' => array(
     'operator' => 'in',
-    'value' => drupal_map_assoc($types),
+    'value' => drupal_map_assoc(array_keys($types)),
     'group' => '0',
     'exposed' => FALSE,
     'expose' => array(
@@ -297,6 +302,12 @@ $handler->override_option('access', array(
   'perm' => '',
 ));
 $handler->override_option('title', 'Calendar');
+if (!empty($header)) {
+  $handler->override_option('header', $header);
+  // The only format we can be sure of is filtered.
+  $handler->override_option('header_format', '1');
+}
+$handler->override_option('header_empty', 1);
 $handler->override_option('items_per_page', 0);
 $handler->override_option('use_more', 0);
 $handler->override_option('style_plugin', 'calendar_nav');
@@ -319,7 +330,10 @@ $handler->override_option('tab_options', array(
   'weight' => 0,
 ));
 $handler->override_option('calendar_colors', array($colors));
-
+$handler->override_option('calendar_colors_vocabulary', array());
+$handler->override_option('calendar_colors_taxonomy', array());
+$handler->override_option('calendar_popup', 0);
+$handler->override_option('calendar_date_link', $date_link_type);
 // Calendar block.
 $handler = $view->new_display('calendar_block', 'Calendar block', 'calendar_block_1');
 $handler->override_option('style_options', array());
@@ -333,8 +347,6 @@ $handler->override_option('style_options', array(
   'display_type' => 'year',
   'name_size' => 1,
   'max_items' => 0,
-  'truncated_fields' => array(),
-  'truncate_length' => '',
 ));
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
@@ -355,8 +367,6 @@ $handler->override_option('style_options', array(
   'with_weekno' => '1',
   'date_fields' => NULL,
   'max_items' => 0,
-  'truncated_fields' => array(),
-  'truncate_length' => '',
 ));
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
@@ -379,8 +389,6 @@ $handler->override_option('style_options', array(
   'groupby_times' => 'hour',
   'groupby_times_custom' => '',
   'groupby_field' => '',
-  'truncated_fields' => array(),
-  'truncate_length' => '',
 ));
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
@@ -403,8 +411,6 @@ $handler->override_option('style_options', array(
   'groupby_times' => 'hour',
   'groupby_times_custom' => '',
   'groupby_field' => '',
-  'truncated_fields' => array(),
-  'truncate_length' => '',
 ));
 $handler->override_option('attachment_position', 'after');
 $handler->override_option('inherit_arguments', TRUE);
@@ -480,6 +486,7 @@ $handler->override_option('style_options', array(
   'grouping' => '',
   'type' => 'ul',
 ));
+$handler->override_option('title', 'Upcoming');
 $handler->override_option('block_description', 'Upcoming');
 $handler->override_option('block_caching', -1);
 

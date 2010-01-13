@@ -1,5 +1,5 @@
 <?php
-// $Id: content_handler_field.inc,v 1.1.2.14 2009/03/18 19:20:52 yched Exp $
+// $Id: content_handler_field.inc,v 1.1.2.17 2009/07/22 20:46:55 markuspetrux Exp $
 
 /**
  * @file
@@ -167,7 +167,9 @@ class content_handler_field extends views_handler_field_node {
   }
 
   function render($values) {
-    $field = $this->content_field;
+    // We're down to a single node here, so we can retrieve the actual field
+    // definition for the node type being considered.
+    $field = content_fields($this->content_field['field_name'], $values->{$this->aliases['type']});
     $options = $this->options;
     $db_info = content_database_info($field);
 
@@ -187,7 +189,20 @@ class content_handler_field extends views_handler_field_node {
 
     $item['#delta'] = $field['multiple'] ?  $values->{$this->aliases['delta']} : 0;
 
-    return $this->render_link(content_format($field, $item, $options['format'], $node), $values);
+    // Render items.
+    $formatter_name = $options['format'];
+    if ($formatter = _content_get_formatter($formatter_name, $field['type'])) {
+      if (content_handle('formatter', 'multiple values', $formatter) == CONTENT_HANDLE_CORE) {
+        // Single-value formatter.
+        $output = content_format($field, $item, $formatter_name, $node);
+      }
+      else {
+        // Multiple values formatter - we actually have only one value to display.
+        $output = content_format($field, array($item), $formatter_name, $node);
+      }
+      return $this->render_link($output, $values);
+    }
+    return '';
   }
 
 }

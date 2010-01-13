@@ -1,5 +1,5 @@
 <?php
-// $Id: image.imagemagick.inc,v 1.23 2008/12/27 06:58:41 drewish Exp $
+// $Id: image.imagemagick.inc,v 1.24 2009/03/06 01:40:09 sun Exp $
 
 /**
  * Return information about the imagemagick toolkit.
@@ -52,7 +52,7 @@ function _image_imagemagick_build_version($form, $form_element) {
 }
 
 function _image_imagemagick_check_path($path, $attach_error_to = FALSE) {
-  if (is_file($path)) {
+  if (file_exists($path)) {
     return TRUE;
   }
   if ($attach_error_to) {

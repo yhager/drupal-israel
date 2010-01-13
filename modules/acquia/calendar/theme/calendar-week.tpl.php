@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar-week.tpl.php,v 1.5.2.4 2008/11/19 12:35:40 karens Exp $
+// $Id: calendar-week.tpl.php,v 1.5.2.6 2009/02/16 23:46:22 karens Exp $
 /**
  * @file
  * Template to display a view as a calendar week.
@@ -33,7 +33,7 @@
 <table>
   <thead>
     <tr>
-      <th class="calendar-agenda-hour"><?php t('Time'); ?></th>
+      <th class="calendar-agenda-hour"><?php print $by_hour_count > 0 ? t('Time') : ''; ?></th>
       <?php foreach ($day_names as $cell): ?>
         <th class="<?php print $cell['class']; ?>">
           <?php print $cell['data']; ?>
@@ -43,8 +43,8 @@
   </thead>
   <tbody>
     <tr>
-      <td class="calendar-agenda-hour">
-         <span class="calendar-hour"><?php print t('All day'); ?></span>
+      <td class="<?php print $agenda_hour_class ?>">
+         <span class="calendar-hour"><?php print $by_hour_count > 0 ? date_t('All day', 'datetime') : ''; ?></span>
        </td>
       <?php foreach ($rows as $day): ?>
        <td class="calendar-agenda-items">

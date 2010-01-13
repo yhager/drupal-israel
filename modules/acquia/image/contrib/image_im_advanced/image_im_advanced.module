@@ -1,5 +1,5 @@
 <?php
-// $Id: image_im_advanced.module,v 1.6 2008/12/27 06:58:41 drewish Exp $
+// $Id: image_im_advanced.module,v 1.7 2009/03/06 01:40:10 sun Exp $
 
 /**
  * Retrieve the settings array.
@@ -137,7 +137,7 @@ function image_im_advanced_settings_validate($element, &$form_state) {
   }
   
   // Check that if the color profile is provided that it's a readable file.
-  if (!empty($options['profile']['path']) && (!is_file($options['profile']['path']) || !is_readable($options['profile']['path']))) {
+  if (!empty($options['profile']['path']) && (!file_exists($options['profile']['path']) || !is_readable($options['profile']['path']))) {
     form_set_error('image_im_advanced_options][profile][path', t('The ICC profile could not be read.'));
   }
 }

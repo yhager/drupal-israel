@@ -1,5 +1,5 @@
 <?php
-// $Id: votingapi.install,v 1.21.4.6 2008/10/09 21:12:35 eaton Exp $
+// $Id: votingapi.install,v 1.21.4.11 2009/06/29 14:05:01 eaton Exp $
 
 /**
  * @file
@@ -21,10 +21,9 @@ function votingapi_schema() {
     ),
     'primary key' => array('vote_id'),
     'indexes' => array(
-      'content' => array('content_type', 'content_id'),
       'content_uid' => array('content_type', 'content_id', 'uid'),
+      'content_uid_2' => array('content_type', 'uid'),
       'content_source' => array('content_type', 'content_id', 'vote_source'),
-      'content_vtype' => array('content_type', 'content_id', 'value_type'),
       'content_value_tag' => array('content_type', 'content_id', 'value_type', 'tag'),
     ),
   );
@@ -71,8 +70,8 @@ function votingapi_update_1() {
  */
 function votingapi_update_2() {
   $ret = array();
-	db_drop_primary_key($ret, 'votingapi_cache');
-	db_drop_primary_key($ret, 'votingapi_vote');
+  db_drop_primary_key($ret, 'votingapi_cache');
+  db_drop_primary_key($ret, 'votingapi_vote');
   db_change_field($ret, votingapi_cache, value, value, array('type' => 'float', 'default' => NULL), array('primary_key' => array('vote_cache_id')));
   db_change_field($ret, votingapi_vote, value, value, array('type' => 'float', 'default' => NULL), array('primary_key' => array('vote_id')));
   return $ret;
@@ -105,44 +104,44 @@ function votingapi_update_3() {
 
 function votingapi_update_4() {
   $ret = array();
-	$name = 'votingapi_action_set';
-	$table_action_step = array(
-		'fields' => array(
-			'vasid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
-			'parent' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
-			'required' => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
-			'mask' => array('type' => 'varchar', 'default' => 'AND'),
-			'content_type' => array('type' => 'varchar', 'length' => 20, 'default' => NULL),
-			'name' => array('type' => 'varchar', 'length' => 128, 'default' => NULL),
-			'enabled' => array('type' => 'int', 'default' => 1),
-			'source' => array('type' => 'varchar', 'length' => 65, 'default' => NULL),
-			'weight' => array('type' => 'int', 'length' => 10, 'not null' => TRUE, 'default' => 0),
-		),
-		'primary key' => array('vasid'),
-	);
-	db_create_table($ret, $name, $table_action_set);
+  $name = 'votingapi_action_set';
+  $table_action_step = array(
+    'fields' => array(
+      'vasid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'parent' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'required' => array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+      'mask' => array('type' => 'varchar', 'default' => 'AND'),
+      'content_type' => array('type' => 'varchar', 'length' => 20, 'default' => NULL),
+      'name' => array('type' => 'varchar', 'length' => 128, 'default' => NULL),
+      'enabled' => array('type' => 'int', 'default' => 1),
+      'source' => array('type' => 'varchar', 'length' => 65, 'default' => NULL),
+      'weight' => array('type' => 'int', 'length' => 10, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('vasid'),
+  );
+  db_create_table($ret, $name, $table_action_set);
 
-	$name = 'votingapi_action_condition';
-	$table_action_condition = array(
-		'fields' => array(
-			'vacid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
-			'vasid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
-			'weight' => array('type' => 'int', 'length' => 10, 'not null' => TRUE, 'default' => 0),
-			'value' => array('type' => 'varchar', 'length' => 255),
-			'handler' => array('type' => 'varchar', 'length' => 255),
-		),
-		'primary key' => array('vacid'),
-	);
-	db_create_table($ret, $name, $table_action_condition);
+  $name = 'votingapi_action_condition';
+  $table_action_condition = array(
+    'fields' => array(
+      'vacid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'vasid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'weight' => array('type' => 'int', 'length' => 10, 'not null' => TRUE, 'default' => 0),
+      'value' => array('type' => 'varchar', 'length' => 255),
+      'handler' => array('type' => 'varchar', 'length' => 255),
+    ),
+    'primary key' => array('vacid'),
+  );
+  db_create_table($ret, $name, $table_action_condition);
 
-	$name = 'votingapi_action';
-	$table_votingapi_action = array(
-		'fields' => array(
-			'vasid' => array('type' => 'int', 'length' => 10, 'unsigned' => TRUE, 'not null' => TRUE),
-			'aid' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => 0),
-		),
-	);
-	db_create_table($ret, $name, $table_votingapi_action);
+  $name = 'votingapi_action';
+  $table_votingapi_action = array(
+    'fields' => array(
+      'vasid' => array('type' => 'int', 'length' => 10, 'unsigned' => TRUE, 'not null' => TRUE),
+      'aid' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => 0),
+    ),
+  );
+  db_create_table($ret, $name, $table_votingapi_action);
 
   return $ret;
 }
@@ -153,24 +152,24 @@ function votingapi_update_4() {
 
 function votingapi_update_5() {
   $ret = array();
-	db_add_index($ret, '{votingapi_vote}', 'content', array('content_type', 'content_id'));
-	db_add_index($ret, '{votingapi_cache}', 'content', array('content_type', 'content_id'));
+  db_add_index($ret, '{votingapi_vote}', 'content', array('content_type', 'content_id'));
+  db_add_index($ret, '{votingapi_cache}', 'content', array('content_type', 'content_id'));
 
-	db_drop_index($ret, '{votingapi_vote}', 'content_type');
-	db_drop_index($ret, '{votingapi_vote}', 'content_id');
-	db_drop_index($ret, '{votingapi_cache}', 'content_type');
-	db_drop_index($ret, '{votingapi_cache}', 'content_id');
+  db_drop_index($ret, '{votingapi_vote}', 'content_type');
+  db_drop_index($ret, '{votingapi_vote}', 'content_id');
+  db_drop_index($ret, '{votingapi_cache}', 'content_type');
+  db_drop_index($ret, '{votingapi_cache}', 'content_id');
 
-	db_rename_table($ret, 'votingapi_action_condition', '{votingapi_action_condition}');
-	db_rename_table($ret, 'votingapi_action', '{votingapi_action}');
+  db_rename_table($ret, 'votingapi_action_condition', '{votingapi_action_condition}');
+  db_rename_table($ret, 'votingapi_action', '{votingapi_action}');
 
-	switch ($GLOBALS['db_type']) {
+  switch ($GLOBALS['db_type']) {
     case 'mysql':
     case 'mysqli':
       $ret[] = update_sql("UPDATE {sequences} SET name = '{votingapi_cache}' WHERE name = 'votingapi_cache';");
       $ret[] = update_sql("UPDATE {sequences} SET name = '{votingapi_vote}' WHERE name = 'votingapi_vote';");
       break;
-	}
+  }
 
   return $ret;
 }
@@ -212,7 +211,7 @@ function votingapi_update_7() {
 
   $name = 'votingapi_action_condition';
   $table_votingapi_action_condition = array(
-    'fields'=> array(
+    'fields' => array(
       'name' => array('type' => 'varchar', 'length' => 64, 'length' => 64),
       'parent_name' => array('type' => 'varchar', 'default' => NULL),
       'description' => array('type' => 'varchar', 'length' => 255, 'default' => NULL),
@@ -285,5 +284,16 @@ function votingapi_update_6100() {
   }
 
   // Yes, we loves us the SchemaAPI.
+  return $ret;
+}
+
+// More index tweaking for votingapi_vote table.
+// It's not really kosher, but this update was *altered* after the release of version 2.0
+// to correct a typo. Better to fix it in-place than leave an actual bug.
+function votingapi_update_6101() {
+  $ret = array();
+  db_drop_index($ret, 'votingapi_vote', 'content');
+  db_drop_index($ret, 'votingapi_vote', 'content_vtype');
+  db_add_index($ret, 'votingapi_vote', 'content_uid_2', array('content_type', 'uid'));
   return $ret;
 }

@@ -1,27 +1,22 @@
 <?php
-//$Id: date_popup.install,v 1.5.6.3 2008/11/18 16:16:00 karens Exp $
+//$Id: date_popup.install,v 1.5.6.6 2009/07/29 10:53:38 karens Exp $
 /**
  * Implementation of hook_requirements().
- * Make sure a site timezone name has been selected.
+ * Added to be sure the Date API version matches this code so invalid
+ * functions are not called.
  */
 function date_popup_requirements($phase) {
   $requirements = array();
   $t = get_t();
   switch ($phase) {
     case 'runtime':
-      $error = FALSE;
-      if (!file_exists(drupal_get_path('module', 'date_popup') .'/lib/jquery.timeentry.pack.js')) {
-        $message .= t('<p>Download jquery.timeentry.pack.js and jquery.timeentry.css from the jquery-timeentry home page at !link and install them in the /lib/ folder of the Date Popup module.</p>', array('!link' => l('http://home.iprimus.com.au/kbwood/jquery/timeEntry.html', 'http://home.iprimus.com.au/kbwood/jquery/timeEntry.html', array('html' => TRUE))));
-      }
-      if (!empty($message)) {
-        $requirements['date_popup_files'] = array(
-         'title' => $t('Date Popup requirements'),
-          'value' => $message,
-          'severity' => REQUIREMENT_ERROR,
+      if (!module_exists('jquery_ui')) {
+        $requirements['date_popup_jquery_ui'] = array(
+          'title' => $t('Date Popup requirements'),
+          'value' => $t('The Date Popup module needs code added by the <a href="http://drupal.org/project/jquery_ui">jQuery UI module.</a> This is not yet a requirement, but soon will be, so you are encouraged to install that module as soon as possible. In the meantime, a version of the needed code is included here.'),
+          'severity' => REQUIREMENT_WARNING,
           );
       }
-      break;
-   case 'install':
       break;
   }
   return $requirements;

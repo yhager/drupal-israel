@@ -1,5 +1,5 @@
 <?php
-// $Id: votingapi.module,v 1.46.2.15 2008/10/09 21:12:35 eaton Exp $
+// $Id: votingapi.module,v 1.46.2.24 2009/07/08 16:09:45 eaton Exp $
 
 /**
  * @file
@@ -265,7 +265,7 @@ function votingapi_delete_votes($votes = array()) {
     foreach ($votes as $vote) {
       $vids[] = $vote['vote_id'];
     }
-    db_query("DELETE FROM {votingapi_vote} WHERE vote_id IN (". db_placeholders($vids) .")", $vids);
+    db_query("DELETE FROM {votingapi_vote} WHERE vote_id IN (" . db_placeholders($vids) . ")", $vids);
   }
 }
 
@@ -282,7 +282,7 @@ function votingapi_delete_results($vote_results = array()) {
     foreach ($vote_results as $vote) {
       $vids[] = $vote['vote_cache_id'];
     }
-    db_query("DELETE FROM {votingapi_cache} WHERE vote_cache_id IN (". db_placeholders($vids) .")", $vids);
+    db_query("DELETE FROM {votingapi_cache} WHERE vote_cache_id IN (" . db_placeholders($vids) . ")", $vids);
   }
 }
 
@@ -292,7 +292,7 @@ function votingapi_delete_results($vote_results = array()) {
  * @param $criteria
  *   A keyed array used to build the select query. Keys can contain
  *   a single value or an array of values to be matched.
- *   $criteria['vote_id']       (If this is set, all other keyes are skipped)
+ *   $criteria['vote_id']       (If this is set, all other keys are skipped)
  *   $criteria['content_id']
  *   $criteria['content_type']
  *   $criteria['value_type']
@@ -301,15 +301,18 @@ function votingapi_delete_results($vote_results = array()) {
  *   $criteria['vote_source']
  *   $criteria['timestamp']   (If this is set, records with timestamps
  *      GREATER THAN the set value will be selected.)
+ * @param $limit
+ *   An optional integer specifying the maximum number of votes to return.
  * @return
  *   An array of votes matching the criteria.
  */
-function votingapi_select_votes($criteria = array()) {
-  if (!empty($criteria['vote_source'])) {
-    $criteria['timestamp'] = time() - variable_get('votingapi_anonymous_window', 3600);
+function votingapi_select_votes($criteria = array(), $limit = 0) {
+  $anon_window = variable_get('votingapi_anonymous_window', 3600);
+  if (!empty($criteria['vote_source']) && $anon_window > 0) {
+    $criteria['timestamp'] = time() - $anon_window;
   }
   $votes = array();
-  $result = _votingapi_select('vote', $criteria);
+  $result = _votingapi_select('vote', $criteria, $limit);
   while ($vote = db_fetch_array($result)) {
     $votes[] = $vote;
   }
@@ -322,21 +325,22 @@ function votingapi_select_votes($criteria = array()) {
  * @param $criteria
  *   A keyed array used to build the select query. Keys can contain
  *   a single value or an array of values to be matched.
- *   $criteria['vote_cache_id']     (If this is set, all other keyes are skipped)
- *   $criteria['content_type']
+ *   $criteria['vote_cache_id']     (If this is set, all other keys are skipped)
+ *   $criteria['content_id']
  *   $criteria['content_type']
  *   $criteria['value_type']
  *   $criteria['tag']
- *   $criteria['uid']
- *   $criteria['vote_source']
+ *   $criteria['function']
  *   $criteria['timestamp']   (If this is set, records with timestamps
  *      GREATER THAN the set value will be selected.)
+ * @param $limit
+ *   An optional integer specifying the maximum number of votes to return.
  * @return
  *   An array of vote results matching the criteria.
  */
-function votingapi_select_results($criteria = array()) {
+function votingapi_select_results($criteria = array(), $limit = 0) {
   $cached = array();
-  $result = _votingapi_select('cache', $criteria);
+  $result = _votingapi_select('cache', $criteria, $limit);
   while ($cache = db_fetch_array($result)) {
     $cached[] = $cache;
   }
@@ -403,6 +407,70 @@ function votingapi_recalculate_results($content_type, $content_id, $force_calcul
 
 
 /**
+ * Returns metadata about tags, value_types, and results defined by vote modules.
+ *
+ * If your module needs to determine what existing tags, value_types, etc., are
+ * being supplied by other modules, call this function. Querying the votingapi
+ * tables for this information directly is discouraged, as values may not appear
+ * consistently. (For example, 'average' does not appear in the cache table until
+ * votes have actually been cast in the cache table.)
+ *
+ * Three major bins of data are stored: tags, value_types, and functions. Each
+ * entry in these bins is keyed by the value stored in the actual VotingAPI
+ * tables, and contains an array with (minimally) 'name' and 'description' keys.
+ * Modules can add extra keys to their entries if desired.
+ *
+ * This metadata can be modified or expanded using hook_votingapi_metadata_alter().
+ *
+ * @return
+ *   An array of metadata defined by VotingAPI and altered by vote modules.
+ *
+ * @see hook_votingapi_metadata_alter()
+ */
+function votingapi_metadata($reset = FALSE) {
+  static $data;
+  if ($reset || !isset($data)) {
+    $data = array(
+      'tags' => array(
+        'vote' => array(
+          'name' => t('Normal vote'),
+          'description' => t('The default tag for votes on content. If multiple votes with different tags are being cast on a piece of content, consider casting a "summary" vote with this tag as well.'),
+        ),
+      ),
+      'value_types' => array(
+        'percent' => array(
+          'name' => t('Percent'),
+          'description' => t('Votes in a specific range. Values are stored in a 1-100 range, but can be represented as any scale when shown to the user.'),
+        ),
+        'points' => array(
+          'name' => t('Points'),
+          'description' => t('Votes that contribute points/tokens/karma towards a total. May be positive or negative.'),
+        ),
+      ),
+      'functions' => array(
+        'count' => array(
+          'name' => t('Number of votes'),
+          'description' => t('The number of votes cast for a given piece of content.'),
+        ),
+        'average' => array(
+          'name' => t('Average vote'),
+          'description' => t('The average vote cast on a given piece of content.'),
+        ),
+        'sum' => array(
+          'name' => t('Total score'),
+          'description' => t('The sum of all votes for a given piece of content.'),
+          'value_types' => array('points'),
+        ),
+      ),
+    );
+
+    drupal_alter('votingapi_metadata', $data);
+  }
+  
+  return $data;
+}
+
+/**
  * Builds the default VotingAPI results for the three supported voting styles.
  */
 function _votingapi_get_standard_results($content_type, $content_id) {
@@ -423,13 +491,13 @@ function _votingapi_get_standard_results($content_type, $content_id) {
     }
   }
 
-  $sql  = "SELECT v.tag, v.value, COUNT(1) AS score ";
+  $sql  = "SELECT v.tag, v.value, v.value_type, COUNT(1) AS score ";
   $sql .= "FROM {votingapi_vote} v ";
   $sql .= "WHERE v.content_type = '%s' AND v.content_id = %d AND v.value_type = 'option' ";
-  $sql .= "GROUP BY v.value, v.tag";
+  $sql .= "GROUP BY v.value, v.tag, v.value_type";
   $results = db_query($sql, $content_type, $content_id);
   while ($result = db_fetch_array($results)) {
-    $cache[$result['tag']][$result['value_type']]['option-'. $result['value']] = $result['score'];
+    $cache[$result['tag']][$result['value_type']]['option-' . $result['value']] = $result['score'];
   }
 
   return $cache;
@@ -482,7 +550,7 @@ function _votingapi_prep_vote(&$vote) {
  * Internal helper function constructs SELECT queries. Don't use unless you're me.
  */
 function _votingapi_select($table = 'vote', $criteria = array(), $limit = 0) {
-  $query = "SELECT * FROM {votingapi_". $table ."} v WHERE 1 = 1";
+  $query = "SELECT * FROM {votingapi_" . $table . "} v WHERE 1 = 1";
   $details = _votingapi_query('vote', $criteria);
 
   $query .= $details['query'];
@@ -493,7 +561,7 @@ function _votingapi_select($table = 'vote', $criteria = array(), $limit = 0) {
  * Internal helper function constructs DELETE queries. Don't use unless you're me.
  */
 function _votingapi_delete($table = 'vote', $criteria = array(), $limit = 0) {
-  $query = "DELETE FROM {votingapi_". $table ."} WHERE 1 = 1";
+  $query = "DELETE FROM {votingapi_" . $table . "} WHERE 1 = 1";
   $details = _votingapi_query('vote', $criteria, '');
 
   $query .= $details['query'];
@@ -558,11 +626,11 @@ function _votingapi_query_builder($name, $value, &$query, &$args, $col_is_string
   else {
     if (is_array($value)) {
       if ($col_is_string) {
-        $query .= " AND $name IN (". db_placeholders($value, 'varchar') .")";
+        $query .= " AND $name IN (" . db_placeholders($value, 'varchar') . ")";
         $args = array_merge($args, $value);
       }
       else {
-        $query .= " AND $name IN (". db_placeholders($value, 'int') .")";
+        $query .= " AND $name IN (" . db_placeholders($value, 'int') . ")";
         $args = array_merge($args, $value);
       }
     }
@@ -578,3 +646,4 @@ function _votingapi_query_builder($name, $value, &$query, &$args, $col_is_string
     }
   }
 }
+

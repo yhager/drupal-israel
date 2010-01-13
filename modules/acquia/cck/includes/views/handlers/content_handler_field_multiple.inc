@@ -1,5 +1,5 @@
 <?php
-// $Id: content_handler_field_multiple.inc,v 1.1.2.16 2009/03/17 22:58:06 yched Exp $
+// $Id: content_handler_field_multiple.inc,v 1.1.2.22 2009/07/22 20:45:17 markuspetrux Exp $
 
 /**
  * @file
@@ -26,8 +26,13 @@ class content_handler_field_multiple extends content_handler_field {
       $this->additional_fields = array(
         'type' => array('table' => 'node', 'field' => 'type'),
         'nid' => array('table' => 'node', 'field' => 'nid'),
-        'vid' => array('table' => 'node', 'field' => 'vid'),
       );
+      if ($view->base_table == 'node_revisions') {
+        $this->additional_fields['vid'] = array('table' => 'node_revisions', 'field' => 'vid');
+      }
+      else {
+        $this->additional_fields['vid'] = array('table' => 'node', 'field' => 'vid');
+      }
     }
   }
 
@@ -82,14 +87,16 @@ class content_handler_field_multiple extends content_handler_field {
       '#default_value' => $options['multiple']['multiple_from'],
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
+      '#description' => t('(first item is 0)'),
     );
     $form['multiple']['multiple_reversed'] = array(
-      '#title' => t('Reversed (start from last values)'),
+      '#title' => t('Reversed'),
       '#type' => 'checkbox',
       '#default_value' => $options['multiple']['multiple_reversed'],
       '#suffix' => '</div>',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
+      '#description' => t('(start from last values)'),
     );
   }
 
@@ -136,24 +143,30 @@ class content_handler_field_multiple extends content_handler_field {
       }
     }
 
+    // It may happend that the multiple values field is related to a non
+    // required relation for which no node data related to the field being
+    // processed here is available.
+    if (empty($vids)) {
+      return parent::pre_render($values);
+    }
+
     // List columns to retrieve.
     $alias = content_views_tablename($field);
     // Prefix aliases with '_' to avoid clashing with field columns names.
     $query_columns = array(
-      'node.vid AS _vid',
-      "$alias.delta as _delta",
+      'vid AS _vid',
+      "delta as _delta",
       // nid is needed to generate the links for 'link to node' option.
-      'node.nid AS _nid',
+      'nid AS _nid',
     );
     // The actual field columns.
     foreach ($db_info['columns'] as $column => $attributes) {
-      $query_columns[] = "$alias.$attributes[column] AS $column";
+      $query_columns[] = "$attributes[column] AS $column";
     }
     $query = 'SELECT '. implode(', ', $query_columns) .
-             ' FROM {'. $db_info['table'] ."} $alias".
-             " LEFT JOIN {node} node ON node.vid = $alias.vid".
-             " WHERE node.vid IN (". implode(',', $vids) .')'.
-             " ORDER BY node.nid ASC, $alias.delta ". ($options['multiple']['multiple_reversed'] ? 'DESC' : 'ASC');
+             ' FROM {'. $db_info['table'] ."}".
+             " WHERE vid IN (". implode(',', $vids) .')'.
+             " ORDER BY _nid ASC, _delta ". ($options['multiple']['multiple_reversed'] ? 'DESC' : 'ASC');
     $result = db_query($query);
 
     while ($item = db_fetch_array($result)) {
@@ -167,13 +180,32 @@ class content_handler_field_multiple extends content_handler_field {
     }
   }
 
+  /**
+   * Return DIV or SPAN based upon the field's element type.
+   *
+   * Fields rendered with the 'group multiple' option use <div> markers,
+   * and thus shouldn't be wrapped in a <span>.
+   */
+  function element_type() {
+    if (!$this->defer_query) {
+      return parent::element_type();
+    }
+
+    if (isset($this->definition['element type'])) {
+      return $this->definition['element type'];
+    }
+    return 'div';
+  }
+
   function render($values) {
     // If this is not a grouped field, use content_handler_field::render().
     if (!$this->defer_query) {
       return parent::render($values);
     }
 
-    $field = $this->content_field;
+    // We're down to a single node here, so we can retrieve the actual field
+    // definition for the node type being considered.
+    $field = content_fields($this->content_field['field_name'], $values->{$this->aliases['type']});
     $options = $this->options;
 
     $vid = $values->{$this->field_alias};
